@@ -4,8 +4,20 @@ module.exports = {
 		"./pages/**/*.{js,ts,jsx,tsx}",
 		"./components/**/*.{js,ts,jsx,tsx}",
 	],
+
 	theme: {
+		minWidth: {
+			0: "0rem",
+			10: "10rem",
+		},
 		extend: {},
 	},
-	plugins: [],
+	plugins: [
+		// ...
+		require("tailwind-scrollbar"),
+	],
+	variants: {
+		// ...
+		scrollbar: ["dark"],
+	},
 };

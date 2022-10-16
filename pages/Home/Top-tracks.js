@@ -1,6 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
-import StatsBox from "../../components/StatsBox";
+import TopTracksList from "../../components/TopTracksList";
 import Sidebar from "../../components/SideBar";
 import { useSession, signIn, signOut } from "next-auth/react";
 export default function TopTrack() {
@@ -8,7 +8,7 @@ export default function TopTrack() {
 	return (
 		<div>
 			<Head>
-				<title>Stats On Spotify</title>
+				<title>Top Tracks | Stats On Spotify</title>
 				<meta
 					name="description"
 					content="Response with User data on Spotify."
@@ -29,7 +29,7 @@ export default function TopTrack() {
 							</h1>
 						</div>
 						<div className="flex flex-col p-10 items-center justify-center dark:bg-gray-900">
-							<StatsBox />
+							<TopTracksList />
 						</div>
 					</div>
 				</div>

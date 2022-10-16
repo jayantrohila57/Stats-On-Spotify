@@ -8,7 +8,7 @@ export default function TopAlbums() {
 	return (
 		<div>
 			<Head>
-				<title>Stats On Spotify</title>
+				<title>Top Albums | Stats On Spotify</title>
 				<meta
 					name="description"
 					content="Response with User data on Spotify."

@@ -113,7 +113,24 @@ const Nav = ({
 						</Link>
 					</nav>
 					<div className="hidden pr-5 md:flex items-center justify-end md:flex-1 lg:w-0">
-						{session ? (
+						{session?.status === "unauthenticated" ? (
+							<Link href="/Help">
+								<a className="inline-flex items-center text-white bg-primary-700 hover:bg-primary-800 ring-1 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900">
+									Help
+									<svg
+										className="ml-2 -mr-1 w-5 h-5"
+										fill="currentColor"
+										viewBox="0 0 20 20"
+									>
+										<path
+											fillRule="evenodd"
+											d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+											clipRule="evenodd"
+										></path>
+									</svg>
+								</a>
+							</Link>
+						) : (
 							<>
 								<Link href="/Account">
 									<div className="rounded-full mt-1 h-9 border-2 hover:bg-green-400 border-opacity-30 hover:scale-110 hover:text-green-400">
@@ -164,23 +181,6 @@ const Nav = ({
 									</svg>
 								</button>
 							</>
-						) : (
-							<Link href="/auth/signIn">
-								<a className="inline-flex items-center text-white bg-primary-700 hover:bg-primary-800 ring-1 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900">
-									Get started
-									<svg
-										className="ml-2 -mr-1 w-5 h-5"
-										fill="currentColor"
-										viewBox="0 0 20 20"
-									>
-										<path
-											fillRule="evenodd"
-											d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
-											clipRule="evenodd"
-										></path>
-									</svg>
-								</a>
-							</Link>
 						)}
 					</div>
 				</div>

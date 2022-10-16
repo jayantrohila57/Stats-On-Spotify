@@ -1,7 +1,11 @@
 import React from "react";
-
+import Profile from "../components/Profile";
 function Account() {
-	return <div>Account</div>;
+	return (
+		<>
+			<Profile />
+		</>
+	);
 }
 
 export default Account;

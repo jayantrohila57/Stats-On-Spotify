@@ -22,7 +22,7 @@ const Nav = ({
 	}, []);
 
 	return (
-		<div className="px-5 fixed w-screen md:backdrop-blur-sm rounded-lg duration-300 sm:backdrop-blur-xl z-10">
+		<div className="px-5 fixed w-screen backdrop-blur-md rounded-lg duration-300 z-10">
 			<div>
 				<div className="flex justify-between items-center  py-3 md:justify-start md:space-x-5">
 					<Link href="/">
@@ -187,133 +187,135 @@ const Nav = ({
 			<div
 				className={
 					open
-						? "block absolute top-0 inset-x-0  origin-top-right md:hidden"
+						? "block  absolute top-0 inset-x-0  origin-top-right md:hidden"
 						: "opacity-0 hidden absolute top-0 inset-x-0 origin-top-right md:hidden"
 				}
 			>
-				<div className="shadow-lg h-screen backdrop-blur-md text-white duration-300 font-bold bg-gray-900 bg-opacity-30 z-10">
-					<div className="p-3 flex items-center justify-between">
-						<Link href="/">
-							<div
-								onClick={() => setOpen(!open)}
-								className="flex p-1 justify-start items-center lg:w-0 lg:flex-1"
-							>
-								<span className="text-2xl dark:text-white text-gray-600">
-									<h1>Stats On Spotify</h1>
-								</span>
-							</div>
-						</Link>
-						<div>
-							<button
-								type="button"
-								className="text-white font-bold pr-4 inline-flex items-center justify-center"
-								onClick={() => setOpen(!open)}
-							>
-								<svg
-									className="h-8 w-8"
-									fill="none"
-									viewBox="0 0 24 24"
-									stroke="currentColor"
-									aria-hidden="true"
-								>
-									<path
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										strokeWidth={3}
-										d="M6 18L18 6M6 6l12 12"
-									/>
-								</svg>
-							</button>
-						</div>
-					</div>
-					<div className="h-full flex flex-col justify-around">
-						<div className="flex flex-col items-start p-1 justify-center">
-							<hi className="mx-5 font-extrabold border-b-2 w-80 text-3xl text-green-400">
-								Links
-							</hi>
-							<Link href="/Home">
-								<h1
+				<div className="h-screen z-10 ">
+					<div className="shadow-lg h-full bg-gray-900 bg-opacity-90  text-white duration-300 font-bold ">
+						<div className="p-3 flex items-center justify-between">
+							<Link href="/">
+								<div
 									onClick={() => setOpen(!open)}
-									className="duration-300 hover:text-green-400 rounded-3xl hover:p-4 my-2 m-1 p-3 text-5xl"
+									className="flex p-1 justify-start items-center lg:w-0 lg:flex-1"
 								>
-									Go to Home
-								</h1>
+									<span className="text-2xl dark:text-white text-gray-600">
+										<h1>Stats On Spotify</h1>
+									</span>
+								</div>
 							</Link>
-							<Link href="/Account">
-								<h1
-									onClick={() => setOpen(!open)}
-									className="duration-300 hover:text-green-400 rounded-3xl hover:p-4 my-2 m-1 p-3 text-5xl"
-								>
-									My Account
-								</h1>
-							</Link>
-							<Link href="/Contribution">
-								<h1
-									onClick={() => setOpen(!open)}
-									className="duration-300 hover:text-green-400 rounded-3xl hover:p-4 my-2 m-1 p-3 text-5xl"
-								>
-									Contribution
-								</h1>
-							</Link>
-							<Link href="/More-Info">
-								<h1
-									onClick={() => setOpen(!open)}
-									className="duration-300 hover:text-green-400 rounded-3xl hover:p-4 my-2 m-1 p-3 text-5xl"
-								>
-									More Info
-								</h1>
-							</Link>
-						</div>
-						<div className="flex items-center p-1 justify-center">
-							{session?.status === "unauthenticated" ? (
+							<div>
 								<button
-									onClick={() => {
-										signIn("spotify");
-									}}
-									className="bg-black m-5 px-2 py-3 w-full rounded-xl mt-5 flex justify-center items-center text-lg hover:scale-105 duration-300 text-green-400"
+									type="button"
+									className="text-white font-bold pr-4 inline-flex items-center justify-center"
+									onClick={() => setOpen(!open)}
 								>
-									Login with Spotify
-								</button>
-							) : (
-								<>
-									<Link href="/Account">
-										<div className="rounded-3xl m-2 h-20  hover:bg-green-400 border-opacity-20 hover:scale-110 hover:text-green-400">
-											<img
-												className="rounded-3xl hover:shadow-md float-left h-full"
-												src={session?.data?.user?.image}
-											/>
-										</div>
-									</Link>
-									<div className="p-1 dark:text-gray-300">
-										<p className="text-2xl text-green-400">
-											{session?.data?.user?.name}
-										</p>
-										<p className="text-lg truncate">
-											{session?.data?.user?.email}
-										</p>
-									</div>
-									<button
-										className="inline-block dark:text-white hover:text-green-400 p-1 h-8 text-sm hover:scale-105 duration-100"
-										onClick={() => {
-											signOut();
-										}}
+									<svg
+										className="h-8 w-8"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+										aria-hidden="true"
 									>
-										<svg
-											className="w-8 h-8"
-											fill="none"
-											stroke="currentColor"
-											viewBox="0 0 24 24"
-										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth="3"
-												d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-											></path>
-										</svg>
+										<path
+											strokeLinecap="round"
+											strokeLinejoin="round"
+											strokeWidth={3}
+											d="M6 18L18 6M6 6l12 12"
+										/>
+									</svg>
+								</button>
+							</div>
+						</div>
+						<div className="h-full pb-10 flex flex-col justify-center">
+							<div className="flex flex-col items-start p-1 justify-center">
+								<hi className="mx-5 font-extrabold border-b-2 border-dashed w-72 text-3xl text-green-400">
+									Menu
+								</hi>
+								<Link href="/Home">
+									<h1
+										onClick={() => setOpen(!open)}
+										className="duration-300 hover:text-green-400 rounded-3xl hover:p-4 my-2 m-1 p-3 text-5xl"
+									>
+										Go to Home
+									</h1>
+								</Link>
+								<Link href="/Account">
+									<h1
+										onClick={() => setOpen(!open)}
+										className="duration-300 hover:text-green-400 rounded-3xl hover:p-4 my-2 m-1 p-3 text-5xl"
+									>
+										My Account
+									</h1>
+								</Link>
+								<Link href="/Contribution">
+									<h1
+										onClick={() => setOpen(!open)}
+										className="duration-300 hover:text-green-400 rounded-3xl hover:p-4 my-2 m-1 p-3 text-5xl"
+									>
+										Contribution
+									</h1>
+								</Link>
+								<Link href="/More-Info">
+									<h1
+										onClick={() => setOpen(!open)}
+										className="duration-300 hover:text-green-400 rounded-3xl hover:p-4 my-2 m-1 p-3 text-5xl"
+									>
+										More Info
+									</h1>
+								</Link>
+							</div>
+							<div className="flex pb-10 items-center p-1 justify-evenly ">
+								{session?.status === "unauthenticated" ? (
+									<button
+										onClick={() => {
+											signIn("spotify");
+										}}
+										className="bg-black m-5 px-2 py-3 w-full rounded-xl mt-5 flex justify-center items-center text-lg hover:scale-105 duration-300 text-green-400"
+									>
+										Login with Spotify
 									</button>
-								</>
-							)}
+								) : (
+									<>
+										<Link href="/Account">
+											<div className="rounded-3xl m-2 h-20  hover:bg-green-400 border-opacity-20 hover:scale-110 hover:text-green-400">
+												<img
+													className="rounded-3xl hover:shadow-md float-left h-full"
+													src={session?.data?.user?.image}
+												/>
+											</div>
+										</Link>
+										<div className="p-1 dark:text-gray-300">
+											<p className="text-2xl text-green-400">
+												{session?.data?.user?.name}
+											</p>
+											<p className="text-lg truncate">
+												{session?.data?.user?.email}
+											</p>
+										</div>
+										<button
+											className="inline-block dark:text-white hover:text-green-400 p-1 h-8 text-sm hover:scale-105 duration-100"
+											onClick={() => {
+												signOut();
+											}}
+										>
+											<svg
+												className="w-8 h-8"
+												fill="none"
+												stroke="currentColor"
+												viewBox="0 0 24 24"
+											>
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													strokeWidth="3"
+													d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+												></path>
+											</svg>
+										</button>
+									</>
+								)}
+							</div>
 						</div>
 					</div>
 				</div>

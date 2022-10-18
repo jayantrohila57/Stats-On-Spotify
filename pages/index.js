@@ -29,17 +29,17 @@ function Hero() {
 					<div className="sm:text-left lg:text-left">
 						<div className="p-5">
 							<h1 className="tracking-tight text-left font-bold text-gray-900  ">
-								<span className="block dark:text-white sm:inline text-6xl md:text-8xl">
+								<span className="block dark:text-white sm:inline text-5xl md:text-8xl">
 									Welcome to
 									<br />
 								</span>
 
-								<span className="block dark:text-green-400 sm:inline text-6xl md:text-8xl">
+								<span className="block dark:text-green-400 sm:inline text-5xl md:text-8xl">
 									Stats On Spotify
 								</span>
 							</h1>
 						</div>
-						<div className="p-5">
+						<div className="px-5">
 							<h1 className="text-xl tracking-tight text-left font-bold text-gray-900 sm:text-5xl md:text-5xl">
 								<span className="block dark:text-gray-300 xl:inline">
 									An Easy Approach To
@@ -49,9 +49,9 @@ function Hero() {
 						</div>
 					</div>
 				</div>
-				<div className="flex flex-col m-2 space-y-4 sm:flex-col sm:justify-center  sm:space-x-4">
+				<div className="flex flex-col m-2  sm:flex-col sm:justify-center  sm:space-x-4">
 					<div className="flex flex-row flex-wrap justify-center items-center">
-						<div className="block m-2 p-6 max-w-sm dark:text-white shadow-2xl rounded-2xl bg-gray-200 bg-opacity-10 backdrop-blur-md ">
+						<div className="block m-1 p-2 max-w-sm dark:text-white shadow-2xl rounded-2xl bg-gray-200 bg-opacity-10 backdrop-blur-md ">
 							<div className="text-center pr-2 ">
 								{session?.status === "unauthenticated" ? (
 									<h2 className="font-bold text-3xl p-5 ">SignUp / LogIn</h2>

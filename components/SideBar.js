@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 export default function SideBar() {
 	const router = useRouter();
 	const [toggleState, setToggleState] = useState(1);
-
 	return (
 		<>
 			<nav className="md:left-0 md:block md:fixed md:top-16 z-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden  flex flex-wrap items-center justify-between relative md:w-60">

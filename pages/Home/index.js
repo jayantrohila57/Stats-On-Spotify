@@ -30,18 +30,16 @@ export default function Home() {
 			items-center justify-center"
 				>
 					<Sidebar />
-					<div className="relative md:ml-64 pt-10 bg-gray-900 h-screen">
+					<div className="relative md:ml-64 pt-10 h-screen">
 						<div className="flex pt-10 items-center justify-center">
 							<h1 className="text-4xl tracking-tight text-center font-bold text-gray-900 sm:text-5xl md:text-6xl">
-								<span className="block dark:text-white sm:inline">
-									{session?.data?.user?.name}'s
-								</span>
+								<span className="block dark:text-white sm:inline">Latest</span>
 								<span className="block dark:text-green-400 xl:inline ml-3">
 									Stats
 								</span>
 							</h1>
 						</div>
-						<div className="flex flex-col p-10 items-center justify-center dark:bg-gray-900">
+						<div className="flex flex-col p-10 items-center justify-center ">
 							<StatsBox />
 						</div>
 					</div>

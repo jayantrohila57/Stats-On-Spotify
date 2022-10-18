@@ -65,14 +65,6 @@ export default function TopTracksList(Tracks) {
 														{value?.album.name}
 													</p>
 												</div>
-												<div className="p-2 w-[150px] max-w-[150px] h-full  dark:text-gray-300">
-													<p className="text-base h-full flex flex-col justify-start align-top items-start dark:text-gray-200">
-														<span className="block dark:text-green-400 xl:inline">
-															Album
-														</span>
-														{value?.album.name}
-													</p>
-												</div>
 											</td>
 										</tr>
 									);

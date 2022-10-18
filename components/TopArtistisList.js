@@ -8,16 +8,16 @@ export default function TopArtistsList(Artists) {
 	const [Data, setData] = useState([]);
 	return (
 		<>
-			<div className="p-1 flex flex-col min-w-0 break-words w-full h-[70vh] shadow-2xl  bg-opacity-10 backdrop-blur-md   border-2 border-gray-600 rounded-3xl text-white">
-				<div className="h-[100vh] m-1 rounded-3xl scrollbar-thin  overflow-y-scroll dark:scrollbar-thumb-green-900 dark:scrollbar-track-black">
+			<div className="p-1 flex flex-col scroll-smooth min-w-0 break-words w-full h-[70vh] shadow-2xl  bg-opacity-10 backdrop-blur-md   border-2 border-gray-600 rounded-3xl text-white">
+				<div className="h-[100vh] m-1 scroll-smooth rounded-3xl scrollbar-thin  overflow-y-scroll dark:scrollbar-thumb-green-900 dark:scrollbar-track-black">
 					<div className="block w-full overflow-x-auto">
-						<table className="items-center w-full bg-transparent ">
+						<table className="items-center scroll-smooth w-full bg-transparent ">
 							<tbody>
 								{data.map((value, index) => {
 									return (
 										<tr
 											key={index}
-											className="flex rounded-2xl shadow-2xl mr-3 border-2 m-1 dark:border-gray-700 hover:m-1.5 hover:relative hover:bg-white hover:bg-opacity-20 duration-300 dark:shadow-2xl hover:dark: dark:hover:dark:shadow-xl  hover:bg-gradient-to-tr"
+											className="flex scroll-smooth rounded-2xl shadow-2xl mr-3 border-2 m-1 dark:border-gray-700 hover:m-1.5 hover:relative hover:bg-white hover:bg-opacity-20 duration-300 dark:shadow-2xl hover:dark: dark:hover:dark:shadow-xl  hover:bg-gradient-to-tr"
 										>
 											<td className="flex-row flex items-center justify-start">
 												<div className="p-1 w-28 h-28 duration-300 border-opacity-0 hover:scale-105 hover:text-indigo-600">
@@ -61,14 +61,6 @@ export default function TopArtistsList(Artists) {
 													</p>
 												</div>
 												<div className="p-2 w-[200px] max-w-[200px] h-full  dark:text-gray-300">
-													<p className="text-base h-full flex flex-col justify-start align-top items-start dark:text-gray-200">
-														<span className="block dark:text-green-400 xl:inline">
-															Followers
-														</span>
-														{value?.followers.total}
-													</p>
-												</div>
-												<div className="p-2 w-[150px] max-w-[150px] h-full  dark:text-gray-300">
 													<p className="text-base h-full flex flex-col justify-start align-top items-start dark:text-gray-200">
 														<span className="block dark:text-green-400 xl:inline">
 															Followers

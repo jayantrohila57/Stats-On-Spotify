@@ -91,12 +91,12 @@ export default function SideBar() {
 								Top Artists
 							</div>
 						</Link>
-						<Link href="/Home/Top-Albums">
+						<Link href="/Home/Playlists">
 							<div
 								className={
-									router.pathname === "/Home/Top-Albums" ||
+									router.pathname === "/Home/Playlists" ||
 									new URL(router.query.callbackUrl, "http://localhost:3000")
-										.pathname == "/Home/Top-Albums"
+										.pathname == "/Home/Playlists"
 										? "inline-flex m-2 p-4 w-56 text-green-400 rounded-lg active border-2 border-green-400  dark:text-green-400 dark:border-green-400 group"
 										: "inline-flex m-2 p-4 w-56 rounded-lg  border-2 dark:border-gray-700  hover:text-gray-600 dark:hover:border-gray-300 dark:hover:text-gray-300 group"
 								}
@@ -104,9 +104,9 @@ export default function SideBar() {
 								<svg
 									aria-hidden="true"
 									className={
-										router.pathname === "/Home/Top-Albums" ||
+										router.pathname === "/Home/Playlists" ||
 										new URL(router.query.callbackUrl, "http://localhost:3000")
-											.pathname == "/Home/Top-Albums"
+											.pathname == "/Home/Playlists"
 											? "mr-2 w-5 h-5 text-green-400 dark:text-green-400"
 											: "mr-2 w-5 h-5 text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-300"
 									}
@@ -115,7 +115,7 @@ export default function SideBar() {
 								>
 									<path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z" />
 								</svg>
-								Top Albums
+								My Playlists
 							</div>
 						</Link>
 						<Link href="/Home/Recent-Streams">

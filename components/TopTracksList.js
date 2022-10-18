@@ -17,7 +17,7 @@ export default function TopTracksList(Tracks) {
 									return (
 										<tr
 											key={index}
-											className="flex rounded-2xl shadow-2xl mr-3 border-2 m-1 dark:border-gray-700 hover:m-1.5 hover:relative hover:bg-white hover:bg-opacity-20 duration-300 dark:shadow-2xl hover:dark: dark:hover:dark:shadow-xl  hover:bg-gradient-to-tr"
+											className="flex rounded-2xl p-3 shadow-2xl mr-3 border-2 m-1 dark:border-gray-700 hover:p-2 hover:relative hover:bg-white hover:bg-opacity-20 duration-300 dark:shadow-2xl hover:dark: dark:hover:dark:shadow-xl  hover:bg-gradient-to-tr"
 										>
 											<td className="flex-row flex items-center justify-start">
 												<div className="p-1 w-24 h-24 border-opacity-0 duration-300 hover:scale-105 hover:text-indigo-600">

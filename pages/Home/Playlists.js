@@ -2,24 +2,28 @@ import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import UseSpotify from "../../hooks/UseSpotify";
-import TopArtistisList from "../../components/TopArtistisList";
+import MyPlaylists from "../../components/MyPlaylists";
 import Sidebar from "../../components/SideBar";
 import { useSession, signIn, signOut } from "next-auth/react";
-export default function TopArtists() {
-	const [Artists, setArtists] = useState([]);
+export default function Playlists() {
+	const [PlaylistsData, setPlaylistsData] = useState([]);
 	const session = useSession();
 	const spotifyApi = UseSpotify();
+	// add user name here "9yo13loxl69oqp0hueroypa45"
 	useEffect(() => {
 		if (spotifyApi.getAccessToken()) {
-			spotifyApi.getMyTopArtists().then(function (data) {
-				setArtists(data.body.items);
-			});
+			spotifyApi
+				.getUserPlaylists("9yo13loxl69oqp0hueroypa45", { limit: 50 })
+				.then(function (data) {
+					setPlaylistsData(data.body);
+				});
 		}
 	}, [session, spotifyApi]);
+
 	return (
 		<div>
 			<Head>
-				<title>Top Artists | Stats On Spotify</title>
+				<title>My Playlists| Stats On Spotify</title>
 				<meta
 					name="description"
 					content="Response with User data on Spotify."
@@ -31,7 +35,7 @@ export default function TopArtists() {
 				<div
 					style={{
 						backgroundImage:
-							"linear-gradient( rgba(0 ,0, 0, 0.2), rgba(0,0,0,0.4)),url('https://images.unsplash.com/photo-1504509546545-e000b4a62425?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8c3BvdGlmeXxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60')",
+							"linear-gradient( rgba(0 ,0, 0, 0.4), rgba(0,0,0,0.9)),url('https://images.unsplash.com/photo-1611172062211-3a3898a443fa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fHN0cmVhbSUyMG11c2ljfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60')",
 						backgroundSize: "cover",
 						backgroundPosition: "center",
 						backgroundRepeat: "no-repeat",
@@ -40,17 +44,18 @@ export default function TopArtists() {
 			items-center justify-center"
 				>
 					<Sidebar />
-					<div className="relative md:ml-48 pt-3 h-screen">
+					<div className="relative md:ml-52 pt-3 h-screen">
 						<div className="flex pt-10 items-center justify-center">
 							<h1 className="text-4xl tracking-tight text-center font-bold text-gray-900 sm:text-5xl md:text-6xl">
-								<span className="block dark:text-white sm:inline">Top</span>
+								<span className="block dark:text-white sm:inline">My</span>
 								<span className="block dark:text-green-400 xl:inline ml-3">
-									Artists
+									Playlists
 								</span>
 							</h1>
 						</div>
 						<div className="flex flex-col p-10 items-center justify-center ">
-							<TopArtistisList props={Artists} />
+							{" "}
+							<MyPlaylists props={PlaylistsData} />
 						</div>
 					</div>
 				</div>

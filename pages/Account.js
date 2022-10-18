@@ -37,16 +37,16 @@ function Account() {
 					className="bg-white  dark:bg-gray-900  flex flex-row flex-wrap
 			items-center justify-center"
 				>
-					<div className="h-screen flex flex-col items-center justify-around ">
-						<div className="pt-10 flex items-center justify-center">
-							<h1 className="text-4xl tracking-tight text-center font-bold text-gray-900 sm:text-5xl md:text-6xl">
+					<div className="min-h-screen flex flex-col flex-wrap  items-center justify-center">
+						<div className="flex items-center justify-center">
+							<h1 className="text-5xl py-14 md:pb-10 flex flex-row tracking-tight text-center font-bold text-gray-900 sm:text-5xl md:text-6xl">
 								<span className="block dark:text-white sm:inline">My</span>
 								<span className="block dark:text-green-400 xl:inline ml-3">
 									Profile
 								</span>
 							</h1>
 						</div>
-						<div className="flex flex-col pb-10 items-center justify-center ">
+						<div className="pb-5">
 							<Profile props={Data} />
 						</div>
 					</div>

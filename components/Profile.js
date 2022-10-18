@@ -1,11 +1,10 @@
 import Head from "next/head";
-import Image from "next/image";
 import { signOut, signIn, useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 function Profile(Data) {
 	const session = useSession();
 	const user = Data.props;
-	console.log(user);
+
 	return (
 		<div>
 			<Head>
@@ -18,12 +17,12 @@ function Profile(Data) {
 			</Head>
 
 			<main>
-				<section className="p-2 flex flex-row flex-wrap rounded-2xl bg-gray-200 bg-opacity-10  backdrop-blur-md   break-words w-full text-white">
-					<div className="items-center  p-5 mx-auto ">
+				<section className="p-2 flex flex-row flex-wrap rounded-3xl bg-gray-500 bg-opacity-5 backdrop-blur-md break-words shadow-2xl md:max-w-full max-w-xs text-white">
+					<div className="items-center p-2 mx-auto ">
 						<div>
 							{session?.data?.user?.image ? (
 								<img
-									className="w-64 h-w-48 rounded-full border-2"
+									className="hover:p-3 duration-300 shadow-2xl w-72 h-72 md:w-64 md:h-64 rounded-3xl border-1"
 									src={session?.data?.user?.image}
 									alt={session?.data?.user?.name}
 								/>
@@ -56,53 +55,53 @@ function Profile(Data) {
 							</button>
 						</div>
 					</div>
-					<div className="items-center p-5 mx-auto  ">
-						<div className="flex flex-row mt-4 md:mt-0 ">
-							<h2 className="mb-4 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-green-400 ">
+					<div className="flex flex-col justify-around m-2">
+						<div className="flex flex-row">
+							<h2 className="md:text-2xl pb-2 hover:py-1 hover:text-green-600 duration-300 text-xl lg:text-3xl font-bold text-green-400 ">
 								Name
 							</h2>
-							<h2 className="mb-4 ml-5 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+							<h2 className="ml-5 md:text-2xl text-xl lg:text-3xl font-bold text-gray-900 dark:text-white">
 								{session?.data?.user?.name}
 							</h2>
 						</div>
-						<div className="flex flex-row mt-4 md:mt-0 ">
-							<h2 className="mb-4 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-green-400 ">
+						<div className="flex flex-row">
+							<h2 className="md:text-2xl pb-2 hover:py-1 hover:text-green-600 duration-300 text-xl lg:text-3xl font-bold text-green-400 ">
 								Email
 							</h2>
-							<h2 className="mb-4 ml-5 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+							<h2 className="ml-5 md:text-2xl truncate text-xl lg:text-3xl font-bold text-gray-900 dark:text-white">
 								{user?.email}
 							</h2>
 						</div>
-						<div className="flex flex-row mt-4 md:mt-0 ">
-							<h2 className="mb-4 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-green-400 ">
+						<div className="flex flex-row">
+							<h2 className="md:text-2xl pb-2 hover:py-1 hover:text-green-600 duration-300 text-xl lg:text-3xl font-bold text-green-400 ">
 								Followers
 							</h2>
-							<h2 className="mb-4 ml-5 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+							<h2 className="ml-5 md:text-2xl text-xl lg:text-3xl font-bold text-gray-900 dark:text-white">
 								{user?.followers?.total}
 							</h2>
 						</div>
 
-						<div className="flex flex-row mt-4 md:mt-0 ">
-							<h2 className="mb-4 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-green-400 ">
+						<div className="flex flex-row">
+							<h2 className="md:text-2xl pb-2 hover:py-1 hover:text-green-600 duration-300 text-xl lg:text-3xl font-bold text-green-400 ">
 								Country
 							</h2>
-							<h2 className="mb-4 ml-5 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+							<h2 className="ml-5 md:text-2xl text-xl lg:text-3xl font-bold text-gray-900 dark:text-white">
 								{user?.country}
 							</h2>
 						</div>
-						<div className="flex flex-row mt-4 md:mt-0 ">
-							<h2 className="mb-4 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-green-400 ">
+						<div className="flex flex-row">
+							<h2 className="md:text-2xl pb-2 hover:py-1 hover:text-green-600 duration-300 text-xl lg:text-3xl font-bold text-green-400 ">
 								Product
 							</h2>
-							<h2 className="mb-4 ml-5 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+							<h2 className="ml-5 md:text-2xl text-xl lg:text-3xl font-bold text-gray-900 dark:text-white">
 								{user?.product}
 							</h2>
 						</div>
-						<div className="flex flex-row mt-4 md:mt-0 ">
-							<h2 className="mb-4 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-green-400 ">
+						<div className="flex flex-row">
+							<h2 className="md:text-2xl pb-2 hover:py-1 hover:text-green-600 duration-300 text-xl lg:text-3xl font-bold text-green-400 ">
 								Explicit Content
 							</h2>
-							<h2 className="mb-4 ml-5 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+							<h2 className="ml-5 md:text-2xl text-xl lg:text-3xl font-bold text-gray-900 dark:text-white">
 								{user?.explicit_content?.filter_enabled == "filter_enabled" ? (
 									<p>Enabled</p>
 								) : (
@@ -110,11 +109,11 @@ function Profile(Data) {
 								)}
 							</h2>
 						</div>
-						<div className="flex flex-row mt-4 md:mt-0 ">
-							<h2 className="mb-4 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-green-400 ">
+						<div className="flex flex-row">
+							<h2 className="md:text-2xl pb-2 hover:py-1 hover:text-green-600 duration-300 text-xl lg:text-3xl font-bold text-green-400 ">
 								Explicit Filter
 							</h2>
-							<h2 className="mb-4 ml-5 md:text-2xl text-xl lg:text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+							<h2 className="ml-5 md:text-2xl text-xl lg:text-3xl font-bold text-gray-900 dark:text-white">
 								{user?.explicit_content?.filter_enabled == "filter_locked" ? (
 									<p>Enabled</p>
 								) : (

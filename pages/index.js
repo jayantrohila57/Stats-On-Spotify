@@ -1,13 +1,9 @@
 import React from "react";
-import { signOut, signIn, useSession, getProviders } from "next-auth/react";
-import Image from "next/image";
+import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import Link from "next/link";
-// import logo from "../public/VoltSec.io.png";
-
 function Hero() {
 	const session = useSession();
-
 	return (
 		<div>
 			<Head>
@@ -24,39 +20,32 @@ function Hero() {
 						"linear-gradient( rgba(0 ,0, 0, 0.2), rgba(0,0,0,0.8)),url('https://images.unsplash.com/photo-1623018035813-9cfb5b502e04?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80')",
 					backgroundSize: 'cover"',
 					backgroundPosition: "center",
-
 					backgroundRepeat: "no-repeat",
 				}}
 				className="bg-white min-h-[100vh] dark:bg-gray-900  flex flex-row flex-wrap
 			items-center justify-center"
 			>
-				<div className="flex flex-row flex-wrap mt-10 items-center justify-between">
+				<div className="flex flex-row flex-wrap mt-10 items-center content-center justify-center">
 					<div className="sm:text-left lg:text-left">
 						<div className="p-5">
 							<h1 className="tracking-tight text-left font-bold text-gray-900  ">
-								<span className="block dark:text-white sm:inline text-5xl md:text-6xl">
+								<span className="block dark:text-white sm:inline text-6xl md:text-8xl">
 									Welcome to
-								</span>{" "}
-								<br />
-								<span className="block dark:text-green-400 sm:inline text-5xl md:text-6xl">
+									<br />
+								</span>
+
+								<span className="block dark:text-green-400 sm:inline text-6xl md:text-8xl">
 									Stats On Spotify
 								</span>
 							</h1>
 						</div>
 						<div className="p-5">
-							<h1 className="text-xl tracking-tight text-left font-bold text-gray-900 sm:text-5xl md:text-4xl">
+							<h1 className="text-xl tracking-tight text-left font-bold text-gray-900 sm:text-5xl md:text-5xl">
 								<span className="block dark:text-gray-300 xl:inline">
 									An Easy Approach To
 									<br /> Review Your Spotify Data
 								</span>
 							</h1>
-
-							<p className="mt-3 text-sm text-left text-gray-300 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-base lg:mx-0">
-								This application provide free details of your spotify top
-								tracks, top artist, Playlists and many more. It allows many
-								other options to manage the songs, make sure to check out at no
-								cost.
-							</p>
 						</div>
 					</div>
 				</div>

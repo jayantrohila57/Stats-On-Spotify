@@ -7,7 +7,7 @@ export default function SideBar() {
 
 	return (
 		<>
-			<nav className="md:left-0 md:block md:fixed md:top-16 z-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden  bg-white dark:bg-gray-900 flex flex-wrap items-center justify-between relative md:w-64  py-10 px-6">
+			<nav className="md:left-0 md:block md:fixed md:top-16 z-0 md:bottom-0 md:overflow-y-auto md:flex-row md:flex-nowrap md:overflow-hidden  flex flex-wrap items-center justify-between relative md:w-60">
 				<div className="md:flex-col  pt-10 md:items-stretch md:flex-nowrap px-0 flex flex-wrap items-center justify-between mx-auto">
 					<ul className="flex flex-col mt-10 text-sm font-medium text-center text-gray-500 dark:text-gray-400">
 						<Link href="/Home">

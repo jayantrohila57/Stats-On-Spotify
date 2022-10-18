@@ -1,5 +1,5 @@
 import React from "react";
-import { signOut, signIn, useSession } from "next-auth/react";
+import { signOut, signIn, useSession, getProviders } from "next-auth/react";
 import Image from "next/image";
 import Head from "next/head";
 import Link from "next/link";
@@ -21,7 +21,7 @@ function Hero() {
 			<section
 				style={{
 					backgroundImage:
-						"linear-gradient( rgba(0 ,0, 0, 0.2), rgba(31, 41, 55)),url('https://images.unsplash.com/photo-1623018035813-9cfb5b502e04?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80')",
+						"linear-gradient( rgba(0 ,0, 0, 0.2), rgba(0,0,0,0.8)),url('https://images.unsplash.com/photo-1623018035813-9cfb5b502e04?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80')",
 					backgroundSize: 'cover"',
 					backgroundPosition: "center",
 
@@ -30,15 +30,15 @@ function Hero() {
 				className="bg-white min-h-[100vh] dark:bg-gray-900  flex flex-row flex-wrap
 			items-center justify-center"
 			>
-				<div className="flex flex-row flex-wrap items-center justify-between">
+				<div className="flex flex-row flex-wrap mt-10 items-center justify-between">
 					<div className="sm:text-left lg:text-left">
 						<div className="p-5">
 							<h1 className="tracking-tight text-left font-bold text-gray-900  ">
-								<span className="block dark:text-white sm:inline text-6xl md:text-6xl">
+								<span className="block dark:text-white sm:inline text-5xl md:text-6xl">
 									Welcome to
 								</span>{" "}
 								<br />
-								<span className="block dark:text-green-400 sm:inline text-6xl md:text-6xl">
+								<span className="block dark:text-green-400 sm:inline text-5xl md:text-6xl">
 									Stats On Spotify
 								</span>
 							</h1>
@@ -52,18 +52,18 @@ function Hero() {
 							</h1>
 
 							<p className="mt-3 text-sm text-left text-gray-300 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-base lg:mx-0">
-								A Certified Ethical Hacker’s and Ai-Powered Cloud Platform To
-								Provide You Better and Affordable Cybersecurity Solutions For
-								Your Organization. VoltSec.io™ is the first AI-Powered
-								Penetration
+								This application provide free details of your spotify top
+								tracks, top artist, Playlists and many more. It allows many
+								other options to manage the songs, make sure to check out at no
+								cost.
 							</p>
 						</div>
 					</div>
 				</div>
 				<div className="flex flex-col m-2 space-y-4 sm:flex-col sm:justify-center  sm:space-x-4">
 					<div className="flex flex-row flex-wrap justify-center items-center">
-						<div className="block m-2 p-6 max-w-sm dark:text-white shadow-2xl rounded-2xl backdrop-blur-lg ">
-							<div className="text-center pr-2 m-5">
+						<div className="block m-2 p-6 max-w-sm dark:text-white shadow-2xl rounded-2xl bg-gray-200 bg-opacity-10 backdrop-blur-md ">
+							<div className="text-center pr-2 ">
 								{session?.status === "unauthenticated" ? (
 									<h2 className="font-bold text-3xl p-5 ">SignUp / LogIn</h2>
 								) : (

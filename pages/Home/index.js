@@ -1,50 +1,77 @@
-import Head from "next/head";
-import Image from "next/image";
-import StatsBox from "../../components/StatsBox";
-import Sidebar from "../../components/SideBar";
-import { useSession, signIn, signOut } from "next-auth/react";
+import BackButton from '../../components/BackButton'
+import Head from 'next/head'
+import Link from 'next/link'
 export default function Home() {
-	const session = useSession();
-	return (
-		<div>
-			<Head>
-				<title>Home | Stats On Spotify</title>
-				<meta
-					name="description"
-					content="Response with User data on Spotify."
-				/>
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
+  const nav = '/'
+  return (
+    <div>
+      <Head>
+        <title>Home | Stats On Spotify</title>
+        <meta
+          name="description"
+          content="Response with User data on Spotify."
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
 
-			<main>
-				<div
-					style={{
-						backgroundImage:
-							"linear-gradient( rgba(0 ,0, 0, 0.2), rgba(0,0,0,0.9)),url('https://images.unsplash.com/photo-1623018035813-9cfb5b502e04?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80')",
-						backgroundSize: 'cover"',
-						backgroundPosition: "center",
-
-						backgroundRepeat: "no-repeat",
-					}}
-					className="bg-white min-h-[100vh] dark:bg-gray-900  flex flex-row flex-wrap
-			items-center justify-center"
-				>
-					<Sidebar />
-					<div className="relative md:ml-64 pt-10 h-screen">
-						<div className="flex pt-10 items-center justify-center">
-							<h1 className="text-4xl tracking-tight text-center font-bold text-gray-900 sm:text-5xl md:text-6xl">
-								<span className="block dark:text-white sm:inline">Latest</span>
-								<span className="block dark:text-green-400 xl:inline ml-3">
-									Stats
-								</span>
-							</h1>
-						</div>
-						<div className="flex flex-col p-10 items-center justify-center ">
-							<StatsBox />
-						</div>
-					</div>
-				</div>
-			</main>
-		</div>
-	);
+      <main>
+        <div
+          className="min-h-screen"
+          style={{
+            backgroundImage:
+              "linear-gradient( rgba(0 ,0, 0, 0.9), rgba(0,0,0,0.2)),url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80')",
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        >
+          <div className="relative flex flex-row md:h-32 h-28 justify-center items-end">
+            <BackButton props={nav} />
+            <div className="text-4xl flex flex-row tracking-tight text-center font-bold text-gray-900 sm:text-5xl md:text-6xl">
+              <span className="block dark:text-white ">Home</span>
+              <span className="block dark:text-green-400 ml-2 ">Page</span>
+            </div>
+          </div>
+          <div className="p-2 mt-10 flex flex-row flex-wrap items-center justify-start">
+            <Link href="/Home/Playlists">
+              <div className="rounded-2xl m-2 hover:p-3 hover:backdrop-blur-md flex flex-col w-[95vw] flex-wrap md:max-w-xs items-start h-36 md:h-36 md:p-2 p-2 bg-black hover:bg-gray-800  hover:bg-opacity-10 bg-opacity-30 duration-200 md:flex-row">
+                <div>
+                  <dt className="ml-2 text-4xl font-extrabold  dark:text-green-400  ">
+                    My Playlists
+                  </dt>
+                </div>
+              </div>
+            </Link>
+            <Link href="/Home/NewRelease">
+              <div className="rounded-2xl m-2 hover:p-3 hover:backdrop-blur-md flex flex-col w-[95vw] flex-wrap md:max-w-xs items-start h-36 md:h-36 md:p-2 p-2 bg-black hover:bg-gray-800  hover:bg-opacity-10 bg-opacity-30 duration-200 md:flex-row">
+                <div>
+                  <dt className="ml-2 text-4xl font-extrabold  dark:text-green-400  ">
+                    New Release
+                  </dt>
+                </div>
+              </div>
+            </Link>
+            <Link href="/Home/Top-Artists">
+              <div className="rounded-2xl m-2 hover:p-3 hover:backdrop-blur-md flex flex-col w-[95vw] flex-wrap md:max-w-xs items-start h-36 md:h-36 md:p-2 p-2 bg-black hover:bg-gray-800  hover:bg-opacity-10 bg-opacity-30 duration-200 md:flex-row">
+                <div>
+                  <dt className="ml-2 text-4xl font-extrabold  dark:text-green-400  ">
+                    My Top Artists
+                  </dt>
+                </div>
+              </div>
+            </Link>
+            <Link href="/Home/Top-tracks">
+              <div className="rounded-2xl m-2 hover:p-3 hover:backdrop-blur-md flex flex-col w-[95vw] flex-wrap md:max-w-xs items-start h-36 md:h-36 md:p-2 p-2 bg-black hover:bg-gray-800  hover:bg-opacity-10 bg-opacity-30 duration-200 md:flex-row">
+                <div>
+                  <dt className="ml-2 text-4xl font-extrabold  dark:text-green-400  ">
+                    My Top Tracks
+                  </dt>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </main>
+    </div>
+  )
 }

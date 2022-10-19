@@ -4,7 +4,6 @@ import Head from 'next/head'
 import UseSpotify from '../../hooks/UseSpotify'
 import MyPlaylists from '../../components/MyPlaylists'
 import { useSession } from 'next-auth/react'
-import Link from 'next/link'
 export default function Playlists() {
   const nav = '/Home'
   const [PlaylistsData, setPlaylistsData] = useState([])
@@ -23,7 +22,7 @@ export default function Playlists() {
   return (
     <div>
       <Head>
-        <title>My Playlists| Stats On Spotify</title>
+        <title>My Playlists | Stats On Spotify</title>
         <meta
           name="description"
           content="Response with User data on Spotify."
@@ -36,7 +35,7 @@ export default function Playlists() {
           className="min-h-screen"
           style={{
             backgroundImage:
-              "linear-gradient( rgba(0 ,0, 0, 0.4), rgba(0,0,0,0.9)),url('https://images.unsplash.com/photo-1611172062211-3a3898a443fa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fHN0cmVhbSUyMG11c2ljfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60')",
+              "linear-gradient( rgba(0 ,0, 0, 0.2), rgba(0,0,0,0.5)),url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80')",
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',

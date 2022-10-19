@@ -131,7 +131,7 @@ const Nav = ({
             ) : (
               <>
                 <Link href="/Account">
-                  <div className="rounded-full mt-1 h-9 border-2 hover:bg-green-400 border-opacity-30 hover:scale-110 hover:text-green-400">
+                  <div className="rounded-full mt-1 mr-2 h-9 border-2 hover:bg-green-400 border-opacity-30 hover:scale-110 hover:text-green-400">
                     {!session?.data?.user?.image ? (
                       <svg
                         className="rounded-full dark:text-white hover:shadow-md float-left w-8 h-8"
@@ -154,10 +154,10 @@ const Nav = ({
                     )}
                   </div>
                 </Link>
-                <div className="mx-2 mb-2 h-8 dark:text-gray-300">
+                {/* <div className="mx-2 mb-2 h-8 dark:text-gray-300">
                   <p className="text-sm">{session?.data?.user?.name}</p>
                   <p className="text-xs">{session?.data?.user?.email}</p>
-                </div>
+                </div> */}
                 <button
                   className="inline-block dark:text-white hover:text-green-400 p-1 h-8 text-sm hover:scale-105 duration-100"
                   onClick={() => {

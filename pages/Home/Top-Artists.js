@@ -50,7 +50,6 @@ export default function MyTopArtists() {
             </div>
           </div>
           <div className="flex flex-col items-center justify-center">
-            {' '}
             <TopArtistisList props={TopArtists} />
           </div>
         </div>

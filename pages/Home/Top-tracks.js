@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Head from "next/head";
-import Image from "next/image";
-import UseSpotify from "../../hooks/UseSpotify";
+import Head from 'next/head'
+import UseSpotify from '../../hooks/UseSpotify'
 import TopTracksList from '../../components/TopTracksList'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import BackButton from '../../components/BackButton'
+
+import { useSession } from 'next-auth/react'
 export default function TopTrack() {
+  const nav = '/Home'
   const [Tracks, setTracks] = useState([])
   const session = useSession()
   const spotifyApi = UseSpotify()
@@ -35,22 +37,17 @@ export default function TopTrack() {
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
           }}
-          className="bg-white min-h-[100vh] dark:bg-gray-900  flex flex-row flex-wrap
-			items-center justify-center"
+          className="min-h-screen"
         >
-          <div className="relative md:ml-48 pt-3 h-screen">
-            <div className="flex pt-10 items-center justify-center">
-              <h1 className="text-4xl tracking-tight text-center font-bold text-gray-900 sm:text-5xl md:text-6xl">
-                <span className="block dark:text-white sm:inline">Top</span>
-                <span className="block dark:text-green-400 xl:inline ml-3">
-                  Tracks
-                </span>
-              </h1>
+          <div className="relative flex flex-row md:h-32 h-28 justify-center items-end">
+            <BackButton props={nav} />
+            <div className="text-4xl flex flex-row tracking-tight text-center font-bold text-gray-900 sm:text-5xl md:text-6xl">
+              <span className="block dark:text-white ">Top</span>
+              <span className="block dark:text-green-400 ml-2 ">Tracks</span>
             </div>
-            <div className="flex flex-col p-10 items-center justify-center ">
-              {' '}
-              <TopTracksList props={Tracks} />
-            </div>
+          </div>
+          <div className="flex flex-col items-center justify-center">
+            <TopTracksList props={Tracks} />
           </div>
         </div>
       </main>

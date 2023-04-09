@@ -124,7 +124,10 @@ export default function Home() {
                 className="flex snap-end flex-col md:flex-row"
               >
                 <div className="bg-black w-10/12 h-1/6 md:w-3/12 md:h-[80vh] md:pt-20">
-                  <NavRouter name="Your Top #50 Songs That You Listen the most." />
+                  <NavRouter
+                    value="/#top-50-Artists"
+                    name="Your Top #50 Songs That You Listen the most."
+                  />
                 </div>
                 <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-9/12">
                   <TopTracksList props={Tracks} />
@@ -134,10 +137,13 @@ export default function Home() {
                 id="top-50-Artists"
                 className="flex snap-end flex-col md:flex-row"
               >
-                <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
-                  <NavRouter name="Your Top #50 Artists That You Listen the most." />
+                <div className="bg-black w-10/12 h-1/6 md:w-3/12 md:h-[80vh] md:pt-20">
+                  <NavRouter
+                    value="/#All-Playlists"
+                    name="Your Top #50 Artists That You Listen the most."
+                  />
                 </div>
-                <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6">
+                <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-9/12">
                   <TopArtistsList props={TopArtists} />
                 </div>
               </div>
@@ -145,10 +151,13 @@ export default function Home() {
                 id="All-Playlists"
                 className="flex snap-end flex-col md:flex-row"
               >
-                <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
-                  <NavRouter name="All Of Your Playlists are Here Check Them Out." />
+                <div className="bg-black w-10/12 h-1/6 md:w-3/12 md:h-[80vh] md:pt-20">
+                  <NavRouter
+                    value="/#New-Release"
+                    name="All Of Your Playlists are Here Check Them Out."
+                  />
                 </div>
-                <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6">
+                <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-9/12">
                   <MyPlaylists props={PlaylistsData} />
                 </div>
               </div>
@@ -156,10 +165,13 @@ export default function Home() {
                 id="New-Release"
                 className="flex snap-end flex-col md:flex-row"
               >
-                <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
-                  <NavRouter name="New Release that we hope you like them." />
+                <div className="bg-black w-10/12 h-1/6 md:w-3/12 md:h-[80vh] md:pt-20">
+                  <NavRouter
+                    value="/#New-Release"
+                    name="New Release that we hope you like them."
+                  />
                 </div>
-                <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6">
+                <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-9/12">
                   <NewItems props={NewReleases} />
                 </div>
               </div>{' '}

@@ -16,7 +16,8 @@ function useSpotify() {
     if (session) {
       if (session.error === 'RefreshAccessTokenError') {
         console.log('manual sign in')
-        signIn()
+        // signIn()
+        alert(`Session Expired Login again. `)
       }
       //setting the acces token that will be used by the api through the build
       spotifyApi.setAccessToken(session.user.accessToken)

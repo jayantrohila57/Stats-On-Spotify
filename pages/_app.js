@@ -1,7 +1,8 @@
-import { SessionProvider } from "next-auth/react";
-import "../styles/globals.css";
+import { SessionProvider } from 'next-auth/react'
+import '../styles/globals.css'
 
 import NextNprogress from 'nextjs-progressbar'
+import Nav from '../components/Nav'
 export default function App({
   Component,
   pageProps: { session, ...pageProps },
@@ -22,6 +23,7 @@ export default function App({
           style={{ WebkitTapHighlightColor: 'transparent' }}
         >
           <div className="h-[100vh] scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 overflow-y-scroll dark:scrollbar-thumb-gray-700 dark:scrollbar-track-gray-800">
+            <Nav />
             <Component {...pageProps} />
           </div>
         </main>

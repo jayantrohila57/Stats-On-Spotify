@@ -7,7 +7,7 @@ import Image from 'next/image'
 
 export function ChevronDoubleDownIcon(props) {
   return (
-    <Link href="/">
+    <Link href="/#getStarted">
       <button className="hover:scale-115 duration-300 transition">
         <svg
           className="text-white animate-bounce   h-10 w-10"
@@ -33,7 +33,7 @@ export function ChevronDoubleDownIcon(props) {
 function Hero() {
   const session = useSession()
   return (
-    <div className="relative ">
+    <div id="home" className="relative ">
       <div className="w-full z-30 absolute md:bottom-5  bottom-10 justify-center flex items-center h-20 my-2">
         <ChevronDoubleDownIcon />
       </div>
@@ -49,18 +49,18 @@ function Hero() {
         <div className="flex flex-row flex-wrap items-center content-center justify-center">
           <div className="sm:text-left lg:text-left">
             <div className="p-5">
-              <h1 className="tracking-tight text-left font-bold text-gray-900  ">
-                <span className="block dark:text-white sm:inline text-7xl md:text-9xl">
-                  Welcome to
-                  <br />
+              <div className="tracking-tight  text-left  text-gray-900  ">
+                <span className="block dark:text-white sm:inline text-5xl md:text-8xl">
+                  Welcome <br />
+                  <h4 className=""> {session?.data?.user?.name} to</h4>
                 </span>
-                <span className="block tracking-tight dark:text-green-400 sm:inline text-8xl md:text-9xl">
+                <h1 className="block tracking-tight font-black dark:text-green-400 sm:inline text-7xl md:text-9xl">
                   Stats On Spotify
-                </span>
-              </h1>
+                </h1>
+              </div>
             </div>
             <div className="px-5">
-              <h1 className="text-2xl tracking-tight text-left font-bold text-gray-900 sm:text-5xl md:text-5xl">
+              <h1 className="text-2xl tracking-tight text-left font-bold text-gray-900 sm:text-4xl md:text-4xl">
                 <span className="block dark:text-gray-300 xl:inline">
                   An Easy Approach To
                   <br /> Review Your Spotify Data

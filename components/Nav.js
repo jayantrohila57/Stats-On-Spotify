@@ -42,7 +42,7 @@ const Nav = ({
           <nav className="hidden text-white md:flex space-x-10">
             <Link
               className="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
-              href="/Home"
+              href="/"
             >
               Home
             </Link>
@@ -144,18 +144,26 @@ const Nav = ({
         }
       >
         <div className="h-screen z-10 ">
-          <div className="shadow-lg h-full bg-gray-900 bg-opacity-90  text-white duration-300 font-bold ">
+          <div className="shadow-lg p-1 h-full bg-black bg-opacity-90  text-white duration-300 font-bold ">
             <div className="p-3 flex items-center justify-between">
-              <Link href="/">
+              <Link href="/#home">
                 <div
                   onClick={() => setOpen(!open)}
-                  className="flex p-1 justify-start items-center lg:w-0 lg:flex-1"
+                  className="flex  justify-start items-center lg:w-0 lg:flex-1"
                 >
-                  <span className="text-2xl dark:text-white text-gray-600">
+                  <Image
+                    className="h-10 w-10 m-0.5"
+                    src={logo}
+                    width={40}
+                    height={40}
+                    alt="logo"
+                  />
+                  <span className="font-bold text-2xl  dark:text-white text-gray-600">
                     <h1>Stats On Spotify</h1>
                   </span>
                 </div>
               </Link>
+
               <div>
                 <button
                   type="button"
@@ -184,7 +192,7 @@ const Nav = ({
                 <hi className="mx-5 font-extrabold border-b-2 border-dashed w-72 text-3xl text-green-400">
                   Menu
                 </hi>
-                <Link href="/Home">
+                <Link href="/">
                   <h1
                     onClick={() => setOpen(!open)}
                     className="duration-300 hover:text-green-400 rounded-3xl hover:p-4 my-2 m-1 p-3 text-5xl"
@@ -217,7 +225,7 @@ const Nav = ({
                   </h1>
                 </Link>
               </div>
-              <div className="flex pb-10 items-center p-1 justify-evenly ">
+              <div className="flex pb-10 items-center p-4 justify-start gap-4 ">
                 {session?.status === 'unauthenticated' ? (
                   <button
                     onClick={() => {
@@ -230,11 +238,11 @@ const Nav = ({
                 ) : (
                   <>
                     <Link href="/Account">
-                      <div className="rounded-3xl m-2 h-20  hover:bg-green-400 border-opacity-20 hover:scale-110 hover:text-green-400">
+                      <div className="border-4 border-slate-100 p-2  rounded-3xl m-0 w-20 h-20  hover:bg-green-400 border-opacity-20 hover:scale-110 hover:text-green-400">
                         {session.status === 'authenticated' ? (
                           <Image
-                            width={50}
-                            height={50}
+                            width={100}
+                            height={100}
                             alt="logo"
                             className="rounded-3xl hover:shadow-md float-left h-full"
                             src={session?.data?.user?.image}
@@ -244,7 +252,7 @@ const Nav = ({
                         )}
                       </div>
                     </Link>
-                    <div className="p-1 dark:text-gray-300">
+                    <div className="p-0 dark:text-gray-300">
                       <p className="text-2xl text-green-400">
                         {session?.data?.user?.name}
                       </p>

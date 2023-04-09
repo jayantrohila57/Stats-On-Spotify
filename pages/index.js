@@ -10,6 +10,7 @@ import NavRouter from '../components/NavRouter'
 import Hero from '../components/Hero'
 import InfoSection from '../components/InfoSection'
 import { NextSeo } from 'next-seo'
+import Link from 'next/link'
 export default function Home() {
   const spotifyApi = UseSpotify()
   const session = useSession()
@@ -115,13 +116,7 @@ export default function Home() {
           <div className="snap-center snap-normal">
             <InfoSection />
           </div>
-          {session.status === 'authenticated' ? (
-            <div className="snap-center snap-normal">
-              <Profile props={Data} />
-            </div>
-          ) : (
-            <></>
-          )}
+
           {session.status === 'authenticated' ? (
             <>
               <div className="flex snap-end flex-col md:flex-row">
@@ -162,7 +157,16 @@ export default function Home() {
           )}
         </div>
         <div className="flex fixed backdrop-blur-sm text-xs bottom-0 w-screen text-slate-100 justify-center items-center py-2">
-          <h2> © 2022-2023 StatsOnSpotify. All Rights Reserved.</h2>
+          <h2 className="items-center text-center">
+            {' '}
+            © 2023 StatsOnSpotify. All Rights Reserved.
+            <br className="md:hidden block" />{' '}
+            <span className="hover:underline text-green-500">
+              <Link href="https://github.com/jayantrohila57">
+                Creator: @JayantRohila57
+              </Link>
+            </span>
+          </h2>
         </div>
       </div>
     </>

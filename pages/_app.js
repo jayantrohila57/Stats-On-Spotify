@@ -80,7 +80,7 @@ export default function App({
       />
       <SessionProvider session={session}>
         <main
-          className="bg-black"
+          className="bg-black font-poppins font-extrabold"
           style={{ WebkitTapHighlightColor: 'transparent' }}
         >
           <div className="h-[100vh] scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 overflow-y-scroll dark:scrollbar-thumb-gray-700 dark:scrollbar-track-gray-800">

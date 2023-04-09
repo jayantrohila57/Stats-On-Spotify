@@ -20,7 +20,7 @@ function InfoSection() {
                 ) : (
                   <>
                     <Link href="/Account">
-                      <div className="border-4 border-slate-100 p-1  rounded-3xl m-0 w-20 h-20  hover:bg-green-400 border-opacity-20 hover:scale-105 hover:text-green-400">
+                      <div className="border-2 border-slate-100 p-1  rounded-3x1 m-0 w-20 h-20  hover:bg-green-400 border-opacity-20 hover:scale-105 hover:text-green-400">
                         {session.status === 'authenticated' ? (
                           <Image
                             width={400}
@@ -77,7 +77,7 @@ function InfoSection() {
             <div className="md:w-8/12 w-full">
               <div className="flex flex-row flex-wrap justify-evenly items-center">
                 <Link href={'/#top-50-songs'}>
-                  <div className="md:h-60 md:w-96 h-40 border-4 border-green-500 border-opacity-50 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-2xl">
+                  <div className="md:h-60 md:w-96 h-40 border-2 border-green-500 border-opacity-10 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-2xl">
                     <div className="font-bold text-slate-300 hover:text-green-500 md:text-4xl text-base p-2">
                       <svg
                         className="w-10 h-10 mb-2"
@@ -94,7 +94,7 @@ function InfoSection() {
                   </div>
                 </Link>{' '}
                 <Link href={'/#top-50-Artists'}>
-                  <div className="md:h-60 md:w-96 h-40 border-4 border-green-500 border-opacity-50 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-2xl">
+                  <div className="md:h-60 md:w-96 h-40 border-2 border-green-500 border-opacity-10 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-2xl">
                     <div className="font-bold text-slate-300 hover:text-green-500 md:text-4xl text-base p-2">
                       <svg
                         className="w-10 h-10 mb-2"
@@ -111,7 +111,7 @@ function InfoSection() {
                   </div>
                 </Link>{' '}
                 <Link href={'/#All-Playlists'}>
-                  <div className="md:h-60 md:w-96 h-40 border-4 border-green-500 border-opacity-50 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-2xl">
+                  <div className="md:h-60 md:w-96 h-40 border-2 border-green-500 border-opacity-10 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-2xl">
                     <div className="font-bold text-slate-300 hover:text-green-500 md:text-4xl text-base p-2">
                       <svg
                         className="w-10 h-10 mb-2"
@@ -128,7 +128,7 @@ function InfoSection() {
                   </div>
                 </Link>
                 <Link href={'/#New-Release'}>
-                  <div className="md:h-60 md:w-96 h-40 border-4 border-green-500 border-opacity-50 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-2xl">
+                  <div className="md:h-60 md:w-96 h-40 border-2 border-green-500 border-opacity-10 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-2xl">
                     <div className="font-bold text-slate-300 hover:text-green-500 md:text-4xl text-base p-2">
                       <svg
                         className="w-10 h-10 mb-2"

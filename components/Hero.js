@@ -50,7 +50,7 @@ function Hero() {
           <div className="sm:text-left lg:text-left">
             <div className="p-5">
               <div className="tracking-tight  text-left  text-slate-900  ">
-                <span className="block dark:text-white sm:inline text-5xl md:text-8xl">
+                <span className="block dark:text-white font-black sm:inline text-7xl md:text-9xl">
                   Welcome <br />
                   <h4 className=""> {session?.data?.user?.name} to</h4>
                 </span>

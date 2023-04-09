@@ -4,8 +4,8 @@ export default function TopArtistsList(TopArtists) {
   const data = TopArtists.props
   return (
     <>
-      <div className="flex md:pt-20 py-5 flex-col scroll-smooth   break-words w-full h-[80vh] md:h-screen bg-black">
-        <div className="md:h-[80vh] h-[80vh] scroll-smooth m-1 duration-300 snap-y snap-mandatory  rounded-xl scrollbar-thin overflow-y-scroll scrollbar-thumb-green-900 scrollbar-track-black">
+      <div className="flex md:pt-20 py-5 flex-col scroll-smooth   break-words w-full h-[75vh] md:h-screen bg-black">
+        <div className="md:h-[80vh] h-[75vh] scroll-smooth m-1 duration-300 snap-y snap-mandatory  rounded-xl scrollbar-thin overflow-y-scroll scrollbar-thumb-green-900 scrollbar-track-black">
           <div className="block scroll-smooth md:w-full duration-300 snap-y snap-mandatory ">
             <div className="flex gap-2 flex-row flex-wrap scroll-smooth duration-300 snap-y snap-mandatory  content-start items-start justify-around mx-auto  text-white">
               {data?.map((value, index) => {
@@ -14,11 +14,7 @@ export default function TopArtistsList(TopArtists) {
                     key={index}
                     className="rounded-2xl hover:scale-95 flex items-center md:p-2  flex-col w-[95vw] flex-wrap md:max-w-md  h-36 md:h-36  bg-slate-200 bg-opacity-10  hover:bg-opacity-20  duration-200 md:flex-row p-2"
                   >
-                    <a
-                      target="0"
-                      className="md:w-32 w-32 mr-1"
-                      href={value?.external_urls?.spotify}
-                    >
+                    <div className="md:w-32 w-32">
                       <Image
                         width={160}
                         height={160}
@@ -26,10 +22,10 @@ export default function TopArtistsList(TopArtists) {
                         src={value?.images[0]?.url}
                         alt={value?.name}
                       />
-                    </a>
-                    <div className="md:ml-3 ml-0 md:p-1 p-2 flex flex-col h-full items-start justify-between w-60 duration-200">
+                    </div>
+                    <div className="md:ml-3 ml-0 md:p-1 p-2 flex flex-col h-full items-start justify-between md:w-72 w-52 duration-200">
                       <div className="">
-                        <span className="justify-start items-center text-2xl font-bold text-slate-200">
+                        <span className="justify-start items-center text-sm md:text-2xl font-bold text-green-500">
                           <svg
                             className="w-5 h-5 mb-1 md:h-7 md:w-7  inline"
                             fill="currentColor"
@@ -44,17 +40,17 @@ export default function TopArtistsList(TopArtists) {
                           </svg>
                           {index + 1}
                         </span>{' '}
-                        <p className="line-clamp-2 md:line-clamp-2 text-xl md:w-72 w-60 md:text-2xl inline font-bold tracking-tight text-slate-900 dark:text-white">
+                        <p className="line-clamp-2 md:line-clamp-2 text-sm md:w-72 w-52 md:text-2xl inline font-bold tracking-tight text-slate-900 dark:text-white">
                           <a target="0" href={value?.external_urls?.spotify}>
                             {value?.name}
                           </a>
                         </p>
-                        <p className="line-clamp-2 inline  md:line-clamp-2 text-xs md:w-72 w-52 tracking-tight font-bold text-slate-300 ">
+                        <h2 className="line-clamp-1 inline  md:line-clamp-2 text-xs md:w-72 w-52 tracking-tight font-bold text-slate-300 ">
                           {value?.genres.map((genera, index) => {
                             return (
                               <span
                                 key={index}
-                                className="inline hover:underline text-green-400"
+                                className="inline hover:underline text-slate-400 leading-1 line-clamp-1"
                               >
                                 {index > 0 ? (
                                   <span className="inline  dark:text-green-400">
@@ -67,9 +63,9 @@ export default function TopArtistsList(TopArtists) {
                               </span>
                             )
                           })}
-                        </p>
+                        </h2>
                       </div>
-                      <div className="flex flex-row flex-wrap w-60 mb-5">
+                      <div className="flex flex-row flex-wrap w-68 mb-5">
                         <p className="md:font-sans font-bold text-xs ">
                           Popularity
                           <span className="text-green-400 mx-1">

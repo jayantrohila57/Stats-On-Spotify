@@ -39,8 +39,8 @@ export default function TopTracksList(Tracks) {
 
   return (
     <>
-      <div className="flex md:pt-20 py-5 flex-col scroll-smooth min-w-0  break-words w-full h-[80vh] md:h-screen bg-black">
-        <div className="md:h-[80vh] h-[80vh] scroll-smooth m-1 duration-300 snap-y snap-mandatory  rounded-xl scrollbar-thin overflow-y-scroll scrollbar-thumb-green-900 scrollbar-track-black">
+      <div className="flex md:pt-20 pt-2 flex-col scroll-smooth min-w-0  break-words w-full h-[75vh] md:h-screen bg-black">
+        <div className="md:h-[80vh] h-[65vh] scroll-smooth m-1 duration-300 snap-y snap-mandatory  rounded-xl scrollbar-thin overflow-y-scroll scrollbar-thumb-green-900 scrollbar-track-black">
           <div className="block scroll-smooth w-full duration-300 snap-y snap-mandatory  overflow-x-auto">
             <div className="flex gap-2 flex-row flex-wrap scroll-smooth duration-300 snap-y snap-mandatory  content-start items-start justify-around mx-auto  text-white">
               {data?.map((value, index) => {
@@ -67,8 +67,8 @@ export default function TopTracksList(Tracks) {
                           />
                         </div>
                       </div>
-                      <div className="p-1">
-                        <p className="line-clamp-2 md:max-w-2xl md:line-clamp-1 text-base w-full md:text-2xl inline font-bold tracking-tight text-slate-300">
+                      <div className="px-1">
+                        <p className="line-clamp-1 md:max-w-2xl md:line-clamp-1 text-sm w-full md:text-2xl inline font-bold tracking-tight leading-none text-slate-300">
                           <p className=" text-green-500 inline mr-2">
                             {' '}
                             <svg
@@ -85,7 +85,11 @@ export default function TopTracksList(Tracks) {
                             </svg>
                             {index + 1}
                           </p>{' '}
-                          <a target="0" href={value?.external_urls?.spotify}>
+                          <a
+                            className="line-clamp-2 md:line-clamp-1"
+                            target="0"
+                            href={value?.external_urls?.spotify}
+                          >
                             {value?.name}
                           </a>
                         </p>

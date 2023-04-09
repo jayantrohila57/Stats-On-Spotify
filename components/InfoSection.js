@@ -14,13 +14,13 @@ function InfoSection() {
         <div className="mx-auto">
           <div className="flex md:flex-row flex-col flex-wrap justify-center items-center">
             <div className="md:w-4/12 w-11/12 p-2 md:p-5 flex flex-col justify-center items-center">
-              <div className="flex pb-10 items-center p-4 justify-start gap-4 ">
+              <div className="flex pb-0 items-center p-4 justify-start gap-4 ">
                 {session?.status === 'unauthenticated' ? (
                   <></>
                 ) : (
                   <>
                     <Link href="/Account">
-                      <div className="border-2 border-slate-100 p-1  rounded-3x1 m-0 w-20 h-20  hover:bg-green-400 border-opacity-20 hover:scale-105 hover:text-green-400">
+                      <div className="border-2 border-slate-100 p-1  rounded-3xl m-0 w-20 h-20  hover:bg-green-400 border-opacity-20 hover:scale-105 hover:text-green-400">
                         {session.status === 'authenticated' ? (
                           <Image
                             width={400}
@@ -49,10 +49,10 @@ function InfoSection() {
                 We offers These Services to You for free!
               </h1>
 
-              <h1 className="md:p-5 md:hidden m-2 md:m-5 p-1 text-slate-100 font-bold text-4xl md:text-5xl ">
+              <h1 className="md:p-5 md:hidden m-2 md:m-5 p-1 text-slate-100 font-bold text-2xl md:text-5xl ">
                 We offers These Services to You for free!
               </h1>
-              <div className="flex my-5 justify-center">
+              <div className="flex my-1 justify-center">
                 {session.status === 'authenticated' ? (
                   <button
                     onClick={() => {

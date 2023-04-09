@@ -240,7 +240,7 @@ const Nav = ({
                             width={100}
                             height={100}
                             alt="logo"
-                            className="rounded-3xl hover:shadow-md float-left h-full"
+                            className="rounded-3xl hover:shadow-md float-left h-20 w-20"
                             src={session?.data?.user?.image}
                           />
                         ) : (
@@ -249,10 +249,10 @@ const Nav = ({
                       </div>
                     </Link>
                     <div className="p-0 dark:text-slate-300">
-                      <p className="text-2xl text-green-400">
+                      <p className="md:text-2xl text-base text-green-400">
                         {session?.data?.user?.name}
                       </p>
-                      <p className="text-lg truncate">
+                      <p className="md:text-lg text-xs truncate">
                         {session?.data?.user?.email}
                       </p>
                     </div>

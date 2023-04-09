@@ -5,8 +5,8 @@ function NewItems(NewReleases) {
   const data = NewReleases?.props
   // console.log(NewReleases)
   return (
-    <div className="flex md:pt-20 py-5 flex-col scroll-smooth min-w-0  break-words w-full h-[80vh] md:h-screen bg-black">
-      <div className="md:h-[80vh] h-[80vh] scroll-smooth m-1 duration-300 snap-y snap-mandatory  rounded-xl scrollbar-thin overflow-y-scroll scrollbar-thumb-green-900 scrollbar-track-black">
+    <div className="flex md:pt-20 py-5 flex-col scroll-smooth min-w-0  break-words w-full h-[75vh] md:h-screen bg-black">
+      <div className="md:h-[80vh] h-[75vh] scroll-smooth m-1 duration-300 snap-y snap-mandatory  rounded-xl scrollbar-thin overflow-y-scroll scrollbar-thumb-green-900 scrollbar-track-black">
         <div className="block scroll-smooth w-full duration-300 snap-y snap-mandatory  overflow-x-auto">
           <div className="flex gap-2 flex-row flex-wrap scroll-smooth duration-300 snap-y snap-mandatory  content-start items-start justify-around mx-auto  text-white">
             {data?.map((value, index) => {
@@ -29,14 +29,14 @@ function NewItems(NewReleases) {
                       alt={value?.name}
                     />
                   </a>
-                  <div className="relative px-2 flex flex-col h-full items-start justify-between w-[80%] duration-200">
+                  <div className="relative px-2 flex flex-col   w-52  h-full items-start justify-between duration-200">
                     <div className="m-0.5">
-                      <p className="line-clamp-2 md:line-clamp-2 text-base w-60 md:w-full md:text-2xl inline font-bold tracking-tight text-slate-900 dark:text-white">
+                      <p className="line-clamp-1 md:line-clamp-2 text-sm w-52 md:w-full md:text-2xl inline font-bold tracking-tight text-slate-900 dark:text-white">
                         <a target="0" href={value?.external_urls?.spotify}>
                           {value?.name}
                         </a>
                       </p>
-                      <p className="line-clamp-1 inline  md:line-clamp-2 text-xs md:text-base w-60 md:w-full tracking-tight font-bold text-slate-300 ">
+                      <p className="line-clamp-1 inline  md:line-clamp-2 text-xs md:text-base w-52 md:w-full tracking-tight font-bold text-slate-300 ">
                         {value?.artists.map((artist, index) => {
                           return (
                             <>
@@ -63,14 +63,14 @@ function NewItems(NewReleases) {
                         })}
                       </p>
                     </div>{' '}
-                    <div className="flex flex-col text-slate-200 flex-wrap w-60">
+                    <div className="flex flex-col text-slate-200 flex-wrap w-52">
                       <p className="w-60 text-xs">
                         Total No. of Tracks{' '}
                         <span className="text-green-400 mx-1">
                           {value?.total_tracks}
                         </span>
                       </p>{' '}
-                      <p className="w-60 text-xs">
+                      <p className="w-60 text-xs hidden md:block">
                         Album Type
                         <span className="text-green-400 mx-1">
                           {value?.album_type}

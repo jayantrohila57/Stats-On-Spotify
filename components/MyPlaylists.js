@@ -30,12 +30,12 @@ function MyPlaylists(PlaylistsData) {
                   </a>
                   <div className="relative px-1 flex flex-col h-full items-start justify-between w-60 duration-200">
                     <div>
-                      <p className="line-clamp-2 md:line-clamp-2 text-lg w-60 md:text-2xl inline font-bold tracking-tight text-slate-900 dark:text-white">
+                      <p className="line-clamp-2 md:line-clamp-2 text-base w-60 md:text-2xl inline font-bold tracking-tight text-slate-900 dark:text-white">
                         <a target="0" href={value?.external_urls?.spotify}>
                           {value?.name}
                         </a>
                       </p>
-                      <p className="line-clamp-1 inline  md:line-clamp-2 text-xs w-60 tracking-tight font-bold text-green-500 ">
+                      <p className="line-clamp-1 hidden md:inline  md:line-clamp-2 text-xs w-60 tracking-tight font-bold text-green-500 ">
                         {value?.description}
                       </p>
                     </div>{' '}

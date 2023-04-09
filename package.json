@@ -19,6 +19,7 @@
     "nextjs-progressbar": "^0.0.16",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "sharp": "^0.32.0",
     "spotify-web-api-node": "^5.0.2",
     "tailwind-scrollbar": "^2.1.0-preview.0",
     "tailwindcss-scroll-snap": "^1.1.0"

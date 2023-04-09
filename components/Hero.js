@@ -39,6 +39,7 @@ function Hero() {
       </div>
       <div className="top-0 md:min-h-[100vh] h-[100vh] object-cover overflow-hidden w-full ">
         <Image
+          unoptimized={true}
           src={`https://images.unsplash.com/photo-1623018035813-9cfb5b502e04?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80`}
           layout="fill"
           className="h-full opacity-50 md:opacity-40 contrast-125 object-cover  w-full"

@@ -1,124 +1,109 @@
-import React from 'react'
-import { signIn, useSession } from 'next-auth/react'
 import Head from 'next/head'
-import Link from 'next/link'
-function Hero() {
-	const session = useSession()
-	return (
-    <div>
-      <Head>
-        <title>Stats On Spotify </title>
-        <meta
-          name="description"
-          content="Response with User data on Spotify."
-        />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <section
-        style={{
-          backgroundImage:
-            "linear-gradient( rgba(0 ,0, 0, 0.2), rgba(0,0,0,0.8)),url('https://images.unsplash.com/photo-1623018035813-9cfb5b502e04?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80')",
-          backgroundSize: 'cover"',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-        }}
-        className="bg-white min-h-[100vh] dark:bg-gray-900  flex flex-row flex-wrap
-			items-center justify-center"
-      >
-        <div className="flex flex-row flex-wrap mt-10 items-center content-center justify-center">
-          <div className="sm:text-left lg:text-left">
-            <div className="p-5">
-              <h1 className="tracking-tight text-left font-bold text-gray-900  ">
-                <span className="block dark:text-white sm:inline text-5xl md:text-8xl">
-                  Welcome to
-                  <br />
-                </span>
+import React, {useEffect, useState} from 'react'
+import {useSession} from 'next-auth/react'
+import UseSpotify from '../hooks/UseSpotify'
+import NewItems from '../components/NewItems'
+import MyPlaylists from '../components/MyPlaylists'
+import Profile from '../components/Profile'
+import TopArtistisList from '../components/TopArtistisList'
+import TopTracksList from '../components/TopTracksList'
+import NavRouter from '../components/NavRouter'
+import Hero from '../components/Hero'
+import InfoSection from '../components/InfoSection'
+import Footer from '../components/Footer'
 
-                <span className="block dark:text-green-400 sm:inline text-5xl md:text-8xl">
-                  Stats On Spotify
-                </span>
-              </h1>
-            </div>
-            <div className="px-5">
-              <h1 className="text-xl tracking-tight text-left font-bold text-gray-900 sm:text-5xl md:text-5xl">
-                <span className="block dark:text-gray-300 xl:inline">
-                  An Easy Approach To
-                  <br /> Review Your Spotify Data
-                </span>
-              </h1>
-            </div>
+export default function Home() {
+  const [Data, setData] = useState([])
+  const [TopArtists, setTopArtists] = useState([])
+  const [NewReleases, setNewReleases] = useState([])
+  const [PlaylistsData, setPlaylistsData] = useState([])
+  const [Tracks, setTracks] = useState([])
+  const spotifyApi = UseSpotify()
+  const session = useSession()
+
+  useEffect(() => {
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi.getNewReleases({limit: 50, offset: 0}).then(function (data) {
+        setNewReleases(data.body.albums.items)
+      })
+    }
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi.getMe().then(function (data) {
+        setData(data.body)
+      })
+    }
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi.getUserPlaylists(Data?.user?.id, {limit: 50, offset: 0}).then(function (data) {
+        setPlaylistsData(data.body)
+      })
+    }
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi.getMyTopArtists({limit: 50, offset: 0}).then(function (data) {
+        setTopArtists(data.body.items)
+        // console.log(data.body.items)
+      })
+    }
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi.getMyTopTracks({limit: 50, offset: 0}).then(function (data) {
+        setTracks(data.body.items)
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session, spotifyApi])
+
+  return (
+    <div className='flex flex-col  bg-black'>
+      <div className='h-screen scrollbar-thin scrollbar-thumb-gray-700 duration-300 snap-y snap-mandatory scroll-smooth scrollbar-track-gray-300 overflow-y-scroll dark:scrollbar-thumb-green-900 dark:scrollbar-track-black'>
+        <div className='snap-center snap-normal'>
+          <Hero />
+        </div>{' '}
+        <div className='snap-center snap-normal'>
+          <Profile props={Data} />
+        </div>{' '}
+        <div className='snap-center snap-normal'>
+          <InfoSection />
+        </div>{' '}
+        <div className='flex snap-end flex-col md:flex-row'>
+          <div className='bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen'>
+            <NavRouter name='Your Top #50 Songs That You Listen the most.' />
+          </div>
+          <div className='flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6'>
+            <TopTracksList props={Tracks} />
           </div>
         </div>
-        <div className="flex flex-col m-2  sm:flex-col sm:justify-center  sm:space-x-4">
-          <div className="flex flex-row flex-wrap justify-center items-center">
-            <div className="block m-1 p-2 max-w-sm dark:text-white shadow-2xl rounded-2xl bg-gray-200 bg-opacity-10 backdrop-blur-md ">
-              <div className="text-center p-3">
-                {session?.status === 'unauthenticated' ? (
-                  <h2 className="font-bold text-3xl p-5 ">SignUp / LogIn</h2>
-                ) : (
-                  <h2 className="font-bold text-3xl p-5 ">
-                    Welcome {session?.data?.user?.name}
-                  </h2>
-                )}
-                {session?.status === 'unauthenticated' ? (
-                  <button
-                    onClick={() => {
-                      signIn('spotify')
-                    }}
-                    className="bg-black  py-2 w-full rounded-xl m-1 flex justify-center items-center text-lg hover:scale-105 duration-300 text-green-400"
-                  >
-                    Login with Spotify
-                  </button>
-                ) : (
-                  <Link href="/Home">
-                    <button className="bg-black py-3 w-full rounded-xl m-1 flex justify-center items-center text-lg hover:scale-105 duration-300 text-green-400">
-                      Get Started
-                      <svg
-                        className="ml-2 w-6 h-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M14 5l7 7m0 0l-7 7m7-7H3"
-                        />
-                      </svg>
-                    </button>
-                  </Link>
-                )}
-                {session?.status === 'unauthenticated' ? (
-                  <p className="m-2 pt-5 text-xs text-gray-600 dark:text-white text-center">
-                    By signing in I agree to
-                    <a
-                      href="#"
-                      className="m-1 border-b border-gray-500 border-dotted"
-                    >
-                      Terms of Service
-                    </a>
-                    and its
-                    <a
-                      href="#"
-                      className="ml-1 border-b border-gray-500 border-dotted"
-                    >
-                      Privacy Policy
-                    </a>
-                  </p>
-                ) : (
-                  <p className="m-2 pt-5 text-xs text-gray-600 dark:text-white text-center">
-                    Let's Explore Your Playlist, Songs, Artists and manage them
-                    efficently.{' '}
-                  </p>
-                )}
-              </div>
-            </div>
+        <div className='flex  snap-end flex-col md:flex-row'>
+          <div className='bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen'>
+            <NavRouter name='Your Top #50 Artists That You Listen the most.' />
+          </div>
+          <div className='flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6'>
+            <TopArtistisList props={TopArtists} />
           </div>
         </div>
-      </section>
+        <div className='flex  snap-end flex-col md:flex-row'>
+          <div className='bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen'>
+            <NavRouter name='All Of Your Playlists are Here Check Them Out.' />
+          </div>
+          <div className='flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6'>
+            <MyPlaylists props={PlaylistsData} />
+          </div>
+        </div>
+        <div className='flex  snap-end flex-col md:flex-row'>
+          <div className='bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen'>
+            <NavRouter name='New Release that we hope you like them.' />
+          </div>
+          <div className='flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6'>
+            <NewItems props={NewReleases} />
+          </div>
+        </div>
+        {/* <div className='flex  snap-end flex-row'>
+          <Footer />
+        </div> */}
+      </div>{' '}
+      {/* <div className='flex  justify-start items-center lg:w-0 lg:flex-1'>
+        <span className='font-bold text-2xl  dark:text-white text-gray-600'>
+          <h1>Stats On Spotify</h1>
+        </span>
+      </div> */}
     </div>
   )
 }
-
-export default Hero

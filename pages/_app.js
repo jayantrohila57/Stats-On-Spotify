@@ -1,13 +1,12 @@
 import { SessionProvider } from "next-auth/react";
 import "../styles/globals.css";
-import Nav from "../components/Nav";
-import Footer from '../components/Footer'
-import NextNprogress from "nextjs-progressbar";
+
+import NextNprogress from 'nextjs-progressbar'
 export default function App({
-	Component,
-	pageProps: { session, ...pageProps },
+  Component,
+  pageProps: { session, ...pageProps },
 }) {
-	return (
+  return (
     <>
       <NextNprogress
         color="green"
@@ -18,16 +17,12 @@ export default function App({
         options={{ showSpinner: false }}
       />
       <SessionProvider session={session}>
-        <header className="dark:bg-gray-800">
-          <Nav />
-        </header>
         <main
-          className="dark:bg-gray-800"
+          className="bg-black"
           style={{ WebkitTapHighlightColor: 'transparent' }}
         >
           <div className="h-[100vh] scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 overflow-y-scroll dark:scrollbar-thumb-gray-700 dark:scrollbar-track-gray-800">
             <Component {...pageProps} />
-            <Footer />
           </div>
         </main>
       </SessionProvider>

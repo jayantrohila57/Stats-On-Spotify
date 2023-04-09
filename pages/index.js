@@ -9,7 +9,7 @@ import TopTracksList from '../components/TopTracksList'
 import NavRouter from '../components/NavRouter'
 import Hero from '../components/Hero'
 import InfoSection from '../components/InfoSection'
-
+import { NextSeo } from 'next-seo'
 export default function Home() {
   const spotifyApi = UseSpotify()
   const session = useSession()
@@ -45,63 +45,126 @@ export default function Home() {
   }, [session, spotifyApi])
 
   return (
-    <div className="flex flex-col bg-black">
-      <div className="h-screen scrollbar-thin scrollbar-thumb-gray-700 duration-300 snap-y snap-mandatory scroll-smooth scrollbar-track-gray-300 overflow-y-scroll dark:scrollbar-thumb-green-900 dark:scrollbar-track-black">
-        <div className="snap-center snap-normal">
-          <Hero />
-        </div>
-        <div className="snap-center snap-normal">
-          <InfoSection />
-        </div>
-        {session.status === 'authenticated' ? (
+    <>
+      <NextSeo
+        title="Stats On Spotify | Your Top Tracks, Artists, Playlists & more."
+        description="An Easy Approach To Review Your Spotify Data. Get all your top 50 Tracks, Artists,  and Playlists for Free, with Secure login with the official Spotify platform."
+        canonical="https://statsonspotify.vercel.app/"
+        openGraph={{
+          type: 'website',
+          locale: 'en_IN',
+          url: 'https://statsonspotify.vercel.app/',
+          title:
+            'Stats On Spotify | Your Top Tracks, Artists, Playlists & more.',
+          description:
+            'An Easy Approach To Review Your Spotify Data. Get all your top 50 Tracks, Artists,  and Playlists for Free, with Secure login with the official Spotify platform.',
+          images: [
+            {
+              url: '/image.png',
+              width: 800,
+              height: 600,
+              alt: 'Og Image Alt',
+              type: 'image/jpeg',
+            },
+            {
+              url: '/image.png',
+              width: 900,
+              height: 800,
+              alt: 'Og Image Alt Second',
+              type: 'image/jpeg',
+            },
+            { url: '/image.png' },
+            { url: '/image.png' },
+          ],
+
+          siteName: 'Stats On Spotify',
+        }}
+        additionalLinkTags={[
+          {
+            rel: 'icon',
+            href: '/favicon.ico',
+          },
+          {
+            rel: 'apple-touch-icon',
+            href: '/image.png',
+            sizes: '76x76',
+          },
+          {
+            rel: 'manifest',
+            href: '/manifest.json',
+          },
+          {
+            rel: 'preload',
+            href: 'https://fonts.googleapis.com/css2?family=Poppins:wght@100&family=Uncial+Antiqua&display=swap',
+            as: 'font',
+            type: 'font/poppins',
+            crossOrigin: 'anonymous',
+          },
+        ]}
+        twitter={{
+          handle: 'https://statsonspotify.vercel.app/',
+          site: 'https://statsonspotify.vercel.app/',
+          cardType: 'summary_large_image',
+        }}
+      />
+      <div className="flex flex-col bg-black">
+        <div className="h-screen scrollbar-thin scrollbar-thumb-gray-700 duration-300 snap-y snap-mandatory scroll-smooth scrollbar-track-gray-300 overflow-y-scroll dark:scrollbar-thumb-green-900 dark:scrollbar-track-black">
           <div className="snap-center snap-normal">
-            <Profile props={Data} />
+            <Hero />
           </div>
-        ) : (
-          <></>
-        )}
-        {session.status === 'authenticated' ? (
-          <>
-            <div className="flex snap-end flex-col md:flex-row">
-              <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
-                <NavRouter name="Your Top #50 Songs That You Listen the most." />
-              </div>
-              <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6">
-                <TopTracksList props={Tracks} />
-              </div>
+          <div className="snap-center snap-normal">
+            <InfoSection />
+          </div>
+          {session.status === 'authenticated' ? (
+            <div className="snap-center snap-normal">
+              <Profile props={Data} />
             </div>
-            <div className="flex snap-end flex-col md:flex-row">
-              <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
-                <NavRouter name="Your Top #50 Artists That You Listen the most." />
+          ) : (
+            <></>
+          )}
+          {session.status === 'authenticated' ? (
+            <>
+              <div className="flex snap-end flex-col md:flex-row">
+                <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
+                  <NavRouter name="Your Top #50 Songs That You Listen the most." />
+                </div>
+                <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6">
+                  <TopTracksList props={Tracks} />
+                </div>
               </div>
-              <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6">
-                <TopArtistsList props={TopArtists} />
+              <div className="flex snap-end flex-col md:flex-row">
+                <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
+                  <NavRouter name="Your Top #50 Artists That You Listen the most." />
+                </div>
+                <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6">
+                  <TopArtistsList props={TopArtists} />
+                </div>
               </div>
-            </div>
-            <div className="flex snap-end flex-col md:flex-row">
-              <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
-                <NavRouter name="All Of Your Playlists are Here Check Them Out." />
+              <div className="flex snap-end flex-col md:flex-row">
+                <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
+                  <NavRouter name="All Of Your Playlists are Here Check Them Out." />
+                </div>
+                <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6">
+                  <MyPlaylists props={PlaylistsData} />
+                </div>
               </div>
-              <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6">
-                <MyPlaylists props={PlaylistsData} />
-              </div>
-            </div>
-            <div className="flex snap-end flex-col md:flex-row">
-              <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
-                <NavRouter name="New Release that we hope you like them." />
-              </div>
-              <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6">
-                <NewItems props={NewReleases} />
-              </div>
-            </div>{' '}
-          </>
-        ) : (
-          <></>
-        )}
+              <div className="flex snap-end flex-col md:flex-row">
+                <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
+                  <NavRouter name="New Release that we hope you like them." />
+                </div>
+                <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6">
+                  <NewItems props={NewReleases} />
+                </div>
+              </div>{' '}
+            </>
+          ) : (
+            <></>
+          )}
+        </div>
+        <div className="flex fixed backdrop-blur-sm text-xs bottom-0 w-screen text-slate-100 justify-center items-center py-2">
+          <h2> © 2022-2023 StatsOnSpotify. All Rights Reserved.</h2>
+        </div>
       </div>
-      <div className="flex fixed text-xs bottom-0 w-screen text-slate-100 justify-center items-center py-2">
-        <h2> © 2022-2023 StatsOnSpotify. All Rights Reserved.</h2>
-      </div>
-    </div>
+    </>
   )
 }

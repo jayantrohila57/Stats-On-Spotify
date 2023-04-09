@@ -7,7 +7,7 @@ import Image from 'next/image'
 
 export function ChevronDoubleDownIcon(props) {
   return (
-    <Link href="/#getStarted">
+    <Link href="/">
       <button className="hover:scale-115 duration-300 transition">
         <svg
           className="text-white animate-bounce   h-10 w-10"

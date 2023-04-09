@@ -10,7 +10,7 @@ const Nav = ({
 }) => {
   const router = useRouter()
   const session = useSession()
-  const logo = ''
+  const logo = '/favicon.png'
   const [open, setOpen] = useState(false)
   const [dropdown, setDropdown] = useState(false)
   const [IsShowing, setIsShowing] = useState(false)
@@ -27,32 +27,39 @@ const Nav = ({
         <div className="flex justify-between items-center  py-3 md:justify-start md:space-x-5">
           <Link href="/">
             <div className="flex  justify-start items-center lg:w-0 lg:flex-1">
+              <Image
+                className="h-10 w-10 m-0.5"
+                src={logo}
+                width={40}
+                height={40}
+                alt="logo"
+              />
               <span className="font-bold text-2xl  dark:text-white text-gray-600">
                 <h1>Stats On Spotify</h1>
               </span>
             </div>
           </Link>
-          <nav class="hidden text-white md:flex space-x-10">
+          <nav className="hidden text-white md:flex space-x-10">
             <Link
-              class="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
+              className="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
               href="/Home"
             >
               Home
             </Link>
             <Link
-              class="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
+              className="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
               href="/Account"
             >
               Account
             </Link>
             <Link
-              class="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
+              className="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
               href="/Contribute"
             >
               Contribute
             </Link>
             <Link
-              class="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
+              className="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
               href="/More-Info"
             >
               More Info
@@ -86,7 +93,7 @@ const Nav = ({
           <div className="hidden pr-5 md:flex items-center justify-end md:flex-1 lg:w-0">
             {session?.status === 'unauthenticated' ? (
               <Link href="/Help">
-                <Link className="inline-flex items-center text-white bg-primary-700 hover:bg-primary-800 ring-1 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900">
+                <div className="inline-flex items-center text-white bg-primary-700 hover:bg-primary-800 ring-1 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-primary-900">
                   Help
                   <svg
                     className="ml-2 -mr-1 w-5 h-5"
@@ -99,7 +106,7 @@ const Nav = ({
                       clipRule="evenodd"
                     ></path>
                   </svg>
-                </Link>
+                </div>
               </Link>
             ) : (
               <>
@@ -224,13 +231,17 @@ const Nav = ({
                   <>
                     <Link href="/Account">
                       <div className="rounded-3xl m-2 h-20  hover:bg-green-400 border-opacity-20 hover:scale-110 hover:text-green-400">
-                        <Image
-                          width={50}
-                          height={50}
-                          alt="logo"
-                          className="rounded-3xl hover:shadow-md float-left h-full"
-                          src={session?.data?.user?.image}
-                        />
+                        {session.status === 'authenticated' ? (
+                          <Image
+                            width={50}
+                            height={50}
+                            alt="logo"
+                            className="rounded-3xl hover:shadow-md float-left h-full"
+                            src={session?.data?.user?.image}
+                          />
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </Link>
                     <div className="p-1 dark:text-gray-300">

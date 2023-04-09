@@ -9,10 +9,10 @@ function InfoSection() {
         id="getStarted"
         className=" flex justify-center items-center h-screen w-screen"
       >
-        <div class="mx-auto">
-          <div class="flex md:flex-row flex-col flex-wrap justify-center items-center">
-            <div class="md:w-4/12 w-11/12 p-2 md:p-5 flex flex-col justify-center items-center">
-              <h1 class="md:p-5 hidden md:block md:m-1 m-5 p-1 text-gray-100 font-bold text-4xl md:text-5xl ">
+        <div className="mx-auto">
+          <div className="flex md:flex-row flex-col flex-wrap justify-center items-center">
+            <div className="md:w-4/12 w-11/12 p-2 md:p-5 flex flex-col justify-center items-center">
+              <h1 className="md:p-5 hidden md:block md:m-1 m-5 p-1 text-gray-100 font-bold text-4xl md:text-5xl ">
                 We offers These Services to You for free!
               </h1>
               <svg
@@ -167,7 +167,7 @@ function InfoSection() {
                   fill="#00bf16"
                 />
               </svg>
-              <h1 class="md:p-5 md:hidden m-2 md:m-5 p-1 text-gray-100 font-bold text-4xl md:text-5xl ">
+              <h1 className="md:p-5 md:hidden m-2 md:m-5 p-1 text-gray-100 font-bold text-4xl md:text-5xl ">
                 We offers These Services to You for free!
               </h1>
               <div className="flex my-5 justify-center">
@@ -192,10 +192,10 @@ function InfoSection() {
                 )}{' '}
               </div>
             </div>
-            <div class="md:w-8/12 w-full">
-              <div class="flex flex-row flex-wrap justify-evenly items-center">
-                <div class="md:h-60 md:w-96 h-40 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-xl">
-                  <div class="font-bold text-green-500 md:text-4xl text-base p-2">
+            <div className="md:w-8/12 w-full">
+              <div className="flex flex-row flex-wrap justify-evenly items-center">
+                <div className="md:h-60 md:w-96 h-40 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-xl">
+                  <div className="font-bold text-green-500 md:text-4xl text-base p-2">
                     <svg
                       className="w-10 h-10 mb-2"
                       fill="currentColor"
@@ -209,8 +209,8 @@ function InfoSection() {
                     </a>
                   </div>
                 </div>{' '}
-                <div class="md:h-60 md:w-96 h-40 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-xl">
-                  <div class="font-bold text-green-500 md:text-4xl text-base p-2">
+                <div className="md:h-60 md:w-96 h-40 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-xl">
+                  <div className="font-bold text-green-500 md:text-4xl text-base p-2">
                     <svg
                       className="w-10 h-10 mb-2"
                       fill="currentColor"
@@ -224,8 +224,8 @@ function InfoSection() {
                     </a>
                   </div>
                 </div>{' '}
-                <div class="md:h-60 md:w-96 h-40 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-xl">
-                  <div class="font-bold text-green-500 md:text-4xl text-base p-2">
+                <div className="md:h-60 md:w-96 h-40 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-xl">
+                  <div className="font-bold text-green-500 md:text-4xl text-base p-2">
                     <svg
                       className="w-10 h-10 mb-2"
                       fill="currentColor"
@@ -239,8 +239,8 @@ function InfoSection() {
                     </a>
                   </div>
                 </div>{' '}
-                <div class="md:h-60 md:w-96 h-40 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-xl">
-                  <div class="font-bold text-green-500 md:text-4xl text-base p-2">
+                <div className="md:h-60 md:w-96 h-40 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-xl">
+                  <div className="font-bold text-green-500 md:text-4xl text-base p-2">
                     <svg
                       className="w-10 h-10 mb-2"
                       fill="currentColor"

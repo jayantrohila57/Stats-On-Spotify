@@ -5,7 +5,7 @@ import { signOut, signIn, useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 const Nav = ({
   activeClasses = 'text-green-400 font-medium',
-  inactiveClasses = 'text-gray-100 hover:text-white focus:text-white',
+  inactiveClasses = 'text-slate-100 hover:text-white focus:text-white',
   classes = 'text-base font-medium transition-colors hover:text-green-400',
 }) => {
   const router = useRouter()
@@ -25,8 +25,8 @@ const Nav = ({
     <div className="px-5 fixed w-screen backdrop-blur-sm rounded-lg duration-300 z-50">
       <div>
         <div className="flex justify-between items-center  py-3 md:justify-start md:space-x-5">
-          <Link href="/">
-            <div className="flex  justify-start items-center lg:w-0 lg:flex-1">
+          <Link href="/#home">
+            <div className="flex cursor-pointer justify-start items-center lg:w-0 lg:flex-1">
               <Image
                 className="h-10 w-10 m-0.5"
                 src={logo}
@@ -34,41 +34,37 @@ const Nav = ({
                 height={40}
                 alt="logo"
               />
-              <span className="font-bold text-2xl  dark:text-white text-gray-600">
+              <span className="font-bold text-2xl  dark:text-white text-slate-600">
                 <h1>Stats On Spotify</h1>
               </span>
             </div>
           </Link>
-          <nav className="hidden text-white md:flex space-x-10">
-            <Link
-              className="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
-              href="/"
-            >
-              Home
+          <ul className="hidden  md:flex space-x-10">
+            <Link href="/#home">
+              <li className="text-white text-bold  hover:text-green-500 hover:scale-110 cursor-pointer duration-300">
+                Home
+              </li>
             </Link>
-            <Link
-              className="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
-              href="/Account"
-            >
-              Account
+            <Link href="/Account">
+              <li className="text-white text-bold  hover:text-green-500 hover:scale-110 cursor-pointer duration-300">
+                Account
+              </li>
             </Link>
-            <Link
-              className="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
-              href="/Contribute"
-            >
-              Contribute
+            <Link href="/Contribute">
+              <li className="text-white text-bold  hover:text-green-500 hover:scale-110 cursor-pointer duration-300">
+                Contribute
+              </li>
             </Link>
-            <Link
-              className="text-base font-medium text-white transition-colors hover:text-green-400   focus:text-green-400 focus:font-medium"
-              href="/More-Info"
-            >
-              More Info
+            <Link href="/More-Info">
+              <li className="text-white text-bold  hover:text-green-500 hover:scale-110 cursor-pointer duration-300">
+                More Info
+              </li>
             </Link>
-          </nav>
+          </ul>
           <div className="-my-2 md:hidden">
             <button
               type="button"
-              className="rounded-xl p-2 dark:text-white inline-flex items-center justify-center text-gray-400"
+              className="rounded-xl p-2 dark:text-white inline-flex items-center justify-center text-slate-400"
               onClick={() => setOpen(!open)}
             >
               <span className="sr-only">Open menu</span>
@@ -158,7 +154,7 @@ const Nav = ({
                     height={40}
                     alt="logo"
                   />
-                  <span className="font-bold text-2xl  dark:text-white text-gray-600">
+                  <span className="font-bold text-2xl  dark:text-white text-slate-600">
                     <h1>Stats On Spotify</h1>
                   </span>
                 </div>
@@ -189,9 +185,9 @@ const Nav = ({
             </div>
             <div className="h-full pb-10 flex flex-col justify-center">
               <div className="flex flex-col items-start p-1 justify-center">
-                <hi className="mx-5 font-extrabold border-b-2 border-dashed w-72 text-3xl text-green-400">
+                <h1 className="mx-5 font-extrabold border-b-2 border-dashed w-72 text-3xl text-green-400">
                   Menu
-                </hi>
+                </h1>
                 <Link href="/">
                   <h1
                     onClick={() => setOpen(!open)}
@@ -252,7 +248,7 @@ const Nav = ({
                         )}
                       </div>
                     </Link>
-                    <div className="p-0 dark:text-gray-300">
+                    <div className="p-0 dark:text-slate-300">
                       <p className="text-2xl text-green-400">
                         {session?.data?.user?.name}
                       </p>

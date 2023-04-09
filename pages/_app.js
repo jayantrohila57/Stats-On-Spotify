@@ -83,7 +83,7 @@ export default function App({
           className="bg-black font-poppins font-extrabold"
           style={{ WebkitTapHighlightColor: 'transparent' }}
         >
-          <div className="h-[100vh] scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-300 overflow-y-scroll dark:scrollbar-thumb-gray-700 dark:scrollbar-track-gray-800">
+          <div className="h-[100vh] scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-slate-300 overflow-y-scroll dark:scrollbar-thumb-slate-700 dark:scrollbar-track-slate-800">
             <Nav />
             <Component {...pageProps} />
           </div>

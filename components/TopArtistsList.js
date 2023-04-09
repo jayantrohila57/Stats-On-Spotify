@@ -12,7 +12,7 @@ export default function TopArtistsList(TopArtists) {
                 return (
                   <div
                     key={index}
-                    className="rounded-2xl hover:scale-95 flex items-center md:p-2  flex-col w-[95vw] flex-wrap md:max-w-lg  h-36 md:h-44  bg-gray-200 bg-opacity-10  hover:bg-opacity-20  duration-200 md:flex-row"
+                    className="rounded-2xl hover:scale-95 flex items-center md:p-2  flex-col w-[95vw] flex-wrap md:max-w-lg  h-36 md:h-44  bg-slate-200 bg-opacity-10  hover:bg-opacity-20  duration-200 md:flex-row"
                   >
                     <a
                       target="0"
@@ -29,7 +29,7 @@ export default function TopArtistsList(TopArtists) {
                     </a>
                     <div className="hover:px-1 ml-3 relative p-0.5 flex flex-col h-full items-start justify-between w-56 duration-200">
                       <div className="">
-                        <span className="justify-start items-center text-2xl font-bold text-gray-200">
+                        <span className="justify-start items-center text-2xl font-bold text-slate-200">
                           <svg
                             className="w-6 pb-1 h-6 inline"
                             fill="currentColor"
@@ -44,12 +44,12 @@ export default function TopArtistsList(TopArtists) {
                           </svg>
                           {index + 1}
                         </span>{' '}
-                        <p className="line-clamp-2 md:line-clamp-2 text-2xl w-72 md:text-2xl inline font-bold tracking-tight text-gray-900 dark:text-white">
+                        <p className="line-clamp-2 md:line-clamp-2 text-2xl w-72 md:text-2xl inline font-bold tracking-tight text-slate-900 dark:text-white">
                           <a target="0" href={value?.external_urls?.spotify}>
                             {value?.name}
                           </a>
                         </p>
-                        <p className="line-clamp-2 inline  md:line-clamp-2 text-base w-72 tracking-tight font-bold text-gray-300 ">
+                        <p className="line-clamp-2 inline  md:line-clamp-2 text-base w-72 tracking-tight font-bold text-slate-300 ">
                           {value?.genres.map((genera, index) => {
                             return (
                               <span

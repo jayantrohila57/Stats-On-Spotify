@@ -8,9 +8,9 @@ import Image from 'next/image'
 export function ChevronDoubleDownIcon(props) {
   return (
     <Link href="/#getStarted">
-      <button className="hover:scale-115 duration-300 transition">
+      <button className=" duration-300 animate-bounce transition">
         <svg
-          className="text-white animate-bounce   h-10 w-10"
+          className="text-white hover:scale-110 duration-300 transition  hover:text-green-500  h-10 w-10"
           fill="none"
           stroke="currentColor"
           strokeWidth={2}
@@ -49,7 +49,7 @@ function Hero() {
         <div className="flex flex-row flex-wrap items-center content-center justify-center">
           <div className="sm:text-left lg:text-left">
             <div className="p-5">
-              <div className="tracking-tight  text-left  text-gray-900  ">
+              <div className="tracking-tight  text-left  text-slate-900  ">
                 <span className="block dark:text-white sm:inline text-5xl md:text-8xl">
                   Welcome <br />
                   <h4 className=""> {session?.data?.user?.name} to</h4>
@@ -60,8 +60,8 @@ function Hero() {
               </div>
             </div>
             <div className="px-5">
-              <h1 className="text-2xl tracking-tight text-left font-bold text-gray-900 sm:text-4xl md:text-4xl">
-                <span className="block dark:text-gray-300 xl:inline">
+              <h1 className="text-2xl tracking-tight text-left font-bold text-slate-900 sm:text-4xl md:text-4xl">
+                <span className="block dark:text-slate-300 xl:inline">
                   An Easy Approach To
                   <br /> Review Your Spotify Data
                 </span>

@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import BackButton from '../components/BackButton'
 import { signOut, signIn, useSession } from 'next-auth/react'
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
@@ -9,7 +10,8 @@ function Profile(Data) {
 
   return (
     <div className="flex justify-center items-center h-screen w-screen bg-black">
-      <section className="text-gray-600 body-font bg-gray-500 shadow-2xl shadow-green-900  border-4 border-green-500  bg-opacity-10 md:p-5 rounded-3xl">
+      <BackButton props="/#getStarted" />
+      <section className="text-slate-600 body-font bg-slate-500 shadow-2xl bg-opacity-10 md:p-5 rounded-3xl">
         <div className="container mx-auto flex md:px-10 py-5 md:flex-row flex-col items-center">
           <div className="lg:max-w-lg lg:w-full md:w-1/3 w-5/6 mb-10 md:mb-0">
             <Image
@@ -22,15 +24,15 @@ function Profile(Data) {
           </div>
           <div className="lg:flex-grow md:w-2/3 lg:pl-24 md:pl-2 flex flex-col md:items-start md:text-left items-center text-center">
             <div className="flex flex-col md:w-full w-[90vw]">
-              <h1 className="md:text-7xl text-5xl w-full leading-tight font-bold text-gray-200">
+              <h1 className="md:text-7xl text-5xl w-full leading-tight font-bold text-slate-200">
                 {session?.data?.user?.name}
               </h1>
               <br />
-              <h2 className="text-4xl font-bold text-gray-200">
+              <h2 className="text-4xl font-bold text-slate-200">
                 {user?.followers?.total}{' '}
                 <span className="text-green-500 inline">Followers</span>
               </h2>{' '}
-              <h2 className="text-2xl truncate font-bold text-gray-600">
+              <h2 className="text-2xl truncate font-bold text-slate-600">
                 {user?.email}
               </h2>{' '}
             </div>

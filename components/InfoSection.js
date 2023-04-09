@@ -34,7 +34,7 @@ function InfoSection() {
                         )}
                       </div>
                     </Link>
-                    <div className="p-0 dark:text-gray-300">
+                    <div className="p-0 dark:text-slate-300">
                       <p className="text-2xl text-green-400">
                         {session?.data?.user?.name}
                       </p>
@@ -45,11 +45,11 @@ function InfoSection() {
                   </>
                 )}
               </div>
-              <h1 className="md:p-5 hidden md:block md:m-1 m-5 p-1 text-gray-100 font-bold text-4xl md:text-5xl ">
+              <h1 className="md:p-5 hidden md:block md:m-1 m-5 p-1 text-slate-100 font-bold text-4xl md:text-5xl ">
                 We offers These Services to You for free!
               </h1>
 
-              <h1 className="md:p-5 md:hidden m-2 md:m-5 p-1 text-gray-100 font-bold text-4xl md:text-5xl ">
+              <h1 className="md:p-5 md:hidden m-2 md:m-5 p-1 text-slate-100 font-bold text-4xl md:text-5xl ">
                 We offers These Services to You for free!
               </h1>
               <div className="flex my-5 justify-center">
@@ -77,8 +77,8 @@ function InfoSection() {
             <div className="md:w-8/12 w-full">
               <div className="flex flex-row flex-wrap justify-evenly items-center">
                 <Link href={'/#top-50-songs'}>
-                  <div className="md:h-60 md:w-96 h-40 border-2 border-green-500 border-opacity-30 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-xl">
-                    <div className="font-bold text-green-500 md:text-4xl text-base p-2">
+                  <div className="md:h-60 md:w-96 h-40 border-4 border-green-500 border-opacity-50 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-2xl">
+                    <div className="font-bold text-slate-300 hover:text-green-500 md:text-4xl text-base p-2">
                       <svg
                         className="w-10 h-10 mb-2"
                         fill="currentColor"
@@ -94,8 +94,8 @@ function InfoSection() {
                   </div>
                 </Link>{' '}
                 <Link href={'/#top-50-Artists'}>
-                  <div className="md:h-60 md:w-96 h-40 border-2 border-green-500 border-opacity-30 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-xl">
-                    <div className="font-bold text-green-500 md:text-4xl text-base p-2">
+                  <div className="md:h-60 md:w-96 h-40 border-4 border-green-500 border-opacity-50 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-2xl">
+                    <div className="font-bold text-slate-300 hover:text-green-500 md:text-4xl text-base p-2">
                       <svg
                         className="w-10 h-10 mb-2"
                         fill="currentColor"
@@ -111,8 +111,8 @@ function InfoSection() {
                   </div>
                 </Link>{' '}
                 <Link href={'/#All-Playlists'}>
-                  <div className="md:h-60 md:w-96 h-40 border-2 border-green-500 border-opacity-30 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-xl">
-                    <div className="font-bold text-green-500 md:text-4xl text-base p-2">
+                  <div className="md:h-60 md:w-96 h-40 border-4 border-green-500 border-opacity-50 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-2xl">
+                    <div className="font-bold text-slate-300 hover:text-green-500 md:text-4xl text-base p-2">
                       <svg
                         className="w-10 h-10 mb-2"
                         fill="currentColor"
@@ -128,8 +128,8 @@ function InfoSection() {
                   </div>
                 </Link>
                 <Link href={'/#New-Release'}>
-                  <div className="md:h-60 md:w-96 h-40 border-2 border-green-500 border-opacity-30 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-xl">
-                    <div className="font-bold text-green-500 md:text-4xl text-base p-2">
+                  <div className="md:h-60 md:w-96 h-40 border-4 border-green-500 border-opacity-50 hover:scale-95 duration-300 transition hover:bg-opacity-25 w-40 md:m-5 m-2 bg-green-500 p-1 md:p-5 bg-opacity-10 rounded-2xl">
+                    <div className="font-bold text-slate-300 hover:text-green-500 md:text-4xl text-base p-2">
                       <svg
                         className="w-10 h-10 mb-2"
                         fill="currentColor"

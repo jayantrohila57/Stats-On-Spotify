@@ -18,7 +18,7 @@ function useSpotify() {
         console.log('manual sign in')
         signOut()
       }
-      //setting the acces token that will be used by the api through the build
+      //setting the access token that will be used by the api through the build
       spotifyApi.setAccessToken(session.user.accessToken)
     }
   }, [session])

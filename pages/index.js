@@ -109,7 +109,7 @@ export default function Home() {
         }}
       />
       <div className="flex flex-col bg-black">
-        <div className="h-screen scrollbar-thin scrollbar-thumb-gray-700 duration-300 snap-y snap-mandatory scroll-smooth scrollbar-track-gray-300 overflow-y-scroll dark:scrollbar-thumb-green-900 dark:scrollbar-track-black">
+        <div className="h-screen scrollbar-thin scrollbar-thumb-slate-700 duration-300 snap-y snap-mandatory scroll-smooth scrollbar-track-slate-300 overflow-y-scroll dark:scrollbar-thumb-green-900 dark:scrollbar-track-black">
           <div className="snap-center snap-normal">
             <Hero />
           </div>
@@ -119,15 +119,21 @@ export default function Home() {
 
           {session.status === 'authenticated' ? (
             <>
-              <div className="flex snap-end flex-col md:flex-row">
-                <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
+              <div
+                id="top-50-songs"
+                className="flex snap-end flex-col md:flex-row"
+              >
+                <div className="bg-black w-10/12 h-1/6 md:w-3/12 md:h-[80vh] md:pt-20">
                   <NavRouter name="Your Top #50 Songs That You Listen the most." />
                 </div>
-                <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-5/6">
+                <div className="flex flex-col items-center justify-center w-12/12 h-4/6 md:w-9/12">
                   <TopTracksList props={Tracks} />
                 </div>
               </div>
-              <div className="flex snap-end flex-col md:flex-row">
+              <div
+                id="top-50-Artists"
+                className="flex snap-end flex-col md:flex-row"
+              >
                 <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
                   <NavRouter name="Your Top #50 Artists That You Listen the most." />
                 </div>
@@ -135,7 +141,10 @@ export default function Home() {
                   <TopArtistsList props={TopArtists} />
                 </div>
               </div>
-              <div className="flex snap-end flex-col md:flex-row">
+              <div
+                id="All-Playlists"
+                className="flex snap-end flex-col md:flex-row"
+              >
                 <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
                   <NavRouter name="All Of Your Playlists are Here Check Them Out." />
                 </div>
@@ -143,7 +152,10 @@ export default function Home() {
                   <MyPlaylists props={PlaylistsData} />
                 </div>
               </div>
-              <div className="flex snap-end flex-col md:flex-row">
+              <div
+                id="New-Release"
+                className="flex snap-end flex-col md:flex-row"
+              >
                 <div className="bg-black w-10/12 h-1/6 md:w-1/5 md:h-screen">
                   <NavRouter name="New Release that we hope you like them." />
                 </div>

@@ -5,7 +5,7 @@ function BackButton(nav) {
   const value = nav.props
   return (
     <Link href={value}>
-      <button className="absolute md:left-10 left-4 bottom-0 text-green-400">
+      <button className="absolute md:left-10 left-5 top-20 text-green-400">
         <svg
           className="md:w-16  md:h-16 h-10 w-10"
           fill="currentColor"

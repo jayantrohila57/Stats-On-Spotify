@@ -59,25 +59,24 @@ export function AnalyticsDashboard() {
           )}
         </section>
 
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-          <TopTracksTable
+        <TopTracksTable
+          tracks={topTracks.data ?? []}
+          isLoading={topTracks.isLoading}
+          error={topTracks.error}
+          onRetry={topTracks.refetch}
+        />
+
+        <div className="grid gap-6 lg:grid-cols-2">
+          <GenreDistribution
+            artists={topArtists.data ?? []}
+            isLoading={topArtists.isLoading}
+            error={topArtists.error}
+          />
+          <AlbumsFromTracksTable
             tracks={topTracks.data ?? []}
             isLoading={topTracks.isLoading}
             error={topTracks.error}
-            onRetry={topTracks.refetch}
           />
-          <div className="space-y-6">
-            <GenreDistribution
-              artists={topArtists.data ?? []}
-              isLoading={topArtists.isLoading}
-              error={topArtists.error}
-            />
-            <AlbumsFromTracksTable
-              tracks={topTracks.data ?? []}
-              isLoading={topTracks.isLoading}
-              error={topTracks.error}
-            />
-          </div>
         </div>
 
         <TopArtistsSection

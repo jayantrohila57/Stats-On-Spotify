@@ -1,4 +1,5 @@
 import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
+import type { SpotifyImage } from "@/lib/spotify/types";
 import type { Paginated, SpotifyAlbumRelease, SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyUserProfile } from "@/lib/spotify/types";
 
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
@@ -38,8 +39,12 @@ export async function getCurrentUserProfile(accessToken: string): Promise<Spotif
   return spotifyFetch<SpotifyUserProfile>({ accessToken, path: "/me" });
 }
 
+function hasUsableAlbumArt(images?: SpotifyImage[]): boolean {
+  return Boolean(images?.some((image) => Boolean(image.url?.trim())));
+}
+
 function trackNeedsEnrichment(track: SpotifyTrack): boolean {
-  const missingArt = !track.album?.images?.length;
+  const missingArt = !hasUsableAlbumArt(track.album?.images);
   const missingPopularity = typeof track.popularity !== "number" || Number.isNaN(track.popularity);
   return missingArt || missingPopularity;
 }

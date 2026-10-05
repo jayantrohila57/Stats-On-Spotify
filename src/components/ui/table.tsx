@@ -1,9 +1,13 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+type TableProps = React.ComponentProps<"table"> & {
+  wrapperClassName?: string;
+};
+
+function Table({ className, wrapperClassName, ...props }: TableProps) {
   return (
-    <div className="relative w-full overflow-auto">
+    <div className={cn("relative w-full max-w-full", wrapperClassName)}>
       <table className={cn("w-full caption-bottom text-sm", className)} {...props} />
     </div>
   );

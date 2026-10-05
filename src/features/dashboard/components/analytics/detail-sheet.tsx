@@ -1,7 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import { albumImageFromTrack, pickSpotifyImageUrl } from "@/lib/spotify/images";
+import { SpotifyImage } from "@/components/spotify/spotify-image";
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import type { SpotifyArtist, SpotifyTrack } from "@/lib/spotify/types";
@@ -37,7 +38,7 @@ export function DetailSheet({ open, onClose, track, artist, rank, derivedShare }
   }
 
   const title = track?.name ?? artist?.name ?? "";
-  const image = track?.album.images[0]?.url ?? artist?.images?.[0]?.url;
+  const image = track ? albumImageFromTrack(track) : pickSpotifyImageUrl(artist?.images);
   const spotifyUrl = track?.external_urls.spotify ?? artist?.external_urls.spotify;
 
   return (
@@ -64,11 +65,7 @@ export function DetailSheet({ open, onClose, track, artist, rank, derivedShare }
         </div>
         <div className="flex-1 overflow-y-auto p-4">
           <div className="flex gap-3">
-            {image ? (
-              <Image src={image} alt="" width={80} height={80} className="size-20 rounded border border-border/80 object-cover" />
-            ) : (
-              <div className="size-20 rounded border border-border/80 bg-muted" />
-            )}
+            <SpotifyImage src={image} alt="" size={80} className="border border-border/80" />
             <div className="min-w-0 flex-1">
               <p className="text-base font-semibold leading-tight">{title}</p>
               {track ? (

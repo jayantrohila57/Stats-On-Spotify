@@ -1,7 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useState } from "react";
+import { SpotifyImage } from "@/components/spotify/spotify-image";
+import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import type { SpotifyArtist } from "@/lib/spotify/types";
 import { deriveRankShare, formatGenreLabel } from "@/lib/analytics/derive";
 import { DetailSheet } from "@/features/dashboard/components/analytics/detail-sheet";
@@ -36,7 +37,7 @@ export function TopArtistsSection({ artists, isLoading, error, onRetry }: TopArt
           <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-5">
             {topFive.map((artist, index) => {
               const rank = index + 1;
-              const image = artist.images?.[0]?.url;
+              const image = pickSpotifyImageUrl(artist.images);
               const share = deriveRankShare(rank, total);
               return (
                 <button
@@ -47,11 +48,7 @@ export function TopArtistsSection({ artists, isLoading, error, onRetry }: TopArt
                 >
                   <div className="flex w-full items-center gap-2">
                     <span className="text-xs font-medium text-muted-foreground tabular-nums">#{rank}</span>
-                    {image ? (
-                      <Image src={image} alt="" width={40} height={40} className="size-10 rounded-full border border-border/60 object-cover" />
-                    ) : (
-                      <div className="size-10 rounded-full bg-muted" />
-                    )}
+                    <SpotifyImage src={image} alt="" size={40} rounded="full" className="border border-border/60" />
                   </div>
                   <span className="line-clamp-2 text-xs font-medium leading-snug">{artist.name}</span>
                   <span className="text-[10px] text-muted-foreground">{(share * 100).toFixed(1)}% derived share</span>
@@ -76,21 +73,17 @@ export function TopArtistsSection({ artists, isLoading, error, onRetry }: TopArt
             {artists.slice(0, 25).map((artist, index) => {
               const rank = index + 1;
               const share = deriveRankShare(rank, total);
-              const image = artist.images?.at(-1)?.url ?? artist.images?.[0]?.url;
+              const image = pickSpotifyImageUrl(artist.images);
               const genres = (artist.genres ?? []).slice(0, 2).map(formatGenreLabel).join(", ");
               return (
                 <TableRow key={artist.id} className="cursor-pointer" onClick={() => setSelected({ artist, rank, share })}>
                   <TableCell className="tabular-nums text-muted-foreground">{rank}</TableCell>
-                  <TableCell>
-                    {image ? (
-                      <Image src={image} alt="" width={32} height={32} className="size-8 rounded-full border border-border/60 object-cover" />
-                    ) : (
-                      <div className="size-8 rounded-full bg-muted" />
-                    )}
+                  <TableCell className="px-2">
+                    <SpotifyImage src={image} alt="" size={32} rounded="full" className="border border-border/60" />
                   </TableCell>
-                  <TableCell className="max-w-[200px] truncate font-medium">{artist.name}</TableCell>
-                  <TableCell className="hidden max-w-[240px] truncate text-xs text-muted-foreground md:table-cell">
-                    {genres || "—"}
+                  <TableCell className="min-w-0 max-w-0 truncate font-medium" title={artist.name}>{artist.name}</TableCell>
+                  <TableCell className="hidden min-w-0 max-w-0 truncate text-xs text-muted-foreground md:table-cell" title={genres || undefined}>
+                    {genres ? genres : <span className="text-muted-foreground/70">No genres listed</span>}
                   </TableCell>
                   <TableCell className="text-right tabular-nums text-xs">{(share * 100).toFixed(1)}%</TableCell>
                   <TableCell className="text-right tabular-nums">{artist.popularity ?? "—"}</TableCell>

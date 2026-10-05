@@ -10,6 +10,15 @@ type RankMovementProps = {
 };
 
 export function RankMovement({ delta, className }: RankMovementProps) {
+  if (delta.kind === "pending") {
+    return (
+      <span
+        className={cn("inline-block h-3.5 w-6 animate-pulse rounded-sm bg-muted/80", className)}
+        aria-hidden
+        title="Loading rank comparison"
+      />
+    );
+  }
   if (delta.kind === "new") {
     return (
       <span className={cn("inline-flex items-center gap-0.5 font-mono-stats text-xs font-medium text-emerald-400", className)}>

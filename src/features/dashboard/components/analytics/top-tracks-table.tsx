@@ -29,6 +29,7 @@ type TopTracksTableProps = {
   tracks: NormalizedTrack[];
   topArtists: SpotifyArtist[];
   compareRange: SpotifyTimeRange;
+  comparePeriodReady: boolean;
   isLoading: boolean;
   error: string | null;
   onRetry?: () => void;
@@ -38,6 +39,7 @@ export function TopTracksTable({
   tracks,
   topArtists,
   compareRange,
+  comparePeriodReady,
   isLoading,
   error,
   onRetry,
@@ -112,7 +114,7 @@ export function TopTracksTable({
               const image = albumImageFromTrack(track);
               const artistLine = track.artists.map((a) => a.name).join(", ");
               const compareRank = track.periods[compareRange];
-              const delta = getRankDelta(compareRank, rank);
+              const delta = getRankDelta(compareRank, rank, comparePeriodReady);
               const share = deriveRankShare(rank, total);
               const isExpanded = expandedId === track.id;
               return (

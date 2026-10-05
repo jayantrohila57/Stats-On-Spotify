@@ -116,6 +116,12 @@ export function useSpotifyAnalyticsQueries() {
 
   const compareRange: SpotifyTimeRange = baselineCompareRange(timeRange);
 
+  const compareRangeIndex = TIME_RANGES.indexOf(compareRange);
+  const comparePeriodReady =
+    compareRangeIndex >= 0 &&
+    topTrackQueries[compareRangeIndex]?.data !== undefined &&
+    topArtistQueries[compareRangeIndex]?.data !== undefined;
+
   const initialTopsLoading =
     topTrackQueries.some((q) => q.isLoading && !q.data) || topArtistQueries.some((q) => q.isLoading && !q.data);
 
@@ -134,6 +140,7 @@ export function useSpotifyAnalyticsQueries() {
     tracksByPeriod,
     artistsByPeriod,
     compareRange,
+    comparePeriodReady,
     timeRange,
     profile,
     playlists,

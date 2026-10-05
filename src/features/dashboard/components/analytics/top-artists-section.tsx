@@ -21,12 +21,20 @@ import { cn } from "@/lib/utils";
 type TopArtistsSectionProps = {
   artists: NormalizedArtist[];
   compareRange: SpotifyTimeRange;
+  comparePeriodReady: boolean;
   isLoading: boolean;
   error: string | null;
   onRetry?: () => void;
 };
 
-export function TopArtistsSection({ artists, compareRange, isLoading, error, onRetry }: TopArtistsSectionProps) {
+export function TopArtistsSection({
+  artists,
+  compareRange,
+  comparePeriodReady,
+  isLoading,
+  error,
+  onRetry,
+}: TopArtistsSectionProps) {
   const [selected, setSelected] = useState<{ artist: NormalizedArtist; rank: number; share: number } | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const topFive = artists.slice(0, 5);
@@ -54,7 +62,7 @@ export function TopArtistsSection({ artists, compareRange, isLoading, error, onR
               const rank = index + 1;
               const image = pickSpotifyImageUrl(artist.images);
               const share = deriveRankShare(rank, total);
-              const delta = getRankDelta(artist.periods[compareRange], rank);
+              const delta = getRankDelta(artist.periods[compareRange], rank, comparePeriodReady);
               return (
                 <SpotifyEntityPreview key={artist.id} kind="artist" artist={artist}>
                   <button
@@ -95,7 +103,7 @@ export function TopArtistsSection({ artists, compareRange, isLoading, error, onR
               const share = deriveRankShare(rank, total);
               const image = pickSpotifyImageUrl(artist.images);
               const genres = (artist.genres ?? []).slice(0, 2).map(formatGenreLabel).join(", ");
-              const delta = getRankDelta(artist.periods[compareRange], rank);
+              const delta = getRankDelta(artist.periods[compareRange], rank, comparePeriodReady);
               const isExpanded = expandedId === artist.id;
               return (
                 <Fragment key={artist.id}>

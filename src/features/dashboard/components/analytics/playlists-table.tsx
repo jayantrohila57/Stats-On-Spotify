@@ -1,8 +1,10 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import type { SpotifyPlaylist } from "@/lib/spotify/types";
+import { pickSpotifyImageUrl } from "@/lib/spotify/images";
+import { spotifyPlainText } from "@/lib/text/plaintext";
+import { SpotifyImage } from "@/components/spotify/spotify-image";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -38,27 +40,25 @@ export function PlaylistsTable({ playlists, isLoading, error, onRetry }: Playlis
         </TableHeader>
         <TableBody>
           {sorted.slice(0, 30).map((playlist) => {
-            const image = playlist.images[0]?.url;
+            const image = pickSpotifyImageUrl(playlist.images);
+            const description = spotifyPlainText(playlist.description);
             return (
               <TableRow key={playlist.id}>
-                <TableCell>
-                  {image ? (
-                    <Image src={image} alt="" width={32} height={32} className="size-8 rounded border border-border/60" />
-                  ) : (
-                    <div className="size-8 rounded bg-muted" />
-                  )}
+                <TableCell className="px-2">
+                  <SpotifyImage src={image} alt="" size={32} className="border border-border/60" />
                 </TableCell>
-                <TableCell className="max-w-[280px]">
+                <TableCell className="min-w-0 max-w-0">
                   <Link
                     href={playlist.external_urls.spotify}
                     target="_blank"
                     rel="noreferrer"
-                    className="truncate font-medium hover:underline"
+                    className="block truncate font-medium hover:underline"
+                    title={playlist.name}
                   >
                     {playlist.name}
                   </Link>
-                  {playlist.description ? (
-                    <p className="truncate text-xs text-muted-foreground">{playlist.description}</p>
+                  {description ? (
+                    <p className="truncate text-xs text-muted-foreground" title={description}>{description}</p>
                   ) : null}
                 </TableCell>
                 <TableCell className="hidden text-muted-foreground md:table-cell">{playlist.owner.display_name}</TableCell>

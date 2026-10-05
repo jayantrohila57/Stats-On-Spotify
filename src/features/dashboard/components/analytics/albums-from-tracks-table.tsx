@@ -1,10 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useMemo } from "react";
 import type { SpotifyTrack } from "@/lib/spotify/types";
+import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
+import { SpotifyImage } from "@/components/spotify/spotify-image";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 type AlbumsFromTracksTableProps = {
@@ -22,11 +23,12 @@ export function AlbumsFromTracksTable({ tracks, isLoading, error }: AlbumsFromTr
     tracks.forEach((track, index) => {
       const rank = index + 1;
       const existing = map.get(track.album.id);
+      const image = pickSpotifyImageUrl(track.album.images);
       if (!existing) {
         map.set(track.album.id, {
           id: track.album.id,
           name: track.album.name,
-          image: track.album.images[0]?.url,
+          image,
           url: track.album.external_urls.spotify,
           artists: track.artists.map((a) => a.name).join(", "),
           trackCount: 1,
@@ -35,6 +37,9 @@ export function AlbumsFromTracksTable({ tracks, isLoading, error }: AlbumsFromTr
       } else {
         existing.trackCount += 1;
         existing.bestRank = Math.min(existing.bestRank, rank);
+        if (!existing.image && image) {
+          existing.image = image;
+        }
       }
     });
     return [...map.values()].sort((a, b) => a.bestRank - b.bestRank);
@@ -50,34 +55,54 @@ export function AlbumsFromTracksTable({ tracks, isLoading, error }: AlbumsFromTr
       emptyTitle="No albums"
       emptyDescription="Add top tracks for this period to see album groupings."
     >
-      <Table>
+      <Table className="table-fixed" wrapperClassName="overflow-x-hidden">
+        <colgroup>
+          <col className="w-10" />
+          <col />
+          <col className="w-[5.5rem]" />
+        </colgroup>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead className="w-10" />
+            <TableHead className="sr-only">Artwork</TableHead>
             <TableHead>Album</TableHead>
-            <TableHead className="hidden md:table-cell">Artists on tracks</TableHead>
-            <TableHead className="w-24 text-right">Top tracks</TableHead>
-            <TableHead className="w-20 text-right">Best rank</TableHead>
+            <TableHead className="hidden 2xl:table-cell">Artists on tracks</TableHead>
+            <TableHead className="text-right" title="Number of top tracks from this album and best rank in your list">
+              In top list
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {albums.slice(0, 20).map((album) => (
             <TableRow key={album.id}>
-              <TableCell>
-                {album.image ? (
-                  <Image src={album.image} alt="" width={32} height={32} className="size-8 rounded border border-border/60" />
-                ) : (
-                  <div className="size-8 rounded bg-muted" />
-                )}
+              <TableCell className="px-2">
+                <SpotifyImage src={album.image} alt="" size={32} className="border border-border/60" />
               </TableCell>
-              <TableCell className="max-w-[220px]">
-                <Link href={album.url} target="_blank" rel="noreferrer" className="truncate font-medium hover:underline">
+              <TableCell className="min-w-0">
+                <Link
+                  href={album.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block truncate font-medium hover:underline"
+                  title={album.name}
+                >
                   {album.name}
                 </Link>
+                <p className="truncate text-xs text-muted-foreground 2xl:hidden" title={album.artists}>
+                  {album.artists}
+                </p>
               </TableCell>
-              <TableCell className="hidden max-w-[200px] truncate text-muted-foreground md:table-cell">{album.artists}</TableCell>
-              <TableCell className="text-right tabular-nums">{album.trackCount}</TableCell>
-              <TableCell className="text-right tabular-nums text-muted-foreground">#{album.bestRank}</TableCell>
+              <TableCell
+                className="hidden min-w-0 truncate text-muted-foreground 2xl:table-cell"
+                title={album.artists}
+              >
+                {album.artists}
+              </TableCell>
+              <TableCell className="text-right text-xs text-muted-foreground">
+                <span className="tabular-nums">{album.trackCount}</span>
+                <span className="hidden sm:inline"> tracks</span>
+                <span className="mx-1 text-border">·</span>
+                <span className="tabular-nums">#{album.bestRank}</span>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -1,15 +1,19 @@
 "use client";
 
-import Image from "next/image";
 import { useMemo, useState } from "react";
 import type { SpotifyTrack } from "@/lib/spotify/types";
+import { albumImageFromTrack } from "@/lib/spotify/images";
 import { DetailSheet } from "@/features/dashboard/components/analytics/detail-sheet";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
+import { SpotifyImage } from "@/components/spotify/spotify-image";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
 const PAGE_SIZES = [10, 25, 50] as const;
+
+const POPULARITY_HEADER_TITLE =
+  "Spotify global popularity score from 0–100. This is not your personal play count.";
 
 type TopTracksTableProps = {
   tracks: SpotifyTrack[];
@@ -52,21 +56,30 @@ export function TopTracksTable({ tracks, isLoading, error, onRetry }: TopTracksT
           </div>
         }
       >
-        <Table>
+        <Table className="table-fixed" wrapperClassName="overflow-x-hidden">
+          <colgroup>
+            <col className="w-8" />
+            <col className="w-10" />
+            <col />
+            <col className="w-11" />
+          </colgroup>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              <TableHead className="w-10">#</TableHead>
-              <TableHead className="w-10" />
+              <TableHead>#</TableHead>
+              <TableHead className="sr-only">Artwork</TableHead>
               <TableHead>Track</TableHead>
-              <TableHead className="hidden md:table-cell">Artist</TableHead>
-              <TableHead className="hidden lg:table-cell">Album</TableHead>
-              <TableHead className="w-28 text-right">Spotify popularity</TableHead>
+              <TableHead className="hidden 2xl:table-cell">Artist</TableHead>
+              <TableHead className="hidden 2xl:table-cell">Album</TableHead>
+              <TableHead className="text-right" title={POPULARITY_HEADER_TITLE}>
+                Pop.
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {visible.map((track, index) => {
               const rank = index + 1;
-              const image = track.album.images.at(-1)?.url ?? track.album.images[0]?.url;
+              const image = albumImageFromTrack(track);
+              const artistLine = track.artists.map((a) => a.name).join(", ");
               return (
                 <TableRow
                   key={track.id}
@@ -74,18 +87,22 @@ export function TopTracksTable({ tracks, isLoading, error, onRetry }: TopTracksT
                   onClick={() => setSelected({ track, rank })}
                 >
                   <TableCell className="tabular-nums text-muted-foreground">{rank}</TableCell>
-                  <TableCell>
-                    {image ? (
-                      <Image src={image} alt="" width={32} height={32} className="size-8 rounded border border-border/60" />
-                    ) : (
-                      <div className="size-8 rounded bg-muted" />
-                    )}
+                  <TableCell className="px-2">
+                    <SpotifyImage src={image} alt="" size={32} className="border border-border/60" />
                   </TableCell>
-                  <TableCell className="max-w-[200px] truncate font-medium">{track.name}</TableCell>
-                  <TableCell className="hidden max-w-[180px] truncate text-muted-foreground md:table-cell">
-                    {track.artists.map((a) => a.name).join(", ")}
+                  <TableCell className="min-w-0">
+                    <p className="truncate font-medium" title={track.name}>{track.name}</p>
+                    <p className="truncate text-xs text-muted-foreground 2xl:hidden" title={artistLine}>
+                      {artistLine}
+                    </p>
+                    <p className="hidden truncate text-xs text-muted-foreground xl:block 2xl:hidden" title={track.album.name}>
+                      {track.album.name}
+                    </p>
                   </TableCell>
-                  <TableCell className="hidden max-w-[180px] truncate text-muted-foreground lg:table-cell">
+                  <TableCell className="hidden min-w-0 truncate text-muted-foreground 2xl:table-cell" title={artistLine}>
+                    {artistLine}
+                  </TableCell>
+                  <TableCell className="hidden min-w-0 truncate text-muted-foreground 2xl:table-cell" title={track.album.name}>
                     {track.album.name}
                   </TableCell>
                   <TableCell className="text-right tabular-nums">{track.popularity}</TableCell>

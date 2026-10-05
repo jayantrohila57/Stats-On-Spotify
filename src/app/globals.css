@@ -58,7 +58,20 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    font-family:
+      var(--font-inter),
+      var(--font-noto-jp),
+      ui-sans-serif,
+      system-ui,
+      "Segoe UI",
+      "Hiragino Sans",
+      "Hiragino Kaku Gothic ProN",
+      "Yu Gothic UI",
+      "Yu Gothic",
+      "Noto Sans JP",
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 

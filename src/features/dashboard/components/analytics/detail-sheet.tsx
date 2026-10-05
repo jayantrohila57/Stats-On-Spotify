@@ -19,6 +19,19 @@ type DetailSheetProps = {
 };
 
 export function DetailSheet({ open, onClose, track, artist, rank, derivedShare }: DetailSheetProps) {
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
   if (!open || (!track && !artist)) {
     return null;
   }

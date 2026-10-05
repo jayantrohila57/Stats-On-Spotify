@@ -1,7 +1,7 @@
 "use client";
 
 import { useSessionGuard } from "@/features/auth/hooks/use-session-guard";
-import { StatsLoadingList, StatsSignInPrompt } from "@/components/stats/stats-feedback";
+import { StatsSignInPrompt } from "@/components/stats/stats-feedback";
 import { AnalyticsPeriodProvider } from "@/features/dashboard/context/analytics-period-context";
 import { AnalyticsDashboard } from "@/features/dashboard/components/analytics/analytics-dashboard";
 import { AnalyticsDashboardSkeleton } from "@/features/dashboard/components/analytics-dashboard-skeleton";

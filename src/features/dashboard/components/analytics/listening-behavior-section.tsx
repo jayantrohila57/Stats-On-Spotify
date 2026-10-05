@@ -25,9 +25,7 @@ export function ListeningBehaviorSection({
   savedTracks,
   followedArtists,
 }: ListeningBehaviorSectionProps) {
-  const savedIds = new Set(savedTracks.map((s) => s.track.id));
-  const followedIds = new Set(followedArtists.map((a) => a.id));
-  const dimensions = deriveTasteDimensions(topTracks, topArtists, savedIds, followedIds);
+  const dimensions = deriveTasteDimensions(topTracks, topArtists, savedTracks, followedArtists);
   const top10Share = topNConcentrationShare(topTracks, 10);
   const diversity = uniqueArtistRatioInTopTracks(topTracks);
 

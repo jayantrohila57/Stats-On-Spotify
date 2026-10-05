@@ -22,7 +22,8 @@ import { ListeningBehaviorSection } from "@/features/dashboard/components/analyt
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import { SPOTIFY_MEDIA_SIZE, SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
-import { idsFromTracks, overlapCount } from "@/lib/analytics/behavior";
+import { computeLibraryOverlapMetrics } from "@/lib/analytics/library-overlap";
+import { useMemo } from "react";
 import { SectionErrorBoundary } from "@/components/stats/section-error-boundary";
 
 export function AnalyticsDashboard() {
@@ -44,11 +45,24 @@ export function AnalyticsDashboard() {
     refetchTops,
   } = useSpotifyAnalyticsQueries();
 
+  const libraryOverlap = useMemo(
+    () =>
+      computeLibraryOverlapMetrics(
+        topTracks,
+        topArtists,
+        savedTracks.data ?? [],
+        followedArtists.data ?? [],
+      ),
+    [topTracks, topArtists, savedTracks.data, followedArtists.data],
+  );
+
   const savedList = savedTracks.data ?? [];
-  const savedOverlap = overlapCount(idsFromTracks(topTracks), new Set(savedList.map((s) => s.track.id)));
 
   const kpiLoading =
-    initialTopsLoading || (playlists.isLoading && !playlists.data) || (profile.isLoading && !profile.data);
+    initialTopsLoading ||
+    (playlists.isLoading && !playlists.data) ||
+    (profile.isLoading && !profile.data) ||
+    (savedTracks.isLoading && savedTracks.data === undefined);
 
   const topsLoading = initialTopsLoading && topTracks.length === 0;
 
@@ -72,8 +86,7 @@ export function AnalyticsDashboard() {
                 topArtists={topArtists}
                 playlists={playlists.data ?? []}
                 profile={profile.data ?? null}
-                savedTrackCount={savedList.length}
-                savedOverlapCount={savedOverlap}
+                libraryOverlap={libraryOverlap}
                 recentPlayCount={(recentlyPlayed.data ?? []).length}
               />
             </div>
@@ -139,12 +152,7 @@ export function AnalyticsDashboard() {
           followedArtists={followedArtists.data ?? []}
         />
 
-        <LibraryOverlapSection
-          topTracks={topTracks}
-          topArtists={topArtists}
-          savedTracks={savedList}
-          followedArtists={followedArtists.data ?? []}
-        />
+        <LibraryOverlapSection libraryOverlap={libraryOverlap} />
 
         <RecentlyPlayedSection
           items={recentlyPlayed.data ?? []}

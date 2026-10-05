@@ -1,5 +1,7 @@
 import type { SpotifyArtist, SpotifyTrack } from "@/lib/spotify/types";
 import { deriveRankShare } from "@/lib/analytics/derive";
+import { savedTrackIdsFromLibrary } from "@/lib/analytics/library-overlap";
+import type { SpotifySavedTrack } from "@/lib/spotify/types";
 
 /** Derived: share of inverse-rank weight in top N — not true play share. */
 export function topNConcentrationShare(items: { id: string }[], n: number): number {
@@ -50,9 +52,11 @@ export type TasteDimension = {
 export function deriveTasteDimensions(
   topTracks: SpotifyTrack[],
   topArtists: SpotifyArtist[],
-  savedTrackIds: Set<string>,
-  followedArtistIds: Set<string>,
+  savedTracks: SpotifySavedTrack[],
+  followedArtists: SpotifyArtist[],
 ): TasteDimension[] {
+  const savedTrackIds = savedTrackIdsFromLibrary(savedTracks);
+  const followedArtistIds = idsFromArtists(followedArtists);
   const trackIds = idsFromTracks(topTracks);
   const artistIds = idsFromArtists(topArtists);
   const top10Share = topNConcentrationShare(topTracks, 10) * 100;

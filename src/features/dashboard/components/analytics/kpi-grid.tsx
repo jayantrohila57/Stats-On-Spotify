@@ -22,7 +22,9 @@ import {
   uniqueAlbumCountFromTracks,
   uniqueArtistCountFromTracks,
 } from "@/lib/analytics/derive";
-import { idsFromTracks, topNConcentrationShare } from "@/lib/analytics/behavior";
+import { topNConcentrationShare } from "@/lib/analytics/behavior";
+import type { LibraryOverlapMetrics } from "@/lib/analytics/library-overlap";
+import { topTracksSavedOverlapHint } from "@/lib/analytics/library-overlap";
 import type { LucideIcon } from "lucide-react";
 
 type KpiGridProps = {
@@ -30,8 +32,7 @@ type KpiGridProps = {
   topArtists: NormalizedArtist[];
   playlists: SpotifyPlaylist[];
   profile: SpotifyUserProfile | null;
-  savedTrackCount: number;
-  savedOverlapCount: number;
+  libraryOverlap: LibraryOverlapMetrics;
   recentPlayCount: number;
 };
 
@@ -63,16 +64,14 @@ export function KpiGrid({
   topArtists,
   playlists,
   profile,
-  savedTrackCount,
-  savedOverlapCount,
+  libraryOverlap,
   recentPlayCount,
 }: KpiGridProps) {
   const medianPop = medianTrackPopularity(topTracks);
   const genreStats = deriveGenreStats(topArtists);
   const uniqueGenres = genreStats.length;
   const top10Share = topNConcentrationShare(topTracks, 10);
-  const trackIds = idsFromTracks(topTracks);
-  const overlapPct = trackIds.size ? Math.round((savedOverlapCount / trackIds.size) * 100) : 0;
+  const { tracks: savedOverlap } = libraryOverlap;
 
   return (
     <div className="grid grid-cols-2 gap-px overflow-hidden rounded-md border border-border/80 bg-border/40 md:grid-cols-4 lg:grid-cols-6">
@@ -113,8 +112,8 @@ export function KpiGrid({
       <KpiCell
         icon={Heart}
         label="Saved overlap"
-        value={`${overlapPct}%`}
-        hint={`${savedOverlapCount} of ${trackIds.size} top tracks in saved sample (${savedTrackCount})`}
+        value={`${savedOverlap.overlapPercentOfTop}%`}
+        hint={topTracksSavedOverlapHint(savedOverlap)}
       />
       <KpiCell
         icon={History}

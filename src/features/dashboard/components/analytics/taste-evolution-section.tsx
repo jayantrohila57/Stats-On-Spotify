@@ -8,6 +8,7 @@ import type { NormalizedArtist } from "@/lib/analytics/normalize";
 import type { SpotifyArtist } from "@/lib/spotify/types";
 import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
 import { timeRangeLabel } from "@/lib/spotify/time-range";
+import { baselineCompareLabel } from "@/lib/spotify/period";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { SpotifyArtistAvatar } from "@/components/spotify/spotify-media";
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
@@ -26,24 +27,32 @@ export function TasteEvolutionSection({
   compareRange,
 }: TasteEvolutionSectionProps) {
   const comparisons = comparePeriods(artists, artistsByPeriod[compareRange] ?? [], timeRange, compareRange, artistsByPeriod);
+
   const movers = [...comparisons]
-    .filter((c) => c.delta.kind === "up" || c.delta.kind === "down" || c.delta.kind === "new")
+    .filter((c) => c.compareRank !== undefined && (c.delta.kind === "up" || c.delta.kind === "down"))
     .sort((a, b) => {
       const score = (d: typeof a.delta) =>
-        d.kind === "new" ? 1000 : d.kind === "up" ? d.delta : d.kind === "down" ? -d.delta : 0;
+        d.kind === "up" ? d.delta : d.kind === "down" ? -d.delta : 0;
       return score(b.delta) - score(a.delta);
     })
     .slice(0, 12);
+
+  const enteredCount = comparisons.filter((c) => c.compareRank === undefined).length;
 
   return (
     <section className="rounded-md border border-border/80 bg-card/30 p-4">
       <SectionHeader
         icon={GitCompareArrows}
         title="Taste evolution"
-        description={`Rank movement: ${timeRangeLabel(timeRange)} vs ${timeRangeLabel(compareRange)} (from Spotify top artist lists)`}
+        description={`Rank changes among artists in both ${timeRangeLabel(timeRange)} and ${timeRangeLabel(compareRange)} top-50 lists. “Was” = rank in ${baselineCompareLabel(timeRange)}.`}
       />
       {movers.length === 0 ? (
-        <p className="mt-3 text-xs text-muted-foreground">No rank changes to highlight between these periods.</p>
+        <p className="mt-3 text-xs text-muted-foreground">
+          No rank changes between these windows for artists that appear in both top-50 lists.
+          {enteredCount > 0
+            ? ` ${enteredCount} artist${enteredCount === 1 ? "" : "s"} in your current top 50 ${enteredCount === 1 ? "is" : "are"} not ranked in the comparison window (shown as NEW in track/artist tables, omitted here).`
+            : null}
+        </p>
       ) : (
         <Table className="mt-3">
           <TableHeader>

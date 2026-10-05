@@ -18,6 +18,7 @@ import type {
   SpotifyUserProfile,
 } from "@/lib/spotify/types";
 import { useAnalyticsPeriod } from "@/features/dashboard/context/analytics-period-context";
+import { baselineCompareRange } from "@/lib/spotify/period";
 
 const TIME_RANGES: SpotifyTimeRange[] = ["short_term", "medium_term", "long_term"];
 
@@ -109,8 +110,7 @@ export function useSpotifyAnalyticsQueries() {
     [artistsByPeriod, timeRange],
   );
 
-  const compareRange: SpotifyTimeRange =
-    timeRange === "short_term" ? "medium_term" : timeRange === "medium_term" ? "long_term" : "medium_term";
+  const compareRange: SpotifyTimeRange = baselineCompareRange(timeRange);
 
   const initialTopsLoading =
     topTrackQueries.some((q) => q.isLoading && !q.data) || topArtistQueries.some((q) => q.isLoading && !q.data);

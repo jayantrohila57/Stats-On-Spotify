@@ -66,12 +66,15 @@ export function comparePeriods<T extends { id: string }>(
   return currentList.map((entity, index) => {
     const currentRank = index + 1;
     const compareRank = compareRankById.get(entity.id);
+    const periods = periodsById.get(entity.id) ?? { [currentRange]: currentRank };
+    const wasRank = periods[compareRange] ?? compareRank;
+
     return {
       entity,
       currentRank,
-      compareRank,
-      delta: getRankDelta(compareRank, currentRank),
-      periods: periodsById.get(entity.id) ?? { [currentRange]: currentRank },
+      compareRank: wasRank,
+      delta: getRankDelta(wasRank, currentRank),
+      periods,
     };
   });
 }

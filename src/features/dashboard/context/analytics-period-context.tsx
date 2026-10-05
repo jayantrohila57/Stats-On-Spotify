@@ -13,7 +13,7 @@ type AnalyticsPeriodContextValue = {
 const AnalyticsPeriodContext = createContext<AnalyticsPeriodContextValue | null>(null);
 
 export function AnalyticsPeriodProvider({ children }: { children: ReactNode }) {
-  const [period, setPeriod] = useState<AnalyticsPeriodId>("6m");
+  const [period, setPeriod] = useState<AnalyticsPeriodId>("4w");
   const value = useMemo(
     () => ({
       period,

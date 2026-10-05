@@ -1,6 +1,6 @@
 "use client";
 
-import { ANALYTICS_PERIODS } from "@/lib/spotify/period";
+import { ANALYTICS_PERIODS, baselineCompareLabel, periodToTimeRange } from "@/lib/spotify/period";
 import { useAnalyticsPeriod } from "@/features/dashboard/context/analytics-period-context";
 import { cn } from "@/lib/utils";
 
@@ -29,7 +29,8 @@ export function PeriodFilterBar() {
           ))}
         </div>
         <p className="text-xs text-muted-foreground">
-          Applies to top tracks, top artists, and derived genre metrics for the selected window.
+          Applies to top tracks, top artists, and derived metrics. Rank “Was” / movement compares to{" "}
+          {baselineCompareLabel(periodToTimeRange(period))}.
         </p>
       </div>
     </div>

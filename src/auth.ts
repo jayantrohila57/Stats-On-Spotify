@@ -1,11 +1,16 @@
 import NextAuth, { type Session } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 import Spotify from "next-auth/providers/spotify";
+import { getAuthSecret, getSpotifyClientId, getSpotifyClientSecret } from "@/lib/env";
 import { applyAuthUrlEnvDefaults } from "@/lib/site-url";
 import { SPOTIFY_SCOPE_STRING } from "@/lib/spotify/scopes";
 import { refreshSpotifyAccessToken } from "@/server/spotify/client";
 
 applyAuthUrlEnvDefaults();
+
+const spotifyClientId = getSpotifyClientId();
+const spotifyClientSecret = getSpotifyClientSecret();
+const authSecret = getAuthSecret();
 
 type SpotifyJwt = JWT & {
   accessToken?: string;
@@ -37,16 +42,18 @@ async function refreshAccessToken(token: SpotifyJwt): Promise<SpotifyJwt> {
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Spotify({
-      clientId: process.env.SPOTIFY_CLIENT_ID,
-      clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+      clientId: spotifyClientId,
+      clientSecret: spotifyClientSecret,
       authorization: {
+        url: "https://accounts.spotify.com/authorize",
         params: {
           scope: SPOTIFY_SCOPE_STRING,
         },
       },
+      token: "https://accounts.spotify.com/api/token",
     }),
   ],
-  secret: process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET,
+  secret: authSecret,
   trustHost: true,
   session: {
     strategy: "jwt",

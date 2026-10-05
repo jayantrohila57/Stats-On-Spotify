@@ -56,6 +56,8 @@ Register **exactly**:
 
 Do not use Netlify or old deploy URLs here — mismatched `AUTH_URL` causes Auth.js `Configuration` errors.
 
+The Spotify provider in `src/auth.ts` must include an explicit `authorization.url` (`https://accounts.spotify.com/authorize`). Passing only `authorization.params` without `url` makes Auth.js fall back to OIDC discovery and throws `TypeError: Invalid URL` on sign-in.
+
 ## Install & run
 
 ```bash

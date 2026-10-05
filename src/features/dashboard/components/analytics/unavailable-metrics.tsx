@@ -11,34 +11,17 @@ export function UnavailableMetricsPanel() {
         isLoading={false}
         error={null}
         isEmpty
-        emptyTitle="Not enough historical data"
-        emptyDescription="This app does not store listening history. Spotify does not expose a time-series play log via the endpoints used here."
+        emptyTitle="Not available"
+        emptyDescription="Spotify does not expose a full time-series play log. Recently played covers only the latest window."
       />
       <SectionShell
-        title="Listening patterns"
-        description="By hour and weekday"
-        isLoading={false}
-        error={null}
-        isEmpty
-        emptyTitle="Not enough historical data"
-        emptyDescription="Hour and weekday breakdowns require recently played timestamps or stored history, which are not available in the current integration."
-      />
-      <SectionShell
-        title="Taste evolution"
-        description="How your top artists change across periods"
-        isLoading={false}
-        error={null}
-        isEmpty
-        emptyTitle="Not enough historical data"
-        emptyDescription="Comparing snapshots over time would require saved historical pulls. Switch periods above to compare current Spotify windows manually."
-      />
-      <SectionShell
-        title="Now playing & recently played"
+        title="Session length & play counts"
+        description="Per-track play totals and listening hours"
         isLoading={false}
         error={null}
         isEmpty
         emptyTitle="Not available"
-        emptyDescription="Playback state and recently played feeds are not wired in this dashboard. Top tracks reflect your Spotify top lists for the selected period."
+        emptyDescription="Personal play counts and listening hours are not returned by the endpoints used here."
       />
     </div>
   );

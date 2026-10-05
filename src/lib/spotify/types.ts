@@ -30,10 +30,36 @@ export type SpotifyTrack = {
   name: string;
   uri: string;
   popularity: number;
+  duration_ms: number;
+  explicit?: boolean;
+  preview_url: string | null;
   track_number: number;
   external_urls: SpotifyExternalUrls;
   artists: SpotifyArtist[];
   album: SpotifyAlbum;
+};
+
+export type SpotifyPlayHistoryItem = {
+  track: SpotifyTrack;
+  played_at: string;
+  context: {
+    type: string;
+    href: string;
+    external_urls: SpotifyExternalUrls;
+    uri: string;
+  } | null;
+};
+
+export type SpotifyCurrentlyPlaying = {
+  is_playing: boolean;
+  item: SpotifyTrack | null;
+  progress_ms: number | null;
+  timestamp: number;
+};
+
+export type SpotifySavedTrack = {
+  added_at: string;
+  track: SpotifyTrack;
 };
 
 export type SpotifyPlaylist = {

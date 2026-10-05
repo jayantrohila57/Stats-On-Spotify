@@ -7,6 +7,24 @@ export type GenreStat = {
 };
 
 /** Derived: genre frequency from top artists' genre tags (not play-weighted). */
+export function deriveGenreStatsWithOther(artists: SpotifyArtist[], limit = 8): GenreStat[] {
+  const all = deriveGenreStats(artists, 50);
+  if (all.length <= limit) return all;
+  const head = all.slice(0, limit);
+  const rest = all.slice(limit);
+  const otherCount = rest.reduce((sum, g) => sum + g.count, 0);
+  const total = all.reduce((sum, g) => sum + g.count, 0);
+  if (otherCount === 0 || total === 0) return head;
+  return [
+    ...head,
+    {
+      genre: "other",
+      count: otherCount,
+      share: otherCount / total,
+    },
+  ];
+}
+
 export function deriveGenreStats(artists: SpotifyArtist[], limit = 12): GenreStat[] {
   const counts = new Map<string, number>();
   for (const artist of artists) {

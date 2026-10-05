@@ -1,6 +1,20 @@
 "use client";
 
-import type { SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyUserProfile } from "@/lib/spotify/types";
+import {
+  Disc3,
+  Headphones,
+  Layers,
+  ListMusic,
+  Mic2,
+  Music2,
+  Tags,
+  TrendingUp,
+  Users,
+  Heart,
+  History,
+} from "lucide-react";
+import type { NormalizedArtist, NormalizedTrack } from "@/lib/analytics/normalize";
+import type { SpotifyPlaylist, SpotifyUserProfile } from "@/lib/spotify/types";
 import {
   deriveGenreStats,
   medianTrackPopularity,
@@ -8,62 +22,110 @@ import {
   uniqueAlbumCountFromTracks,
   uniqueArtistCountFromTracks,
 } from "@/lib/analytics/derive";
+import { idsFromTracks, topNConcentrationShare } from "@/lib/analytics/behavior";
+import type { LucideIcon } from "lucide-react";
 
 type KpiGridProps = {
-  topTracks: SpotifyTrack[];
-  topArtists: SpotifyArtist[];
+  topTracks: NormalizedTrack[];
+  topArtists: NormalizedArtist[];
   playlists: SpotifyPlaylist[];
   profile: SpotifyUserProfile | null;
+  savedTrackCount: number;
+  savedOverlapCount: number;
+  recentPlayCount: number;
 };
 
-function KpiCell({ label, value, hint }: { label: string; value: string; hint?: string }) {
+function KpiCell({
+  icon: Icon,
+  label,
+  value,
+  hint,
+}: {
+  icon: LucideIcon;
+  label: string;
+  value: string;
+  hint?: string;
+}) {
   return (
     <div className="border border-border/60 bg-background/40 px-3 py-2.5">
-      <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+      <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+        <Icon className="size-3.5 shrink-0 opacity-70" aria-hidden />
+        {label}
+      </div>
       <p className="mt-1 text-lg font-semibold tabular-nums tracking-tight">{value}</p>
       {hint ? <p className="mt-0.5 text-[11px] text-muted-foreground">{hint}</p> : null}
     </div>
   );
 }
 
-export function KpiGrid({ topTracks, topArtists, playlists, profile }: KpiGridProps) {
+export function KpiGrid({
+  topTracks,
+  topArtists,
+  playlists,
+  profile,
+  savedTrackCount,
+  savedOverlapCount,
+  recentPlayCount,
+}: KpiGridProps) {
   const medianPop = medianTrackPopularity(topTracks);
   const genreStats = deriveGenreStats(topArtists);
   const uniqueGenres = genreStats.length;
+  const top10Share = topNConcentrationShare(topTracks, 10);
+  const trackIds = idsFromTracks(topTracks);
+  const overlapPct = trackIds.size ? Math.round((savedOverlapCount / trackIds.size) * 100) : 0;
 
   return (
     <div className="grid grid-cols-2 gap-px overflow-hidden rounded-md border border-border/80 bg-border/40 md:grid-cols-4 lg:grid-cols-6">
-      <KpiCell label="Top tracks" value={String(topTracks.length)} hint="From Spotify top tracks (max 50)" />
-      <KpiCell label="Top artists" value={String(topArtists.length)} hint="From Spotify top artists (max 50)" />
+      <KpiCell icon={Music2} label="Top tracks" value={String(topTracks.length)} hint="Spotify top tracks (max 50)" />
+      <KpiCell icon={Mic2} label="Top artists" value={String(topArtists.length)} hint="Spotify top artists (max 50)" />
       <KpiCell
+        icon={Users}
         label="Unique artists"
         value={String(uniqueArtistCountFromTracks(topTracks))}
-        hint="Across your top tracks list"
+        hint="Across top tracks list"
       />
       <KpiCell
+        icon={Disc3}
         label="Unique albums"
         value={String(uniqueAlbumCountFromTracks(topTracks))}
-        hint="Across your top tracks list"
+        hint="Across top tracks list"
       />
       <KpiCell
+        icon={TrendingUp}
         label="Median popularity"
         value={medianPop !== null ? String(Math.round(medianPop)) : "—"}
-        hint="Spotify popularity score (0–100), not your play count"
+        hint="Spotify score 0–100, not play count"
       />
+      <KpiCell icon={Tags} label="Genre tags" value={String(uniqueGenres)} hint="Derived from top artists" />
       <KpiCell
-        label="Genre tags"
-        value={String(uniqueGenres)}
-        hint="Derived from top artists' genre metadata"
+        icon={Layers}
+        label="Top-10 concentration"
+        value={`${(top10Share * 100).toFixed(0)}%`}
+        hint="Derived inverse-rank weight in top 10"
       />
-      <KpiCell label="Playlists" value={String(playlists.length)} hint="Your library playlists" />
+      <KpiCell icon={ListMusic} label="Playlists" value={String(playlists.length)} hint="Your library playlists" />
       <KpiCell
+        icon={Headphones}
         label="Playlist tracks"
         value={totalPlaylistTracks(playlists).toLocaleString()}
-        hint="Sum of playlist track totals from Spotify"
+        hint="Sum of playlist totals"
+      />
+      <KpiCell
+        icon={Heart}
+        label="Saved overlap"
+        value={`${overlapPct}%`}
+        hint={`${savedOverlapCount} of ${trackIds.size} top tracks in saved sample (${savedTrackCount})`}
+      />
+      <KpiCell
+        icon={History}
+        label="Recent plays"
+        value={String(recentPlayCount)}
+        hint="Items in recently played window"
       />
       {profile ? (
         <KpiCell
-          label="Spotify followers"
+          icon={Users}
+          label="Followers"
           value={profile.followers.total.toLocaleString()}
           hint="Public profile metric"
         />

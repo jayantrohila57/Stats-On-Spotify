@@ -1,23 +1,34 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { SPOTIFY_MEDIA_SIZE, SpotifyArtistAvatar } from "@/components/spotify/spotify-media";
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
-import type { SpotifyArtist } from "@/lib/spotify/types";
 import { deriveRankShare, formatGenreLabel } from "@/lib/analytics/derive";
+import { getRankDelta } from "@/lib/analytics/compare";
+import type { NormalizedArtist } from "@/lib/analytics/normalize";
+import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
+import { timeRangeLabel } from "@/lib/spotify/time-range";
 import { DetailSheet } from "@/features/dashboard/components/analytics/detail-sheet";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
+import { RankMovement } from "@/features/dashboard/components/analytics/rank-movement";
+import { SpotifyEntityPreview } from "@/features/dashboard/components/analytics/spotify-entity-preview";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 type TopArtistsSectionProps = {
-  artists: SpotifyArtist[];
+  artists: NormalizedArtist[];
+  compareRange: SpotifyTimeRange;
   isLoading: boolean;
   error: string | null;
   onRetry?: () => void;
 };
 
-export function TopArtistsSection({ artists, isLoading, error, onRetry }: TopArtistsSectionProps) {
-  const [selected, setSelected] = useState<{ artist: SpotifyArtist; rank: number; share: number } | null>(null);
+export function TopArtistsSection({ artists, compareRange, isLoading, error, onRetry }: TopArtistsSectionProps) {
+  const [selected, setSelected] = useState<{ artist: NormalizedArtist; rank: number; share: number } | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const topFive = artists.slice(0, 5);
   const total = artists.length;
 
@@ -39,20 +50,23 @@ export function TopArtistsSection({ artists, isLoading, error, onRetry }: TopArt
               const rank = index + 1;
               const image = pickSpotifyImageUrl(artist.images);
               const share = deriveRankShare(rank, total);
+              const delta = getRankDelta(artist.periods[compareRange], rank);
               return (
-                <button
-                  key={artist.id}
-                  type="button"
-                  onClick={() => setSelected({ artist, rank, share })}
-                  className="flex flex-col items-start gap-2 rounded-md border border-border/70 bg-background/50 p-2 text-left transition-colors hover:bg-muted/40"
-                >
-                  <div className="flex w-full items-center gap-2">
-                    <span className="text-xs font-medium text-muted-foreground tabular-nums">#{rank}</span>
+                <SpotifyEntityPreview key={artist.id} kind="artist" artist={artist}>
+                  <button
+                    type="button"
+                    onClick={() => setSelected({ artist, rank, share })}
+                    className="flex w-full flex-col items-start gap-2 rounded-md border border-border/70 bg-background/50 p-2 text-left transition-colors hover:bg-muted/40"
+                  >
+                    <div className="flex w-full items-center justify-between gap-2">
+                      <span className="text-xs font-medium text-muted-foreground tabular-nums">#{rank}</span>
+                      <RankMovement delta={delta} />
+                    </div>
                     <SpotifyArtistAvatar src={image} name={artist.name} size={SPOTIFY_MEDIA_SIZE.card} />
-                  </div>
-                  <span className="line-clamp-2 text-xs font-medium leading-snug">{artist.name}</span>
-                  <span className="text-[10px] text-muted-foreground">{(share * 100).toFixed(1)}% derived share</span>
-                </button>
+                    <span className="line-clamp-2 text-xs font-medium leading-snug">{artist.name}</span>
+                    <span className="text-[10px] text-muted-foreground">{(share * 100).toFixed(1)}% derived share</span>
+                  </button>
+                </SpotifyEntityPreview>
               );
             })}
           </div>
@@ -61,12 +75,14 @@ export function TopArtistsSection({ artists, isLoading, error, onRetry }: TopArt
         <Table>
           <TableHeader>
             <TableRow className="hover:bg-transparent">
+              <TableHead className="w-8" />
               <TableHead className="w-10">#</TableHead>
               <TableHead className="w-10" />
               <TableHead>Artist</TableHead>
               <TableHead className="hidden md:table-cell">Genres</TableHead>
+              <TableHead className="w-20 text-right">Move</TableHead>
               <TableHead className="w-24 text-right">Derived share</TableHead>
-              <TableHead className="w-28 text-right">Spotify popularity</TableHead>
+              <TableHead className="w-28 text-right">Popularity</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -75,19 +91,68 @@ export function TopArtistsSection({ artists, isLoading, error, onRetry }: TopArt
               const share = deriveRankShare(rank, total);
               const image = pickSpotifyImageUrl(artist.images);
               const genres = (artist.genres ?? []).slice(0, 2).map(formatGenreLabel).join(", ");
+              const delta = getRankDelta(artist.periods[compareRange], rank);
+              const isExpanded = expandedId === artist.id;
               return (
-                <TableRow key={artist.id} className="cursor-pointer" onClick={() => setSelected({ artist, rank, share })}>
-                  <TableCell className="tabular-nums text-muted-foreground">{rank}</TableCell>
-                  <TableCell className="w-10 shrink-0 px-2">
-                    <SpotifyArtistAvatar src={image} name={artist.name} />
-                  </TableCell>
-                  <TableCell className="min-w-0 max-w-0 truncate font-medium" title={artist.name}>{artist.name}</TableCell>
-                  <TableCell className="hidden min-w-0 max-w-0 truncate text-xs text-muted-foreground md:table-cell" title={genres || undefined}>
-                    {genres ? genres : <span className="text-muted-foreground/70">No genres listed</span>}
-                  </TableCell>
-                  <TableCell className="text-right tabular-nums text-xs">{(share * 100).toFixed(1)}%</TableCell>
-                  <TableCell className="text-right tabular-nums">{artist.popularity ?? "—"}</TableCell>
-                </TableRow>
+                <Fragment key={artist.id}>
+                  <TableRow className="cursor-pointer">
+                    <TableCell className="p-1">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="size-7"
+                        onClick={() => setExpandedId(isExpanded ? null : artist.id)}
+                      >
+                        <ChevronDown className={cn("size-4 transition-transform", isExpanded && "rotate-180")} />
+                      </Button>
+                    </TableCell>
+                    <TableCell className="tabular-nums text-muted-foreground" onClick={() => setSelected({ artist, rank, share })}>
+                      {rank}
+                    </TableCell>
+                    <TableCell className="w-10 shrink-0 px-2" onClick={() => setSelected({ artist, rank, share })}>
+                      <SpotifyArtistAvatar src={image} name={artist.name} />
+                    </TableCell>
+                    <TableCell className="min-w-0 max-w-0" onClick={() => setSelected({ artist, rank, share })}>
+                      <SpotifyEntityPreview kind="artist" artist={artist}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="block truncate font-medium">{artist.name}</span>
+                          </TooltipTrigger>
+                          <TooltipContent>{artist.name}</TooltipContent>
+                        </Tooltip>
+                      </SpotifyEntityPreview>
+                    </TableCell>
+                    <TableCell
+                      className="hidden min-w-0 max-w-0 truncate text-xs text-muted-foreground md:table-cell"
+                      title={genres || undefined}
+                    >
+                      {genres ? genres : <span className="text-muted-foreground/70">No genres listed</span>}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <RankMovement delta={delta} />
+                    </TableCell>
+                    <TableCell className="text-right tabular-nums text-xs">{(share * 100).toFixed(1)}%</TableCell>
+                    <TableCell className="text-right tabular-nums">{artist.popularity ?? "—"}</TableCell>
+                  </TableRow>
+                  {isExpanded ? (
+                    <TableRow className="bg-muted/20 hover:bg-muted/20">
+                      <TableCell colSpan={8} className="text-xs text-muted-foreground">
+                        Period ranks:{" "}
+                        {(["short_term", "medium_term", "long_term"] as SpotifyTimeRange[])
+                          .map((r) =>
+                            artist.periods[r]
+                              ? `${r === "short_term" ? "4w" : r === "medium_term" ? "6m" : "all"} #${artist.periods[r]}`
+                              : null,
+                          )
+                          .filter(Boolean)
+                          .join(" · ")}{" "}
+                        · vs {timeRangeLabel(compareRange)}:{" "}
+                        {artist.periods[compareRange] ? `#${artist.periods[compareRange]}` : "not ranked"}
+                      </TableCell>
+                    </TableRow>
+                  ) : null}
+                </Fragment>
               );
             })}
           </TableBody>

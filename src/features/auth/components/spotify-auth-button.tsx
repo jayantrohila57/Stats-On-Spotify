@@ -19,7 +19,7 @@ export function SpotifyAuthButton({ className, size = "default" }: SpotifyAuthBu
         variant="spotify"
         size={size}
         className={className}
-        onClick={() => signOut()}
+        onClick={() => signOut({ callbackUrl: "/login" })}
       >
         <LogOut />
         Log out of Spotify
@@ -33,7 +33,7 @@ export function SpotifyAuthButton({ className, size = "default" }: SpotifyAuthBu
       variant="spotify"
       size={size}
       className={className}
-      onClick={() => signIn("spotify")}
+      onClick={() => signIn("spotify", { callbackUrl: "/" })}
     >
       <LogIn />
       Log in with Spotify

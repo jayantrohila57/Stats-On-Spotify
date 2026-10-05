@@ -1,13 +1,12 @@
 {
   "name": "Stats On Spotify",
   "short_name": "Stats On Spotify",
-  "description": "Personal Spotify listening stats: top tracks, artists, and playlists.",
-  "theme_color": "#000000",
-  "background_color": "#0a0a0a",
+  "description": "Personal Spotify listening dashboard.",
+  "theme_color": "#050505",
+  "background_color": "#050505",
   "display": "standalone",
-  "orientation": "portrait",
   "scope": "/",
-  "start_url": "/",
+  "start_url": "/login",
   "lang": "en",
   "icons": [
     {
@@ -24,16 +23,8 @@
     }
   ],
   "shortcuts": [
-    {
-      "name": "Home",
-      "url": "/",
-      "description": "View your listening stats"
-    },
-    {
-      "name": "Account",
-      "url": "/account",
-      "description": "Your Spotify profile"
-    }
+    { "name": "Dashboard", "url": "/" },
+    { "name": "Log in", "url": "/login" }
   ],
   "categories": ["entertainment", "music"]
 }

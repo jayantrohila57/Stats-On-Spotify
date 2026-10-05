@@ -11,19 +11,26 @@ function hasSpotifyAccess(session: Session | null | undefined): boolean {
 }
 
 export default auth((request) => {
-  if (!request.nextUrl.pathname.startsWith("/account")) {
+  const { pathname } = request.nextUrl;
+  const authenticated = hasSpotifyAccess(request.auth);
+
+  if (pathname === "/login") {
+    if (authenticated) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
     return NextResponse.next();
   }
 
-  if (hasSpotifyAccess(request.auth)) {
+  if (pathname === "/") {
+    if (!authenticated) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
     return NextResponse.next();
   }
 
-  const home = new URL("/", request.nextUrl.origin);
-  home.searchParams.set("signin", "spotify");
-  return NextResponse.redirect(home);
+  return NextResponse.next();
 });
 
 export const config = {
-  matcher: ["/account"],
+  matcher: ["/", "/login"],
 };

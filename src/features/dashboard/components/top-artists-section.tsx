@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { analyticsCardClass } from "@/features/dashboard/lib/surface";
 import type { SpotifyArtist } from "@/lib/spotify/types";
 import { timeRangeLabel, type SpotifyTimeRange } from "@/lib/spotify/time-range";
 import { cn } from "@/lib/utils";
@@ -23,7 +24,7 @@ export function TopArtistsSection({
   const list = artists.slice(0, 12);
 
   return (
-    <section className="rounded-2xl border border-white/5 bg-zinc-950/60 p-4">
+    <section className={`${analyticsCardClass} p-4`}>
       <div className="mb-3 flex items-baseline justify-between gap-2">
         <h3 className="text-lg font-semibold">Top artists</h3>
         <p className="text-xs text-zinc-500">{timeRangeLabel(timeRange)}</p>

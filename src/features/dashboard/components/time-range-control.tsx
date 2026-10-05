@@ -12,7 +12,7 @@ type TimeRangeControlProps = {
 export function TimeRangeControl({ value, onChange, disabled }: TimeRangeControlProps) {
   return (
     <div
-      className="inline-flex flex-wrap gap-1 rounded-full border border-white/10 bg-zinc-900/80 p-1"
+      className="inline-flex w-full flex-wrap gap-1 rounded-xl border border-zinc-800 bg-zinc-900 p-1 sm:w-auto"
       role="group"
       aria-label="Listening time range"
     >
@@ -24,10 +24,10 @@ export function TimeRangeControl({ value, onChange, disabled }: TimeRangeControl
           title={option.label}
           onClick={() => onChange(option.value)}
           className={cn(
-            "rounded-full px-3 py-1.5 text-xs font-medium transition sm:px-4 sm:text-sm",
+            "rounded-lg px-3 py-1.5 text-xs font-medium transition sm:px-4 sm:text-sm",
             value === option.value
               ? "bg-[#1db954] text-black"
-              : "text-zinc-400 hover:bg-white/5 hover:text-white",
+              : "text-zinc-400 hover:bg-zinc-800 hover:text-white",
             disabled && "pointer-events-none opacity-60",
           )}
         >

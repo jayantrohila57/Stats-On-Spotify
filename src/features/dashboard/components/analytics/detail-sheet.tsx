@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { albumImageFromTrack, pickSpotifyImageUrl } from "@/lib/spotify/images";
-import { SpotifyImage } from "@/components/spotify/spotify-image";
+import { SPOTIFY_MEDIA_SIZE, SpotifyArtistAvatar, SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { useEffect } from "react";
 import { X } from "lucide-react";
 import type { SpotifyArtist, SpotifyTrack } from "@/lib/spotify/types";
@@ -65,7 +65,11 @@ export function DetailSheet({ open, onClose, track, artist, rank, derivedShare }
         </div>
         <div className="flex-1 overflow-y-auto p-4">
           <div className="flex gap-3">
-            <SpotifyImage src={image} alt="" size={80} className="border border-border/80" />
+            {track ? (
+              <SpotifyThumbnail src={image} alt={title} size={SPOTIFY_MEDIA_SIZE.detail} className="border-border/80" />
+            ) : (
+              <SpotifyArtistAvatar src={image} name={title} size={SPOTIFY_MEDIA_SIZE.detail} className="border-border/80" />
+            )}
             <div className="min-w-0 flex-1">
               <p className="text-base font-semibold leading-tight">{title}</p>
               {track ? (

@@ -5,7 +5,7 @@ import { useMemo } from "react";
 import type { SpotifyTrack } from "@/lib/spotify/types";
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
-import { SpotifyImage } from "@/components/spotify/spotify-image";
+import { SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 type AlbumsFromTracksTableProps = {
@@ -74,8 +74,8 @@ export function AlbumsFromTracksTable({ tracks, isLoading, error }: AlbumsFromTr
         <TableBody>
           {albums.slice(0, 20).map((album) => (
             <TableRow key={album.id}>
-              <TableCell className="px-2">
-                <SpotifyImage src={album.image} alt="" size={32} className="border border-border/60" />
+              <TableCell className="w-10 shrink-0 px-2">
+                <SpotifyThumbnail src={album.image} alt="" />
               </TableCell>
               <TableCell className="min-w-0">
                 <Link

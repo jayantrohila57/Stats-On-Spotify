@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
-import { analyticsCardClass } from "@/features/dashboard/lib/surface";
+import { AnalyticsSection } from "@/features/dashboard/components/analytics-section";
 import type { SpotifyPlaylist } from "@/lib/spotify/types";
 
 type PlaylistsStatsSectionProps = {
@@ -17,26 +17,23 @@ export function PlaylistsStatsSection({ playlists }: PlaylistsStatsSectionProps)
 
   if (!list.length) {
     return (
-      <section className={`${analyticsCardClass} border-dashed p-6 text-center text-sm text-zinc-500`}>
-        No playlists in your library yet.
-      </section>
+      <AnalyticsSection id="playlists" title="Playlists" description="Playlists in your Spotify library.">
+        <p className="text-center text-sm text-zinc-500">No playlists in your library yet.</p>
+      </AnalyticsSection>
     );
   }
 
   return (
-    <section className={`${analyticsCardClass} p-4`}>
-      <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className="text-lg font-semibold">Your playlists</h3>
-        <p className="text-xs text-zinc-500">
-          {playlists.length} playlist{playlists.length === 1 ? "" : "s"} · {totalTracks.toLocaleString()} tracks
-          total
-        </p>
-      </div>
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <AnalyticsSection
+      id="playlists"
+      title="Playlists"
+      description={`${playlists.length} playlist${playlists.length === 1 ? "" : "s"} · ${totalTracks.toLocaleString()} tracks total`}
+    >
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {list.map((playlist) => {
           const image = playlist.images[0]?.url;
           return (
-            <li key={playlist.id} className="rounded-xl border border-zinc-800 bg-zinc-900 p-3">
+            <li key={playlist.id} className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-3">
               <div className="flex gap-3">
                 {image ? (
                   <Image
@@ -67,6 +64,6 @@ export function PlaylistsStatsSection({ playlists }: PlaylistsStatsSectionProps)
           );
         })}
       </ul>
-    </section>
+    </AnalyticsSection>
   );
 }

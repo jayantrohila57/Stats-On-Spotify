@@ -33,7 +33,7 @@ export function AnalyticsToolbar({
 
   return (
     <div
-      className="flex flex-col gap-3 rounded-2xl border border-zinc-800 bg-zinc-950 p-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
+      className="flex flex-col gap-4 rounded-2xl border border-zinc-800 bg-zinc-950 p-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-3"
       role="toolbar"
       aria-label="Dashboard controls"
     >

@@ -23,6 +23,7 @@ import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import { SPOTIFY_MEDIA_SIZE, SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 import { idsFromTracks, overlapCount } from "@/lib/analytics/behavior";
+import { SectionErrorBoundary } from "@/components/stats/section-error-boundary";
 
 export function AnalyticsDashboard() {
   const {
@@ -79,6 +80,7 @@ export function AnalyticsDashboard() {
           )}
         </section>
 
+        <SectionErrorBoundary sectionTitle="Top tracks">
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2">
             <TopTracksTable
@@ -96,7 +98,9 @@ export function AnalyticsDashboard() {
             onRetry={() => currentlyPlaying.refetch()}
           />
         </div>
+        </SectionErrorBoundary>
 
+        <SectionErrorBoundary sectionTitle="Genres and albums">
         <div className="grid gap-6 lg:grid-cols-2">
           <GenreDistribution
             artists={topArtists}
@@ -108,7 +112,9 @@ export function AnalyticsDashboard() {
           />
           <AlbumsFromTracksTable tracks={topTracks} isLoading={topsLoading} error={topTracksError} />
         </div>
+        </SectionErrorBoundary>
 
+        <SectionErrorBoundary sectionTitle="Top artists">
         <TopArtistsSection
           artists={topArtists}
           compareRange={compareRange}
@@ -116,7 +122,9 @@ export function AnalyticsDashboard() {
           error={topTracksError}
           onRetry={() => void refetchTops()}
         />
+        </SectionErrorBoundary>
 
+        <SectionErrorBoundary sectionTitle="Recently played">
         <TasteEvolutionSection
           artists={topArtists}
           artistsByPeriod={artistsByPeriod}
@@ -146,13 +154,16 @@ export function AnalyticsDashboard() {
         />
 
         <ListeningPatternsSection items={recentlyPlayed.data ?? []} />
+        </SectionErrorBoundary>
 
+        <SectionErrorBoundary sectionTitle="Playlists">
         <PlaylistsTable
           playlists={playlists.data ?? []}
           isLoading={playlists.isLoading && !playlists.data}
           error={playlists.error?.message ?? null}
           onRetry={() => playlists.refetch()}
         />
+        </SectionErrorBoundary>
 
         <SectionShell
           title="New releases (browse)"

@@ -7,18 +7,27 @@ import { SpotifyArtistAvatar, SpotifyThumbnail } from "@/components/spotify/spot
 import { albumImageFromTrack, pickSpotifyImageUrl } from "@/lib/spotify/images";
 import type { SpotifyArtist, SpotifyPlaylist, SpotifyTrack } from "@/lib/spotify/types";
 import { formatDurationMs } from "@/lib/text/duration";
+import { cn } from "@/lib/utils";
 
 type PreviewProps =
   | { kind: "track"; track: SpotifyTrack }
   | { kind: "artist"; artist: SpotifyArtist }
   | { kind: "playlist"; playlist: SpotifyPlaylist };
 
-export function SpotifyEntityPreview(props: PreviewProps & { children: React.ReactNode }) {
-  const { children } = props;
+/**
+ * HoverCardTrigger uses Radix Slot (asChild). It must receive exactly one DOM element child.
+ * Always wrap consumer content in a single span so Tooltip/Link/text siblings cannot break the slot.
+ */
+export function SpotifyEntityPreview(
+  props: PreviewProps & { children: React.ReactNode; className?: string },
+) {
+  const { children, className } = props;
 
   return (
     <HoverCard openDelay={200} closeDelay={100}>
-      <HoverCardTrigger asChild>{children}</HoverCardTrigger>
+      <HoverCardTrigger asChild>
+        <span className={cn("block min-w-0", className)}>{children}</span>
+      </HoverCardTrigger>
       <HoverCardContent className="w-72 p-3" align="start">
         {props.kind === "track" ? (
           <TrackPreview track={props.track} />

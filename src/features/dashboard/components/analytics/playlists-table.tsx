@@ -69,22 +69,24 @@ export function PlaylistsTable({ playlists, isLoading, error, onRetry }: Playlis
                   </TableCell>
                   <TableCell className="min-w-0 max-w-0">
                     <SpotifyEntityPreview kind="playlist" playlist={playlist}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Link
-                            href={playlist.external_urls.spotify}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="block truncate font-medium hover:underline"
-                          >
-                            {playlist.name}
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>{playlist.name}</TooltipContent>
-                      </Tooltip>
-                      {description ? (
-                        <p className="truncate text-xs text-muted-foreground" title={description}>{description}</p>
-                      ) : null}
+                      <div className="min-w-0">
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Link
+                              href={playlist.external_urls.spotify}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="block truncate font-medium hover:underline"
+                            >
+                              {playlist.name}
+                            </Link>
+                          </TooltipTrigger>
+                          <TooltipContent>{playlist.name}</TooltipContent>
+                        </Tooltip>
+                        {description ? (
+                          <p className="truncate text-xs text-muted-foreground" title={description}>{description}</p>
+                        ) : null}
+                      </div>
                     </SpotifyEntityPreview>
                   </TableCell>
                   <TableCell className="hidden text-muted-foreground md:table-cell">{playlist.owner.display_name}</TableCell>

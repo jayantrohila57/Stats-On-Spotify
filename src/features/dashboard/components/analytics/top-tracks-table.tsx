@@ -127,7 +127,7 @@ export function TopTracksTable({ tracks, compareRange, isLoading, error, onRetry
                         <div className="min-w-0 text-left">
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <p className="truncate font-medium">{track.name}</p>
+                              <span className="block truncate font-medium">{track.name}</span>
                             </TooltipTrigger>
                             <TooltipContent>{track.name}</TooltipContent>
                           </Tooltip>

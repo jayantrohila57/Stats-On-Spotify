@@ -1,41 +1,33 @@
 "use client";
 
+import { useSessionGuard } from "@/features/auth/hooks/use-session-guard";
+import { StatsSignInPrompt } from "@/components/stats/stats-feedback";
+import { AnalyticsPeriodProvider } from "@/features/dashboard/context/analytics-period-context";
+import { AnalyticsDashboard } from "@/features/dashboard/components/analytics/analytics-dashboard";
 import { AnalyticsDashboardSkeleton } from "@/features/dashboard/components/analytics-dashboard-skeleton";
-import { DashboardShell } from "@/features/dashboard/components/dashboard-shell";
-import { useDashboardData } from "@/features/dashboard/hooks/use-dashboard-data";
-import { StatsErrorState } from "@/components/stats/stats-feedback";
-import { Button } from "@/components/ui/button";
 
 export function DashboardPage() {
-  const { data, isLoading, isRefreshingTops, error, timeRange, setTimeRange, refetch } = useDashboardData();
+  const { status } = useSessionGuard();
 
-  if (isLoading) {
+  if (status === "loading") {
     return (
-      <div className="min-h-screen bg-[#0a0a0a]">
+      <div className="min-h-screen bg-background">
         <AnalyticsDashboardSkeleton />
       </div>
     );
   }
 
-  if (error) {
+  if (status !== "authenticated") {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a] p-8">
-        <div className="w-full max-w-lg">
-          <StatsErrorState message={error} onRetry={refetch} />
-          <Button className="mt-4" variant="outline" onClick={() => refetch()}>
-            Reload dashboard
-          </Button>
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-background p-8">
+        <StatsSignInPrompt />
       </div>
     );
   }
 
   return (
-    <DashboardShell
-      data={data}
-      timeRange={timeRange}
-      onTimeRangeChange={setTimeRange}
-      isRefreshingTops={isRefreshingTops}
-    />
+    <AnalyticsPeriodProvider>
+      <AnalyticsDashboard />
+    </AnalyticsPeriodProvider>
   );
 }

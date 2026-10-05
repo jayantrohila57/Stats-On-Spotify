@@ -52,7 +52,5 @@ export function getSiteUrl(): string {
 export function applyAuthUrlEnvDefaults(): void {
   const resolved = getSiteUrl();
   process.env.AUTH_URL = resolved;
-  if (process.env.NEXTAUTH_URL && isBlockedAuthUrl(normalizeSiteUrl(process.env.NEXTAUTH_URL))) {
-    delete process.env.NEXTAUTH_URL;
-  }
+  process.env.NEXTAUTH_URL = resolved;
 }

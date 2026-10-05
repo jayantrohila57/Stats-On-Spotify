@@ -1,87 +1,62 @@
 # Stats on Spotify
 
-Personal Spotify listening stats in the browser: top tracks, artists, playlists (owned + followed), and profile. Built with **Next.js 16** (App Router), **Auth.js / NextAuth v5**, **Tailwind CSS v4**, and **shadcn/ui**.
+Personal Spotify listening **dashboard** (dark, Spotify-inspired UI). Sign in with Spotify to see your top tracks, artists, playlists, and profile.
 
 **Live:** https://statsonspotify.vercel.app
 
-## Stack (current)
+## UX
 
-| Layer | Choice |
-|-------|--------|
-| Framework | Next.js 16 App Router + React 19 |
-| Language | TypeScript (strict) |
-| Auth | Auth.js via `next-auth@5.0.0-beta.32` (Spotify OAuth, JWT + refresh) |
-| Styling | Tailwind CSS v4 + shadcn/ui (`components.json`, CSS variables) |
-| Data | Spotify Web API (`fetch` on the server, `/api/spotify/*` routes) |
+| State | Route | Experience |
+|-------|--------|------------|
+| Signed out | `/login` | Dedicated login screen — “Log in with Spotify” |
+| Signed in | `/` | Dashboard (featured playlists, genres, top tracks, artists, profile menu) |
 
-## Project layout
+`src/proxy.ts` protects `/` (redirects guests to `/login` once) and sends signed-in users away from `/login`.
+
+## Stack
+
+Next.js 16 App Router · React 19 · TypeScript · Auth.js (`next-auth@5.0.0-beta.32`) · Tailwind v4 · shadcn/ui
+
+## Layout
 
 ```
 src/
-  app/                 # Routes, layouts, API route handlers
-  auth.ts              # Auth.js config (handlers, auth, signIn, signOut)
-  proxy.ts             # Route protection for /account (Next.js 16 proxy)
-  components/          # Presentational UI (ui/ = shadcn primitives)
-  features/            # Feature slices (auth, dashboard, playlists, …)
-  lib/                 # Utils, env helpers, Spotify types/scopes
-  server/              # Spotify API client + route helpers
+  app/                 login + dashboard routes
+  auth.ts              Auth.js config
+  proxy.ts             auth gate for / and /login
+  components/ui/       shadcn primitives
+  features/dashboard/  dashboard UI + data hook
+  features/auth/       login screen + sign-in button
+  server/spotify/      API client + route helpers
 ```
-
-UI → feature hooks → API routes → `src/server/spotify` + `auth()`. Swap UI later without touching Spotify or auth code.
-
-## Requirements
-
-- Node.js 20+
-- [Spotify Developer](https://developer.spotify.com/dashboard) app
 
 ## Environment variables
 
 Create `.env.local`:
 
-| Variable | Required | Notes |
-|----------|----------|--------|
-| `SPOTIFY_CLIENT_ID` | Yes | Spotify app client ID |
-| `SPOTIFY_CLIENT_SECRET` | Yes | Spotify app client secret |
-| `AUTH_SECRET` or `NEXTAUTH_SECRET` | Yes | Session encryption secret ([generate](https://generate-secret.vercel.app/32)) |
-| `AUTH_URL` or `NEXTAUTH_URL` | Yes in production | **Must** be `https://statsonspotify.vercel.app` on Vercel (not a Netlify or preview URL). Local: `http://localhost:3000` |
+| Variable | Required |
+|----------|----------|
+| `SPOTIFY_CLIENT_ID` | Yes |
+| `SPOTIFY_CLIENT_SECRET` | Yes |
+| `AUTH_SECRET` or `NEXTAUTH_SECRET` | Yes |
+| `AUTH_URL` or `NEXTAUTH_URL` | Yes in production → `https://statsonspotify.vercel.app` |
 
-`SPOTIFY_*` and `NEXTAUTH_*` names are still supported. At runtime, `src/lib/site-url.ts` ignores stale `*.netlify.app` values in `AUTH_URL` / `NEXTAUTH_URL` and falls back to the canonical Vercel URL so OAuth never redirects to Netlify.
+Spotify **Redirect URI** (Dashboard):
 
-### Spotify redirect URIs (Dashboard → your app → Redirect URIs)
+- `http://localhost:3000/api/auth/callback/spotify`
+- `https://statsonspotify.vercel.app/api/auth/callback/spotify`
 
-Register **exactly**:
-
-- Local: `http://localhost:3000/api/auth/callback/spotify`
-- Production: `https://statsonspotify.vercel.app/api/auth/callback/spotify`
-
-Do not use Netlify or old deploy URLs here — mismatched `AUTH_URL` causes Auth.js `Configuration` errors.
-
-## Install & run
-
-```bash
-git clone https://github.com/jayantrohila57/Stats-On-Spotify.git
-cd Stats-On-Spotify
-npm install
-npm run dev
-```
-
-Open http://localhost:3000 and sign in with Spotify.
+The Spotify provider in `src/auth.ts` must set `authorization.url` to `https://accounts.spotify.com/authorize` (params-only breaks Auth.js with `Invalid URL`).
 
 ## Scripts
 
-- `npm run dev` — development server
-- `npm run build` — production build
-- `npm run start` — run production build locally
-- `npm run lint` — ESLint (flat config)
-
-## shadcn/ui
-
-Configured via `components.json`. Add or refresh components:
-
 ```bash
-npx shadcn@latest add button card tabs alert badge avatar
+npm install
+npm run dev
+npm run build
+npm run lint
 ```
 
-## Deploy
+## Placeholders
 
-Production ships from **`main`** (e.g. Vercel). Set the same env vars in the host dashboard.
+Friends Activity and the bottom player bar are **UI placeholders** (no Spotify social/playback APIs in this pass). Top tracks, artists, playlists, and profile use live `/api/spotify/*` routes.

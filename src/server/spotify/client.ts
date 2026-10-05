@@ -1,3 +1,4 @@
+import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
 import type { Paginated, SpotifyAlbumRelease, SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyUserProfile } from "@/lib/spotify/types";
 
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
@@ -37,20 +38,28 @@ export async function getCurrentUserProfile(accessToken: string): Promise<Spotif
   return spotifyFetch<SpotifyUserProfile>({ accessToken, path: "/me" });
 }
 
-export async function getMyTopTracks(accessToken: string, limit = 50): Promise<SpotifyTrack[]> {
+export async function getMyTopTracks(
+  accessToken: string,
+  limit = 50,
+  timeRange: SpotifyTimeRange = "medium_term",
+): Promise<SpotifyTrack[]> {
   const data = await spotifyFetch<Paginated<SpotifyTrack>>({
     accessToken,
     path: "/me/top/tracks",
-    searchParams: { limit, time_range: "medium_term" },
+    searchParams: { limit, time_range: timeRange },
   });
   return data.items;
 }
 
-export async function getMyTopArtists(accessToken: string, limit = 50): Promise<SpotifyArtist[]> {
+export async function getMyTopArtists(
+  accessToken: string,
+  limit = 50,
+  timeRange: SpotifyTimeRange = "medium_term",
+): Promise<SpotifyArtist[]> {
   const data = await spotifyFetch<Paginated<SpotifyArtist>>({
     accessToken,
     path: "/me/top/artists",
-    searchParams: { limit, time_range: "medium_term" },
+    searchParams: { limit, time_range: timeRange },
   });
   return data.items;
 }

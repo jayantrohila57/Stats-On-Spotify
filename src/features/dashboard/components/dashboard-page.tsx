@@ -6,7 +6,7 @@ import { StatsErrorState, StatsLoadingList } from "@/components/stats/stats-feed
 import { Button } from "@/components/ui/button";
 
 export function DashboardPage() {
-  const { data, isLoading, error, refetch } = useDashboardData();
+  const { data, isLoading, isRefreshingTops, error, timeRange, setTimeRange, refetch } = useDashboardData();
 
   if (isLoading) {
     return (
@@ -29,5 +29,12 @@ export function DashboardPage() {
     );
   }
 
-  return <DashboardShell data={data} />;
+  return (
+    <DashboardShell
+      data={data}
+      timeRange={timeRange}
+      onTimeRangeChange={setTimeRange}
+      isRefreshingTops={isRefreshingTops}
+    />
+  );
 }

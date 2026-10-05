@@ -14,7 +14,7 @@ export function LoginScreen() {
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-white">Stats On Spotify</h1>
           <p className="mt-3 text-sm text-zinc-400">
-            Your personal listening dashboard. Sign in with Spotify to view your top tracks, artists, and playlists.
+            Your personal listening analytics. Sign in with Spotify to explore your top tracks, artists, and genres.
           </p>
         </div>
         <SpotifyAuthButton size="lg" className="w-full" />

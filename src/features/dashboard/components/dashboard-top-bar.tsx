@@ -1,10 +1,11 @@
 "use client";
 
-import { Bell, ChevronDown, Search, Shield, SlidersHorizontal } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
+import { TimeRangeControl } from "@/features/dashboard/components/time-range-control";
+import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
 import type { SpotifyUserProfile } from "@/lib/spotify/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,48 +14,45 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 
-const filterPills = ["Minimal", "House", "Electronic"];
+type DashboardTopBarProps = {
+  profile: SpotifyUserProfile | null;
+  timeRange: SpotifyTimeRange;
+  onTimeRangeChange: (range: SpotifyTimeRange) => void;
+  isRefreshingTops?: boolean;
+};
 
-export function DashboardTopBar({ profile }: { profile: SpotifyUserProfile | null }) {
+export function DashboardTopBar({
+  profile,
+  timeRange,
+  onTimeRangeChange,
+  isRefreshingTops,
+}: DashboardTopBarProps) {
   const { data: session } = useSession();
   const displayName = profile?.display_name ?? session?.user?.name ?? "You";
 
   return (
-    <header className="flex flex-wrap items-center gap-3 border-b border-white/5 px-4 py-3">
-      <div className="relative min-w-[220px] flex-1">
-        <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-zinc-500" />
-        <Input
-          placeholder="Search..."
-          className="h-11 rounded-full border-white/10 bg-zinc-900/80 pl-10 text-white placeholder:text-zinc-500"
-        />
+    <header className="flex flex-col gap-3 border-b border-white/5 px-4 py-3 sm:flex-row sm:flex-wrap sm:items-center">
+      <div className="min-w-0">
+        <h1 className="text-lg font-bold tracking-tight sm:text-xl">Listening analytics</h1>
+        <p className="text-xs text-zinc-500">Top tracks, artists, and genres from your Spotify account</p>
       </div>
-      <div className="hidden items-center gap-2 lg:flex">
-        {filterPills.map((pill) => (
-          <Button key={pill} variant="secondary" size="sm" className="rounded-full bg-zinc-900 text-zinc-300">
-            {pill}
-          </Button>
-        ))}
-        <Button variant="secondary" size="sm" className="rounded-full bg-zinc-900 text-zinc-300">
-          <SlidersHorizontal className="size-4" />
-          Filters
-        </Button>
+      <div className="flex flex-1 flex-wrap items-center justify-start gap-3 sm:justify-center">
+        <TimeRangeControl value={timeRange} onChange={onTimeRangeChange} disabled={isRefreshingTops} />
       </div>
-      <div className="ml-auto flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="rounded-full text-zinc-400 hover:text-white">
-          <Shield className="size-4" />
-        </Button>
-        <Button variant="ghost" size="icon" className="rounded-full text-zinc-400 hover:text-white">
-          <Bell className="size-4" />
-        </Button>
+      <div className="flex items-center justify-end sm:ml-auto">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button type="button" className="flex items-center gap-2 rounded-full bg-zinc-900 px-2 py-1">
+            <button
+              type="button"
+              className="flex items-center gap-2 rounded-full bg-zinc-900 px-2 py-1"
+              aria-label="Account menu"
+            >
               <Avatar className="size-9 border border-white/10">
                 <AvatarImage src={session?.user?.image ?? undefined} alt={displayName} />
                 <AvatarFallback>{displayName.slice(0, 1)}</AvatarFallback>
               </Avatar>
+              <span className="hidden max-w-[120px] truncate text-sm font-medium sm:inline">{displayName}</span>
               <ChevronDown className="size-4 text-zinc-400" />
             </button>
           </DropdownMenuTrigger>
@@ -63,7 +61,7 @@ export function DashboardTopBar({ profile }: { profile: SpotifyUserProfile | nul
             <DropdownMenuSeparator className="bg-white/10" />
             {profile ? (
               <DropdownMenuItem disabled className="text-xs text-zinc-500">
-                {profile.followers.total.toLocaleString()} Spotify followers
+                Spotify profile connected
               </DropdownMenuItem>
             ) : null}
             <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/login" })}>Log out</DropdownMenuItem>

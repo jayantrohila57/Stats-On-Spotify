@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
 import type { SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyUserProfile } from "@/lib/spotify/types";
 
 type DashboardData = {
@@ -13,7 +14,10 @@ type DashboardData = {
 type DashboardState = {
   data: DashboardData;
   isLoading: boolean;
+  isRefreshingTops: boolean;
   error: string | null;
+  timeRange: SpotifyTimeRange;
+  setTimeRange: (range: SpotifyTimeRange) => void;
   refetch: () => Promise<void>;
 };
 
@@ -33,18 +37,35 @@ async function fetchJson<T>(path: string): Promise<T> {
   return response.json() as Promise<T>;
 }
 
+function topsQuery(timeRange: SpotifyTimeRange): string {
+  return `time_range=${encodeURIComponent(timeRange)}`;
+}
+
 export function useDashboardData(): DashboardState {
   const [data, setData] = useState<DashboardData>(empty);
   const [isLoading, setIsLoading] = useState(true);
+  const [isRefreshingTops, setIsRefreshingTops] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [timeRange, setTimeRange] = useState<SpotifyTimeRange>("medium_term");
+  const skipTimeRangeEffect = useRef(true);
+
+  const fetchTops = useCallback(async (range: SpotifyTimeRange) => {
+    const q = topsQuery(range);
+    const [topTracks, topArtists] = await Promise.all([
+      fetchJson<SpotifyTrack[]>(`/api/spotify/top-tracks?${q}`),
+      fetchJson<SpotifyArtist[]>(`/api/spotify/top-artists?${q}`),
+    ]);
+    return { topTracks, topArtists };
+  }, []);
 
   const refetch = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
+      const q = topsQuery(timeRange);
       const [topTracks, topArtists, playlists, profile] = await Promise.all([
-        fetchJson<SpotifyTrack[]>("/api/spotify/top-tracks"),
-        fetchJson<SpotifyArtist[]>("/api/spotify/top-artists"),
+        fetchJson<SpotifyTrack[]>(`/api/spotify/top-tracks?${q}`),
+        fetchJson<SpotifyArtist[]>(`/api/spotify/top-artists?${q}`),
         fetchJson<SpotifyPlaylist[]>("/api/spotify/playlists"),
         fetchJson<SpotifyUserProfile>("/api/spotify/profile"),
       ]);
@@ -55,7 +76,9 @@ export function useDashboardData(): DashboardState {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [timeRange]);
+
+  const initialTimeRange = useRef(timeRange);
 
   useEffect(() => {
     let active = true;
@@ -63,9 +86,10 @@ export function useDashboardData(): DashboardState {
       setIsLoading(true);
       setError(null);
       try {
+        const q = topsQuery(initialTimeRange.current);
         const [topTracks, topArtists, playlists, profile] = await Promise.all([
-          fetchJson<SpotifyTrack[]>("/api/spotify/top-tracks"),
-          fetchJson<SpotifyArtist[]>("/api/spotify/top-artists"),
+          fetchJson<SpotifyTrack[]>(`/api/spotify/top-tracks?${q}`),
+          fetchJson<SpotifyArtist[]>(`/api/spotify/top-artists?${q}`),
           fetchJson<SpotifyPlaylist[]>("/api/spotify/playlists"),
           fetchJson<SpotifyUserProfile>("/api/spotify/profile"),
         ]);
@@ -80,6 +104,7 @@ export function useDashboardData(): DashboardState {
       } finally {
         if (active) {
           setIsLoading(false);
+          skipTimeRangeEffect.current = false;
         }
       }
     };
@@ -89,5 +114,35 @@ export function useDashboardData(): DashboardState {
     };
   }, []);
 
-  return { data, isLoading, error, refetch };
+  useEffect(() => {
+    if (skipTimeRangeEffect.current) {
+      return;
+    }
+
+    let active = true;
+    const run = async () => {
+      setIsRefreshingTops(true);
+      setError(null);
+      try {
+        const { topTracks, topArtists } = await fetchTops(timeRange);
+        if (active) {
+          setData((prev) => ({ ...prev, topTracks, topArtists }));
+        }
+      } catch (err) {
+        if (active) {
+          setError(err instanceof Error ? err.message : "Failed to load listening stats");
+        }
+      } finally {
+        if (active) {
+          setIsRefreshingTops(false);
+        }
+      }
+    };
+    void run();
+    return () => {
+      active = false;
+    };
+  }, [timeRange, fetchTops]);
+
+  return { data, isLoading, isRefreshingTops, error, timeRange, setTimeRange, refetch };
 }

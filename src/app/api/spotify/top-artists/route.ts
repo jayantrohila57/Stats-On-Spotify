@@ -1,6 +1,9 @@
+import { parseTimeRange } from "@/lib/spotify/time-range";
 import { getMyTopArtists } from "@/server/spotify/client";
 import { withSpotifySession } from "@/server/spotify/route-handler";
 
-export async function GET() {
-  return withSpotifySession((accessToken) => getMyTopArtists(accessToken));
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const timeRange = parseTimeRange(searchParams.get("time_range"));
+  return withSpotifySession((accessToken) => getMyTopArtists(accessToken, 50, timeRange));
 }

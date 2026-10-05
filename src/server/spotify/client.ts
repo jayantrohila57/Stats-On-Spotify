@@ -1,10 +1,11 @@
+import { normalizeCurrentlyPlaying } from "@/lib/spotify/currently-playing";
 import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
 import type { SpotifyImage } from "@/lib/spotify/types";
 import type {
+  CurrentlyPlayingPayload,
   Paginated,
   SpotifyAlbumRelease,
   SpotifyArtist,
-  SpotifyCurrentlyPlaying,
   SpotifyPlayHistoryItem,
   SpotifyPlaylist,
   SpotifySavedTrack,
@@ -185,19 +186,42 @@ export async function getRecentlyPlayed(
   return data.items;
 }
 
-export async function getCurrentlyPlaying(accessToken: string): Promise<SpotifyCurrentlyPlaying | null> {
-  const response = await fetch(`${SPOTIFY_API_BASE}/me/player/currently-playing`, {
-    headers: { Authorization: `Bearer ${accessToken}` },
-    cache: "no-store",
-  });
-  if (response.status === 204) {
-    return null;
+export async function getCurrentlyPlaying(accessToken: string): Promise<CurrentlyPlayingPayload> {
+  try {
+    const response = await fetch(`${SPOTIFY_API_BASE}/me/player/currently-playing`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      cache: "no-store",
+    });
+
+    if (response.status === 204 || response.status === 202) {
+      return { playing: null };
+    }
+
+    if (response.status === 401 || response.status === 403) {
+      return { playing: null, scopeMissing: true };
+    }
+
+    if (!response.ok) {
+      return { playing: null };
+    }
+
+    const text = await response.text();
+    if (!text.trim()) {
+      return { playing: null };
+    }
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      return { playing: null };
+    }
+
+    const playing = normalizeCurrentlyPlaying(parsed);
+    return { playing };
+  } catch {
+    return { playing: null };
   }
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(`Spotify API error (${response.status}): ${body}`);
-  }
-  return response.json() as Promise<SpotifyCurrentlyPlaying>;
 }
 
 export async function getSavedTracks(accessToken: string, maxItems = 150): Promise<SpotifySavedTrack[]> {

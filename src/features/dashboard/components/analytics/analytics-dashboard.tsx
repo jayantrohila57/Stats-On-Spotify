@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { BarChart3 } from "lucide-react";
+import { useMemo } from "react";
 import { useSpotifyAnalyticsQueries } from "@/features/spotify/hooks/use-spotify-queries";
 import { AnalyticsHeader } from "@/features/dashboard/components/analytics/analytics-header";
 import { PeriodFilterBar } from "@/features/dashboard/components/analytics/period-filter-bar";
@@ -19,11 +20,16 @@ import { ListeningPatternsSection } from "@/features/dashboard/components/analyt
 import { TasteEvolutionSection } from "@/features/dashboard/components/analytics/taste-evolution-section";
 import { LibraryOverlapSection } from "@/features/dashboard/components/analytics/library-overlap-section";
 import { ListeningBehaviorSection } from "@/features/dashboard/components/analytics/listening-behavior-section";
+import { OverviewMiniChart } from "@/features/dashboard/components/analytics/overview-mini-chart";
+import {
+  DashboardSectionNav,
+  DashboardSectionNavMobile,
+} from "@/features/dashboard/components/analytics/dashboard-section-nav";
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import { SPOTIFY_MEDIA_SIZE, SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 import { computeLibraryOverlapMetrics } from "@/lib/analytics/library-overlap";
-import { useMemo } from "react";
+import { deriveGenreStatsWithOther, formatGenreLabel } from "@/lib/analytics/derive";
 import { SectionErrorBoundary } from "@/components/stats/section-error-boundary";
 
 export function AnalyticsDashboard() {
@@ -57,6 +63,7 @@ export function AnalyticsDashboard() {
   );
 
   const savedList = savedTracks.data ?? [];
+  const recentList = recentlyPlayed.data ?? [];
 
   const kpiLoading =
     initialTopsLoading ||
@@ -66,151 +73,180 @@ export function AnalyticsDashboard() {
 
   const topsLoading = initialTopsLoading && topTracks.length === 0;
 
+  const genreStats = deriveGenreStatsWithOther(topArtists, 3);
+  const topGenreLine = genreStats[0]
+    ? `${genreStats[0].genre === "other" ? "Other" : formatGenreLabel(genreStats[0].genre)} ${(genreStats[0].share * 100).toFixed(0)}% of top-artist genres · ${genreStats.length}+ tags in view`
+    : "Genre tags from your top artists";
+
+  const overviewDescription = `${topTracks.length} tracks · ${topArtists.length} artists · ${playlists.data?.length ?? 0} playlists · ${recentList.length} recent plays in sample`;
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <AnalyticsHeader profile={profile.data ?? null} profileLoading={profile.isLoading} />
       <PeriodFilterBar />
-      <main className="mx-auto max-w-[1400px] space-y-6 px-4 py-6 md:px-6">
-        <section aria-label="Listening overview">
-          <SectionHeader
-            icon={BarChart3}
-            title="Listening overview"
-            description="Counts and summaries from live Spotify API responses"
-          />
-          {kpiLoading ? (
-            <div className="mt-3 h-24 animate-pulse rounded-md border border-border/80 bg-muted/30" />
-          ) : (
-            <div className="mt-3">
-              <KpiGrid
+      <DashboardSectionNavMobile />
+      <div className="mx-auto flex max-w-[1400px] gap-8 px-4 py-6 md:px-6">
+        <DashboardSectionNav className="w-36 shrink-0 pt-1" />
+        <main className="min-w-0 flex-1 space-y-8">
+          <section id="section-overview" aria-label="Listening overview" className="scroll-mt-20">
+            <SectionHeader
+              icon={BarChart3}
+              title="Listening overview"
+              description={overviewDescription}
+            />
+            {kpiLoading ? (
+              <div className="mt-3 h-28 animate-pulse rounded-md border border-border/80 bg-muted/30" />
+            ) : (
+              <div className="mt-3 space-y-0">
+                <KpiGrid
+                  topTracks={topTracks}
+                  topArtists={topArtists}
+                  playlists={playlists.data ?? []}
+                  profile={profile.data ?? null}
+                  libraryOverlap={libraryOverlap}
+                  recentPlayCount={recentList.length}
+                />
+                <OverviewMiniChart topArtists={topArtists} recentPlays={recentList} />
+              </div>
+            )}
+          </section>
+
+          <section id="section-patterns" className="scroll-mt-20 space-y-8">
+            <SectionErrorBoundary sectionTitle="Listening patterns">
+              <ListeningPatternsSection items={recentList} />
+            </SectionErrorBoundary>
+          </section>
+
+          <section id="section-tracks" className="scroll-mt-20 space-y-8">
+            <SectionErrorBoundary sectionTitle="Top tracks">
+              <TopTracksTable
+                tracks={topTracks}
+                topArtists={topArtists}
+                compareRange={compareRange}
+                isLoading={topsLoading}
+                error={topTracksError}
+                onRetry={() => void refetchTops()}
+              />
+              <NowPlayingCard
+                payload={currentlyPlaying.data}
+                isLoading={currentlyPlaying.isLoading && currentlyPlaying.data === undefined}
+              />
+            </SectionErrorBoundary>
+          </section>
+
+          <section id="section-genres" className="scroll-mt-20">
+            <SectionErrorBoundary sectionTitle="Genres and albums">
+              <GenreDistribution
+                artists={topArtists}
+                artistsByPeriod={artistsByPeriod}
+                activeRange={timeRange}
+                compareRange={compareRange}
+                isLoading={topsLoading}
+                error={topTracksError}
+                description={topGenreLine}
+              />
+              <div className="mt-8">
+                <AlbumsFromTracksTable tracks={topTracks} isLoading={topsLoading} error={topTracksError} />
+              </div>
+            </SectionErrorBoundary>
+          </section>
+
+          <section id="section-artists" className="scroll-mt-20">
+            <SectionErrorBoundary sectionTitle="Top artists">
+              <TopArtistsSection
+                artists={topArtists}
+                compareRange={compareRange}
+                isLoading={topsLoading}
+                error={topTracksError}
+                onRetry={() => void refetchTops()}
+              />
+            </SectionErrorBoundary>
+          </section>
+
+          <section id="section-taste" className="scroll-mt-20 space-y-8">
+            <SectionErrorBoundary sectionTitle="Taste evolution">
+              <TasteEvolutionSection
+                artists={topArtists}
+                artistsByPeriod={artistsByPeriod}
+                timeRange={timeRange}
+                compareRange={compareRange}
+              />
+              <ListeningBehaviorSection
                 topTracks={topTracks}
                 topArtists={topArtists}
-                playlists={playlists.data ?? []}
-                profile={profile.data ?? null}
-                libraryOverlap={libraryOverlap}
-                recentPlayCount={(recentlyPlayed.data ?? []).length}
+                savedTracks={savedList}
+                followedArtists={followedArtists.data ?? []}
               />
-            </div>
-          )}
-        </section>
+            </SectionErrorBoundary>
+          </section>
 
-        <SectionErrorBoundary sectionTitle="Top tracks">
-        <div className="grid gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <TopTracksTable
-              tracks={topTracks}
-              compareRange={compareRange}
-              isLoading={topsLoading}
-              error={topTracksError}
-              onRetry={() => void refetchTops()}
-            />
-          </div>
-          <NowPlayingCard
-            data={currentlyPlaying.data}
-            isLoading={currentlyPlaying.isLoading && currentlyPlaying.data === undefined}
-            error={currentlyPlaying.error?.message ?? null}
-            onRetry={() => currentlyPlaying.refetch()}
-          />
-        </div>
-        </SectionErrorBoundary>
+          <section id="section-library" className="scroll-mt-20">
+            <SectionErrorBoundary sectionTitle="Library overlap">
+              <LibraryOverlapSection libraryOverlap={libraryOverlap} />
+            </SectionErrorBoundary>
+          </section>
 
-        <SectionErrorBoundary sectionTitle="Genres and albums">
-        <div className="grid gap-6 lg:grid-cols-2">
-          <GenreDistribution
-            artists={topArtists}
-            artistsByPeriod={artistsByPeriod}
-            activeRange={timeRange}
-            compareRange={compareRange}
-            isLoading={topsLoading}
-            error={topTracksError}
-          />
-          <AlbumsFromTracksTable tracks={topTracks} isLoading={topsLoading} error={topTracksError} />
-        </div>
-        </SectionErrorBoundary>
+          <section id="section-playlists" className="scroll-mt-20">
+            <SectionErrorBoundary sectionTitle="Playlists">
+              <PlaylistsTable
+                playlists={playlists.data ?? []}
+                isLoading={playlists.isLoading && !playlists.data}
+                error={playlists.error?.message ?? null}
+                onRetry={() => playlists.refetch()}
+              />
+            </SectionErrorBoundary>
+          </section>
 
-        <SectionErrorBoundary sectionTitle="Top artists">
-        <TopArtistsSection
-          artists={topArtists}
-          compareRange={compareRange}
-          isLoading={topsLoading}
-          error={topTracksError}
-          onRetry={() => void refetchTops()}
-        />
-        </SectionErrorBoundary>
+          <section id="section-recent" className="scroll-mt-20 space-y-8">
+            <SectionErrorBoundary sectionTitle="Recently played">
+              <RecentlyPlayedSection
+                items={recentList}
+                isLoading={recentlyPlayed.isLoading && !recentlyPlayed.data}
+                error={recentlyPlayed.error?.message ?? null}
+                onRetry={() => recentlyPlayed.refetch()}
+              />
+            </SectionErrorBoundary>
+          </section>
 
-        <SectionErrorBoundary sectionTitle="Recently played">
-        <TasteEvolutionSection
-          artists={topArtists}
-          artistsByPeriod={artistsByPeriod}
-          timeRange={timeRange}
-          compareRange={compareRange}
-        />
+          <SectionShell
+            title="New releases (browse)"
+            description="Spotify catalog — not personalized analytics"
+            isLoading={newReleases.isLoading && !newReleases.data}
+            error={newReleases.error?.message ?? null}
+            onRetry={() => newReleases.refetch()}
+            isEmpty={!newReleases.isLoading && !newReleases.error && (newReleases.data?.length ?? 0) === 0}
+            emptyTitle="No releases"
+            emptyDescription="Browse new releases could not be loaded."
+            className="opacity-90"
+          >
+            <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {(newReleases.data ?? []).slice(0, 4).map((album) => {
+                const image = pickSpotifyImageUrl(album.images);
+                return (
+                  <li key={album.id} className="flex gap-3 rounded-md border border-border/70 p-3">
+                    <SpotifyThumbnail src={image} alt={album.name} size={SPOTIFY_MEDIA_SIZE.release} />
+                    <div className="min-w-0">
+                      <Link
+                        href={album.external_urls.spotify}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="line-clamp-2 text-sm font-medium hover:underline"
+                      >
+                        {album.name}
+                      </Link>
+                      <p className="truncate text-[13px] text-muted-foreground">
+                        {album.artists.map((a) => a.name).join(", ")}
+                      </p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </SectionShell>
 
-        <ListeningBehaviorSection
-          topTracks={topTracks}
-          topArtists={topArtists}
-          savedTracks={savedList}
-          followedArtists={followedArtists.data ?? []}
-        />
-
-        <LibraryOverlapSection libraryOverlap={libraryOverlap} />
-
-        <RecentlyPlayedSection
-          items={recentlyPlayed.data ?? []}
-          isLoading={recentlyPlayed.isLoading && !recentlyPlayed.data}
-          error={recentlyPlayed.error?.message ?? null}
-          onRetry={() => recentlyPlayed.refetch()}
-        />
-
-        <ListeningPatternsSection items={recentlyPlayed.data ?? []} />
-        </SectionErrorBoundary>
-
-        <SectionErrorBoundary sectionTitle="Playlists">
-        <PlaylistsTable
-          playlists={playlists.data ?? []}
-          isLoading={playlists.isLoading && !playlists.data}
-          error={playlists.error?.message ?? null}
-          onRetry={() => playlists.refetch()}
-        />
-        </SectionErrorBoundary>
-
-        <SectionShell
-          title="New releases (browse)"
-          description="Spotify catalog — not personalized analytics"
-          isLoading={newReleases.isLoading && !newReleases.data}
-          error={newReleases.error?.message ?? null}
-          onRetry={() => newReleases.refetch()}
-          isEmpty={!newReleases.isLoading && !newReleases.error && (newReleases.data?.length ?? 0) === 0}
-          emptyTitle="No releases"
-          emptyDescription="Browse new releases could not be loaded."
-          className="opacity-90"
-        >
-          <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-            {(newReleases.data ?? []).slice(0, 4).map((album) => {
-              const image = pickSpotifyImageUrl(album.images);
-              return (
-                <li key={album.id} className="flex gap-2 rounded-md border border-border/70 p-2">
-                  <SpotifyThumbnail src={image} alt={album.name} size={SPOTIFY_MEDIA_SIZE.release} />
-                  <div className="min-w-0">
-                    <Link
-                      href={album.external_urls.spotify}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="line-clamp-2 text-xs font-medium hover:underline"
-                    >
-                      {album.name}
-                    </Link>
-                    <p className="truncate text-[11px] text-muted-foreground">
-                      {album.artists.map((a) => a.name).join(", ")}
-                    </p>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-        </SectionShell>
-
-        <UnavailableMetricsPanel />
-      </main>
+          <UnavailableMetricsPanel />
+        </main>
+      </div>
     </div>
   );
 }

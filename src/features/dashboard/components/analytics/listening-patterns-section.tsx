@@ -24,22 +24,24 @@ export function ListeningPatternsSection({ items }: ListeningPatternsSectionProp
   const hours = deriveHourDistribution(items);
   const weekdays = deriveWeekdayDistribution(items);
   const hasData = items.length > 0;
+  const peakHour = hours.reduce((best, b) => (b.count > best.count ? b : best), hours[0]);
+  const peakDay = weekdays.reduce((best, b) => (b.count > best.count ? b : best), weekdays[0]);
+
+  const description = hasData
+    ? `${items.length} plays in sample · busiest hour ${peakHour.hour}:00 (${peakHour.count} plays, ${(peakHour.share * 100).toFixed(0)}%) · busiest day ${peakDay.label} (${peakDay.count})`
+    : "Hour and weekday distribution from your recent plays sample — not all-time history";
 
   return (
-    <section className="rounded-md border border-border/80 bg-card/30 p-4">
-      <SectionHeader
-        icon={Clock3}
-        title="Listening patterns"
-        description="Hour and weekday distribution from your recent plays sample — not all-time history"
-      />
+    <section className="rounded-md border border-border/80 bg-card/30 p-4 md:p-5">
+      <SectionHeader icon={Clock3} title="Listening patterns" description={description} />
       {!hasData ? (
         <StatsEmptyState
           title="Not enough recent plays"
           description="Load recently played data to see hour and weekday patterns from that window."
         />
       ) : (
-        <div className="mt-3 grid gap-4 lg:grid-cols-2">
-          <ChartContainer config={hourChartConfig} className="aspect-[5/2] min-h-[160px] w-full">
+        <div className="mt-4 space-y-8">
+          <ChartContainer config={hourChartConfig} className="aspect-[5/2] min-h-[180px] w-full">
             <BarChart data={hours} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
               <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis dataKey="hour" tickLine={false} axisLine={false} tickFormatter={(h) => `${h}`} />
@@ -48,7 +50,7 @@ export function ListeningPatternsSection({ items }: ListeningPatternsSectionProp
               <Bar dataKey="count" fill="var(--color-count)" radius={[2, 2, 0, 0]} />
             </BarChart>
           </ChartContainer>
-          <ChartContainer config={weekdayChartConfig} className="aspect-[5/2] min-h-[160px] w-full">
+          <ChartContainer config={weekdayChartConfig} className="aspect-[5/2] min-h-[180px] w-full">
             <BarChart data={weekdays} margin={{ left: 0, right: 8, top: 8, bottom: 0 }}>
               <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis dataKey="label" tickLine={false} axisLine={false} />

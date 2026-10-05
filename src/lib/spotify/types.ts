@@ -50,11 +50,32 @@ export type SpotifyPlayHistoryItem = {
   } | null;
 };
 
+export type SpotifyEpisode = {
+  id: string;
+  name: string;
+  duration_ms: number;
+  explicit?: boolean;
+  external_urls: SpotifyExternalUrls;
+  images?: SpotifyImage[];
+  show?: { id: string; name: string; external_urls?: SpotifyExternalUrls };
+};
+
+export type SpotifyPlaybackItem =
+  | (SpotifyTrack & { type?: "track" })
+  | (SpotifyEpisode & { type?: "episode" });
+
 export type SpotifyCurrentlyPlaying = {
   is_playing: boolean;
-  item: SpotifyTrack | null;
+  item: SpotifyPlaybackItem | null;
+  currently_playing_type?: "track" | "episode" | "ad" | "unknown";
   progress_ms: number | null;
   timestamp: number;
+};
+
+/** API wrapper — always returned with HTTP 200 when session is valid. */
+export type CurrentlyPlayingPayload = {
+  playing: SpotifyCurrentlyPlaying | null;
+  scopeMissing?: boolean;
 };
 
 export type SpotifySavedTrack = {

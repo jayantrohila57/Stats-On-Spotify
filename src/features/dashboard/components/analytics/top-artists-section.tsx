@@ -36,7 +36,11 @@ export function TopArtistsSection({ artists, compareRange, isLoading, error, onR
     <>
       <SectionShell
         title="Top artists"
-        description="Ranked by Spotify for the selected period"
+        description={
+          artists.length > 0
+            ? `${artists.length} top artists · top 5 cards use derived inverse-rank share`
+            : "Ranked by Spotify for the selected period"
+        }
         isLoading={isLoading}
         error={error}
         onRetry={onRetry}
@@ -63,8 +67,8 @@ export function TopArtistsSection({ artists, compareRange, isLoading, error, onR
                       <RankMovement delta={delta} />
                     </div>
                     <SpotifyArtistAvatar src={image} name={artist.name} size={SPOTIFY_MEDIA_SIZE.card} />
-                    <span className="line-clamp-2 text-xs font-medium leading-snug">{artist.name}</span>
-                    <span className="text-[10px] text-muted-foreground">{(share * 100).toFixed(1)}% derived share</span>
+                    <span className="line-clamp-2 text-sm font-medium leading-snug">{artist.name}</span>
+                    <span className="font-mono-stats text-[12px] text-muted-foreground">{(share * 100).toFixed(1)}% derived share</span>
                   </button>
                 </SpotifyEntityPreview>
               );
@@ -95,7 +99,7 @@ export function TopArtistsSection({ artists, compareRange, isLoading, error, onR
               const isExpanded = expandedId === artist.id;
               return (
                 <Fragment key={artist.id}>
-                  <TableRow className="cursor-pointer">
+                  <TableRow className="cursor-pointer [&>td]:py-3">
                     <TableCell className="p-1">
                       <Button
                         type="button"
@@ -111,7 +115,7 @@ export function TopArtistsSection({ artists, compareRange, isLoading, error, onR
                       {rank}
                     </TableCell>
                     <TableCell className="w-10 shrink-0 px-2" onClick={() => setSelected({ artist, rank, share })}>
-                      <SpotifyArtistAvatar src={image} name={artist.name} />
+                      <SpotifyArtistAvatar src={image} name={artist.name} size={SPOTIFY_MEDIA_SIZE.table} />
                     </TableCell>
                     <TableCell className="min-w-0 max-w-0" onClick={() => setSelected({ artist, rank, share })}>
                       <SpotifyEntityPreview kind="artist" artist={artist}>

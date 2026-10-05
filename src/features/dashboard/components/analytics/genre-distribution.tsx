@@ -25,6 +25,7 @@ type GenreDistributionProps = {
   artistsByPeriod?: Record<SpotifyTimeRange, SpotifyArtist[]>;
   activeRange?: SpotifyTimeRange;
   compareRange?: SpotifyTimeRange;
+  description?: string;
   isLoading: boolean;
   error: string | null;
 };
@@ -34,6 +35,7 @@ export function GenreDistribution({
   artistsByPeriod,
   activeRange,
   compareRange,
+  description,
   isLoading,
   error,
 }: GenreDistributionProps) {
@@ -53,7 +55,7 @@ export function GenreDistribution({
   return (
     <SectionShell
       title="Genre distribution"
-      description="Derived from genre tags on your top artists"
+      description={description ?? "Derived from genre tags on your top artists"}
       isLoading={isLoading}
       error={error}
       isEmpty={!isLoading && !error && stats.length === 0}
@@ -67,15 +69,15 @@ export function GenreDistribution({
         ) : null
       }
     >
-      <div className="grid gap-4 lg:grid-cols-[1fr_160px]">
-        <ul className="space-y-2.5">
+      <div className="flex flex-col gap-6 md:flex-row md:items-start">
+        <ul className="min-w-0 flex-1 space-y-3">
           {stats.map((item) => (
             <li key={item.genre}>
-              <div className="mb-1 flex items-center justify-between gap-2 text-xs">
+              <div className="mb-1 flex items-center justify-between gap-2 text-sm">
                 <span className="truncate font-medium">
                   {item.genre === "other" ? "Other" : formatGenreLabel(item.genre)}
                 </span>
-                <span className="shrink-0 tabular-nums text-muted-foreground">
+                <span className="shrink-0 font-mono-stats text-muted-foreground">
                   {item.count} artist{item.count === 1 ? "" : "s"} · {(item.share * 100).toFixed(0)}%
                 </span>
               </div>

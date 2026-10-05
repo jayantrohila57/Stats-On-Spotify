@@ -1,6 +1,16 @@
 import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
 import type { SpotifyImage } from "@/lib/spotify/types";
-import type { Paginated, SpotifyAlbumRelease, SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyUserProfile } from "@/lib/spotify/types";
+import type {
+  Paginated,
+  SpotifyAlbumRelease,
+  SpotifyArtist,
+  SpotifyCurrentlyPlaying,
+  SpotifyPlayHistoryItem,
+  SpotifyPlaylist,
+  SpotifySavedTrack,
+  SpotifyTrack,
+  SpotifyUserProfile,
+} from "@/lib/spotify/types";
 
 const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
 
@@ -136,6 +146,86 @@ export async function getMyPlaylists(accessToken: string, limit = 50): Promise<S
     searchParams: { limit },
   });
   return data.items;
+}
+
+async function fetchAllPages<T>(
+  accessToken: string,
+  path: string,
+  limit: number,
+  maxItems: number,
+  searchParams?: Record<string, string | number | undefined>,
+): Promise<T[]> {
+  const items: T[] = [];
+  let offset = 0;
+  while (items.length < maxItems) {
+    const pageLimit = Math.min(limit, maxItems - items.length);
+    const data = await spotifyFetch<Paginated<T>>({
+      accessToken,
+      path,
+      searchParams: { ...searchParams, limit: pageLimit, offset },
+    });
+    items.push(...data.items);
+    if (data.items.length < pageLimit || items.length >= data.total) {
+      break;
+    }
+    offset += data.items.length;
+  }
+  return items;
+}
+
+export async function getRecentlyPlayed(
+  accessToken: string,
+  limit = 50,
+): Promise<SpotifyPlayHistoryItem[]> {
+  const data = await spotifyFetch<{ items: SpotifyPlayHistoryItem[] }>({
+    accessToken,
+    path: "/me/player/recently-played",
+    searchParams: { limit },
+  });
+  return data.items;
+}
+
+export async function getCurrentlyPlaying(accessToken: string): Promise<SpotifyCurrentlyPlaying | null> {
+  const response = await fetch(`${SPOTIFY_API_BASE}/me/player/currently-playing`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    cache: "no-store",
+  });
+  if (response.status === 204) {
+    return null;
+  }
+  if (!response.ok) {
+    const body = await response.text();
+    throw new Error(`Spotify API error (${response.status}): ${body}`);
+  }
+  return response.json() as Promise<SpotifyCurrentlyPlaying>;
+}
+
+export async function getSavedTracks(accessToken: string, maxItems = 150): Promise<SpotifySavedTrack[]> {
+  return fetchAllPages<SpotifySavedTrack>(accessToken, "/me/tracks", 50, maxItems);
+}
+
+export async function getFollowedArtists(accessToken: string, maxItems = 200): Promise<SpotifyArtist[]> {
+  const items: SpotifyArtist[] = [];
+  let after: string | undefined;
+  while (items.length < maxItems) {
+    const data = await spotifyFetch<{
+      artists: { items: SpotifyArtist[]; cursors?: { after: string }; total: number };
+    }>({
+      accessToken,
+      path: "/me/following",
+      searchParams: {
+        type: "artist",
+        limit: Math.min(50, maxItems - items.length),
+        after,
+      },
+    });
+    items.push(...data.artists.items);
+    after = data.artists.cursors?.after;
+    if (!after || data.artists.items.length === 0) {
+      break;
+    }
+  }
+  return items.slice(0, maxItems);
 }
 
 export async function getNewReleases(accessToken: string, limit = 20): Promise<SpotifyAlbumRelease[]> {

@@ -1,10 +1,11 @@
 "use client";
 
-import type { SpotifyAlbumRelease, SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyUserProfile } from "@/lib/spotify/types";
-import { useAnalyticsPeriod } from "@/features/dashboard/context/analytics-period-context";
-import { useSpotifyResource } from "@/features/spotify/hooks/use-spotify-resource";
+import Link from "next/link";
+import { BarChart3 } from "lucide-react";
+import { useSpotifyAnalyticsQueries } from "@/features/spotify/hooks/use-spotify-queries";
 import { AnalyticsHeader } from "@/features/dashboard/components/analytics/analytics-header";
 import { PeriodFilterBar } from "@/features/dashboard/components/analytics/period-filter-bar";
+import { SectionHeader } from "@/features/dashboard/components/analytics/section-header";
 import { KpiGrid } from "@/features/dashboard/components/analytics/kpi-grid";
 import { TopTracksTable } from "@/features/dashboard/components/analytics/top-tracks-table";
 import { TopArtistsSection } from "@/features/dashboard/components/analytics/top-artists-section";
@@ -12,100 +13,160 @@ import { GenreDistribution } from "@/features/dashboard/components/analytics/gen
 import { PlaylistsTable } from "@/features/dashboard/components/analytics/playlists-table";
 import { AlbumsFromTracksTable } from "@/features/dashboard/components/analytics/albums-from-tracks-table";
 import { UnavailableMetricsPanel } from "@/features/dashboard/components/analytics/unavailable-metrics";
-import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
-import Link from "next/link";
+import { NowPlayingCard } from "@/features/dashboard/components/analytics/now-playing-card";
+import { RecentlyPlayedSection } from "@/features/dashboard/components/analytics/recently-played-section";
+import { ListeningPatternsSection } from "@/features/dashboard/components/analytics/listening-patterns-section";
+import { TasteEvolutionSection } from "@/features/dashboard/components/analytics/taste-evolution-section";
+import { LibraryOverlapSection } from "@/features/dashboard/components/analytics/library-overlap-section";
+import { ListeningBehaviorSection } from "@/features/dashboard/components/analytics/listening-behavior-section";
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import { SPOTIFY_MEDIA_SIZE, SpotifyThumbnail } from "@/components/spotify/spotify-media";
-
-function usePeriodEndpoint<T>(path: string) {
-  const { timeRange } = useAnalyticsPeriod();
-  const endpoint = `${path}?time_range=${timeRange}`;
-  return useSpotifyResource<T>(endpoint);
-}
+import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
+import { idsFromTracks, overlapCount } from "@/lib/analytics/behavior";
 
 export function AnalyticsDashboard() {
-  const topTracks = usePeriodEndpoint<SpotifyTrack[]>("/api/spotify/top-tracks");
-  const topArtists = usePeriodEndpoint<SpotifyArtist[]>("/api/spotify/top-artists");
-  const playlists = useSpotifyResource<SpotifyPlaylist[]>("/api/spotify/playlists");
-  const profile = useSpotifyResource<SpotifyUserProfile>("/api/spotify/profile");
-  const newReleases = useSpotifyResource<SpotifyAlbumRelease[]>("/api/spotify/new-releases");
+  const {
+    topTracks,
+    topArtists,
+    artistsByPeriod,
+    compareRange,
+    timeRange,
+    profile,
+    playlists,
+    recentlyPlayed,
+    savedTracks,
+    followedArtists,
+    currentlyPlaying,
+    newReleases,
+    initialTopsLoading,
+    topTracksError,
+    refetchTops,
+  } = useSpotifyAnalyticsQueries();
+
+  const savedList = savedTracks.data ?? [];
+  const savedOverlap = overlapCount(idsFromTracks(topTracks), new Set(savedList.map((s) => s.track.id)));
 
   const kpiLoading =
-    topTracks.isLoading || topArtists.isLoading || playlists.isLoading || profile.isLoading;
+    initialTopsLoading || (playlists.isLoading && !playlists.data) || (profile.isLoading && !profile.data);
 
-  const hasAnyKpiData =
-    (topTracks.data?.length ?? 0) > 0 ||
-    (topArtists.data?.length ?? 0) > 0 ||
-    (playlists.data?.length ?? 0) > 0;
+  const topsLoading = initialTopsLoading && topTracks.length === 0;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <AnalyticsHeader profile={profile.data} profileLoading={profile.isLoading} />
+      <AnalyticsHeader profile={profile.data ?? null} profileLoading={profile.isLoading} />
       <PeriodFilterBar />
       <main className="mx-auto max-w-[1400px] space-y-6 px-4 py-6 md:px-6">
         <section aria-label="Listening overview">
-          <div className="mb-3">
-            <h2 className="text-sm font-semibold">Listening overview</h2>
-            <p className="text-xs text-muted-foreground">Counts and summaries from live Spotify API responses</p>
-          </div>
-          {kpiLoading && !hasAnyKpiData ? (
-            <div className="h-24 animate-pulse rounded-md border border-border/80 bg-muted/30" />
+          <SectionHeader
+            icon={BarChart3}
+            title="Listening overview"
+            description="Counts and summaries from live Spotify API responses"
+          />
+          {kpiLoading ? (
+            <div className="mt-3 h-24 animate-pulse rounded-md border border-border/80 bg-muted/30" />
           ) : (
-            <KpiGrid
-              topTracks={topTracks.data ?? []}
-              topArtists={topArtists.data ?? []}
-              playlists={playlists.data ?? []}
-              profile={profile.data}
-            />
+            <div className="mt-3">
+              <KpiGrid
+                topTracks={topTracks}
+                topArtists={topArtists}
+                playlists={playlists.data ?? []}
+                profile={profile.data ?? null}
+                savedTrackCount={savedList.length}
+                savedOverlapCount={savedOverlap}
+                recentPlayCount={(recentlyPlayed.data ?? []).length}
+              />
+            </div>
           )}
         </section>
 
-        <TopTracksTable
-          tracks={topTracks.data ?? []}
-          isLoading={topTracks.isLoading}
-          error={topTracks.error}
-          onRetry={topTracks.refetch}
-        />
-
-        <div className="grid gap-6 lg:grid-cols-2">
-          <GenreDistribution
-            artists={topArtists.data ?? []}
-            isLoading={topArtists.isLoading}
-            error={topArtists.error}
-          />
-          <AlbumsFromTracksTable
-            tracks={topTracks.data ?? []}
-            isLoading={topTracks.isLoading}
-            error={topTracks.error}
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <TopTracksTable
+              tracks={topTracks}
+              compareRange={compareRange}
+              isLoading={topsLoading}
+              error={topTracksError}
+              onRetry={() => void refetchTops()}
+            />
+          </div>
+          <NowPlayingCard
+            data={currentlyPlaying.data}
+            isLoading={currentlyPlaying.isLoading && currentlyPlaying.data === undefined}
+            error={currentlyPlaying.error?.message ?? null}
+            onRetry={() => currentlyPlaying.refetch()}
           />
         </div>
 
+        <div className="grid gap-6 lg:grid-cols-2">
+          <GenreDistribution
+            artists={topArtists}
+            artistsByPeriod={artistsByPeriod}
+            activeRange={timeRange}
+            compareRange={compareRange}
+            isLoading={topsLoading}
+            error={topTracksError}
+          />
+          <AlbumsFromTracksTable tracks={topTracks} isLoading={topsLoading} error={topTracksError} />
+        </div>
+
         <TopArtistsSection
-          artists={topArtists.data ?? []}
-          isLoading={topArtists.isLoading}
-          error={topArtists.error}
-          onRetry={topArtists.refetch}
+          artists={topArtists}
+          compareRange={compareRange}
+          isLoading={topsLoading}
+          error={topTracksError}
+          onRetry={() => void refetchTops()}
         />
+
+        <TasteEvolutionSection
+          artists={topArtists}
+          artistsByPeriod={artistsByPeriod}
+          timeRange={timeRange}
+          compareRange={compareRange}
+        />
+
+        <ListeningBehaviorSection
+          topTracks={topTracks}
+          topArtists={topArtists}
+          savedTracks={savedList}
+          followedArtists={followedArtists.data ?? []}
+        />
+
+        <LibraryOverlapSection
+          topTracks={topTracks}
+          topArtists={topArtists}
+          savedTracks={savedList}
+          followedArtists={followedArtists.data ?? []}
+        />
+
+        <RecentlyPlayedSection
+          items={recentlyPlayed.data ?? []}
+          isLoading={recentlyPlayed.isLoading && !recentlyPlayed.data}
+          error={recentlyPlayed.error?.message ?? null}
+          onRetry={() => recentlyPlayed.refetch()}
+        />
+
+        <ListeningPatternsSection items={recentlyPlayed.data ?? []} />
 
         <PlaylistsTable
           playlists={playlists.data ?? []}
-          isLoading={playlists.isLoading}
-          error={playlists.error}
-          onRetry={playlists.refetch}
+          isLoading={playlists.isLoading && !playlists.data}
+          error={playlists.error?.message ?? null}
+          onRetry={() => playlists.refetch()}
         />
 
         <SectionShell
           title="New releases (browse)"
-          description="Spotify catalog new releases — not personalized to your listening"
-          isLoading={newReleases.isLoading}
-          error={newReleases.error}
-          onRetry={newReleases.refetch}
+          description="Spotify catalog — not personalized analytics"
+          isLoading={newReleases.isLoading && !newReleases.data}
+          error={newReleases.error?.message ?? null}
+          onRetry={() => newReleases.refetch()}
           isEmpty={!newReleases.isLoading && !newReleases.error && (newReleases.data?.length ?? 0) === 0}
           emptyTitle="No releases"
           emptyDescription="Browse new releases could not be loaded."
+          className="opacity-90"
         >
           <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-            {(newReleases.data ?? []).slice(0, 8).map((album) => {
+            {(newReleases.data ?? []).slice(0, 4).map((album) => {
               const image = pickSpotifyImageUrl(album.images);
               return (
                 <li key={album.id} className="flex gap-2 rounded-md border border-border/70 p-2">

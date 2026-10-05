@@ -1,14 +1,18 @@
 "use client";
 
-import type { SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyUserProfile } from "@/lib/spotify/types";
+import { useCallback, useMemo, useState } from "react";
+import { AnalyticsDetailPanel } from "@/features/dashboard/components/analytics-detail-panel";
+import { AnalyticsSummaryHeader } from "@/features/dashboard/components/analytics-summary-header";
 import { DashboardSidebar } from "@/features/dashboard/components/dashboard-sidebar";
 import { DashboardTopBar } from "@/features/dashboard/components/dashboard-top-bar";
-import { FeaturedPlaylistCards } from "@/features/dashboard/components/featured-playlist-cards";
-import { GenresGrid } from "@/features/dashboard/components/genres-grid";
-import { TracksOfWeekList } from "@/features/dashboard/components/tracks-of-week-list";
-import { RecentArtistsGrid } from "@/features/dashboard/components/recent-artists-grid";
-import { FriendsActivityPanel } from "@/features/dashboard/components/friends-activity-panel";
-import { PlayerBar } from "@/features/dashboard/components/player-bar";
+import { GenresSection } from "@/features/dashboard/components/genres-section";
+import { PlaylistsStatsSection } from "@/features/dashboard/components/playlists-stats-section";
+import { TopArtistsSection } from "@/features/dashboard/components/top-artists-section";
+import { TopTracksSection } from "@/features/dashboard/components/top-tracks-section";
+import { artistsForGenre } from "@/features/dashboard/lib/genres";
+import type { AnalyticsSelection } from "@/features/dashboard/types/analytics-selection";
+import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
+import type { SpotifyArtist, SpotifyPlaylist, SpotifyTrack, SpotifyUserProfile } from "@/lib/spotify/types";
 
 export type DashboardShellData = {
   topTracks: SpotifyTrack[];
@@ -17,27 +21,127 @@ export type DashboardShellData = {
   profile: SpotifyUserProfile | null;
 };
 
-export function DashboardShell({ data }: { data: DashboardShellData }) {
-  const spotlightTrack = data.topTracks[0] ?? null;
+type DashboardShellProps = {
+  data: DashboardShellData;
+  timeRange: SpotifyTimeRange;
+  onTimeRangeChange: (range: SpotifyTimeRange) => void;
+  isRefreshingTops?: boolean;
+};
+
+export function DashboardShell({ data, timeRange, onTimeRangeChange, isRefreshingTops }: DashboardShellProps) {
+  const [selection, setSelection] = useState<AnalyticsSelection>(null);
+
+  const selectedTrackId = selection?.kind === "track" ? selection.track.id : null;
+  const selectedArtistId = selection?.kind === "artist" ? selection.artist.id : null;
+  const selectedGenreKey = selection?.kind === "genre" ? selection.genre : null;
+
+  const openTrack = useCallback((track: SpotifyTrack) => {
+    setSelection({ kind: "track", track });
+  }, []);
+
+  const openArtist = useCallback(
+    (artist: SpotifyArtist) => {
+      setSelection({ kind: "artist", artist });
+    },
+    [],
+  );
+
+  const openArtistById = useCallback(
+    (artistId: string) => {
+      const artist = data.topArtists.find((a) => a.id === artistId);
+      if (artist) {
+        openArtist(artist);
+      }
+    },
+    [data.topArtists, openArtist],
+  );
+
+  const openTrackById = useCallback(
+    (trackId: string) => {
+      const track = data.topTracks.find((t) => t.id === trackId);
+      if (track) {
+        openTrack(track);
+      }
+    },
+    [data.topTracks, openTrack],
+  );
+
+  const openGenre = useCallback(
+    (genreKey: string) => {
+      setSelection({
+        kind: "genre",
+        genre: genreKey,
+        relatedArtists: artistsForGenre(data.topArtists, genreKey),
+      });
+    },
+    [data.topArtists],
+  );
+
+  const panelOpen = selection !== null;
+
+  const layoutClass = useMemo(
+    () => (panelOpen ? "lg:pr-[min(28rem,100%)]" : ""),
+    [panelOpen],
+  );
 
   return (
     <div className="flex min-h-screen bg-[#050505] text-white">
       <DashboardSidebar />
-      <div className="flex min-w-0 flex-1 flex-col">
-        <DashboardTopBar profile={data.profile} />
-        <div className="flex min-h-0 flex-1 gap-4 p-4 pb-28 xl:pr-80">
-          <div className="min-w-0 flex-1 space-y-5 overflow-y-auto">
-            <FeaturedPlaylistCards playlists={data.playlists} />
-            <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,0.9fr)]">
-              <GenresGrid artists={data.topArtists} />
-              <TracksOfWeekList tracks={data.topTracks} />
-              <RecentArtistsGrid artists={data.topArtists} />
-            </div>
+      <div className={`flex min-w-0 flex-1 flex-col transition-[padding] ${layoutClass}`}>
+        <DashboardTopBar
+          profile={data.profile}
+          timeRange={timeRange}
+          onTimeRangeChange={onTimeRangeChange}
+          isRefreshingTops={isRefreshingTops}
+        />
+        <main className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4">
+          <AnalyticsSummaryHeader
+            profile={data.profile}
+            topTrack={data.topTracks[0] ?? null}
+            timeRange={timeRange}
+            topTrackCount={data.topTracks.length}
+            topArtistCount={data.topArtists.length}
+          />
+          <GenresSection
+            artists={data.topArtists}
+            timeRange={timeRange}
+            selectedGenreKey={selectedGenreKey}
+            onSelectGenre={(key) => openGenre(key)}
+            isRefreshing={isRefreshingTops}
+          />
+          <div className="grid gap-5 xl:grid-cols-2">
+            <TopTracksSection
+              tracks={data.topTracks}
+              timeRange={timeRange}
+              selectedTrackId={selectedTrackId}
+              onSelectTrack={openTrack}
+              isRefreshing={isRefreshingTops}
+            />
+            <TopArtistsSection
+              artists={data.topArtists}
+              timeRange={timeRange}
+              selectedArtistId={selectedArtistId}
+              onSelectArtist={openArtist}
+              isRefreshing={isRefreshingTops}
+            />
           </div>
-        </div>
-        <FriendsActivityPanel />
-        <PlayerBar track={spotlightTrack} />
+          <PlaylistsStatsSection playlists={data.playlists} />
+        </main>
       </div>
+      {panelOpen ? (
+        <button
+          type="button"
+          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+          aria-label="Close detail panel"
+          onClick={() => setSelection(null)}
+        />
+      ) : null}
+      <AnalyticsDetailPanel
+        selection={selection}
+        onClose={() => setSelection(null)}
+        onSelectArtist={openArtistById}
+        onSelectTrack={openTrackById}
+      />
     </div>
   );
 }

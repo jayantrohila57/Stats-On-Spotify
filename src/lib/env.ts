@@ -15,5 +15,9 @@ export function getSpotifyClientSecret(): string {
 }
 
 export function getAuthSecret(): string {
-  return required("NEXTAUTH_SECRET");
+  const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
+  if (!secret) {
+    throw new Error("Missing required environment variable: AUTH_SECRET or NEXTAUTH_SECRET");
+  }
+  return secret;
 }

@@ -1,63 +1,43 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SpotifyAuthButton } from "@/features/auth/components/spotify-auth-button";
 
 const services = [
-  {
-    href: "/#top-tracks",
-    title: "Top 50 Tracks",
-    description: "See the songs you listen to most.",
-  },
-  {
-    href: "/#top-artists",
-    title: "Top 50 Artists",
-    description: "Your most-played artists at a glance.",
-  },
-  {
-    href: "/#playlists",
-    title: "Your Playlists",
-    description: "Browse playlists you own or follow.",
-  },
-  {
-    href: "/#new-releases",
-    title: "New Releases",
-    description: "Fresh albums from Spotify's catalog.",
-  },
+  { href: "/#top-tracks", title: "Top tracks", description: "Your 50 most-played songs (medium term)." },
+  { href: "/#top-artists", title: "Top artists", description: "Artists you listen to most." },
+  { href: "/#playlists", title: "Playlists", description: "Owned and followed playlists in your library." },
+  { href: "/account", title: "Profile", description: "Spotify profile details and sign-out." },
 ];
 
 export function GetStartedSection() {
   const { data: session, status } = useSession();
 
   return (
-    <section id="get-started" className="flex min-h-screen items-center px-4 py-24 md:px-8">
-      <div className="mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-[1fr_1.4fr]">
+    <section id="get-started" className="px-4 py-20 md:px-8">
+      <div className="mx-auto grid w-full max-w-6xl gap-10 lg:grid-cols-[1fr_1.3fr]">
         <div className="space-y-6">
           {status === "authenticated" && session?.user ? (
-            <div className="flex items-center gap-4">
-              {session.user.image ? (
-                <Image
-                  src={session.user.image}
-                  alt={session.user.name ?? "Profile"}
-                  width={72}
-                  height={72}
-                  className="rounded-full border border-white/20"
-                />
-              ) : null}
-              <div>
-                <p className="text-xl font-semibold text-green-400">{session.user.name}</p>
-                <p className="truncate text-sm text-slate-400">{session.user.email}</p>
+            <div className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/5 p-4">
+              <Avatar className="size-14 border border-white/10">
+                <AvatarImage src={session.user.image ?? undefined} alt={session.user.name ?? "You"} />
+                <AvatarFallback>{session.user.name?.slice(0, 1) ?? "S"}</AvatarFallback>
+              </Avatar>
+              <div className="min-w-0">
+                <p className="truncate text-lg font-semibold text-green-400">{session.user.name}</p>
+                <p className="truncate text-sm text-muted-foreground">{session.user.email}</p>
               </div>
             </div>
           ) : null}
-          <h2 className="text-3xl font-bold text-white md:text-5xl">We offer these services for free</h2>
-          <p className="text-slate-300">
-            Sign in with Spotify to load your personal listening stats. Your data stays tied to your session — this is
-            not a multi-user SaaS.
-          </p>
+          <div>
+            <h2 className="text-3xl font-bold text-white md:text-4xl">Get started in one click</h2>
+            <p className="mt-3 text-muted-foreground">
+              This app is for your account only. Sign in with Spotify to load your stats securely via the official API.
+            </p>
+          </div>
           <SpotifyAuthButton size="lg" />
         </div>
 

@@ -41,8 +41,41 @@ export function useSpotifyResource<T>(endpoint: string, enabled = true): FetchSt
   }, [enabled, endpoint, status]);
 
   useEffect(() => {
-    void fetchData();
-  }, [fetchData]);
+    if (!enabled || status !== "authenticated") {
+      return;
+    }
+
+    let active = true;
+    const run = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const response = await fetch(endpoint);
+        if (!response.ok) {
+          const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+          throw new Error(payload?.error ?? `Request failed (${response.status})`);
+        }
+        const json = (await response.json()) as T;
+        if (active) {
+          setData(json);
+        }
+      } catch (err) {
+        if (active) {
+          setError(err instanceof Error ? err.message : "Failed to load data");
+          setData(null);
+        }
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    void run();
+    return () => {
+      active = false;
+    };
+  }, [enabled, endpoint, status]);
 
   return { data, isLoading, error, refetch: fetchData };
 }

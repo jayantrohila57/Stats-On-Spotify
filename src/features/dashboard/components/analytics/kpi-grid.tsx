@@ -49,12 +49,12 @@ function KpiCell({
 }) {
   return (
     <div className="border border-border/60 bg-background/40 px-3 py-2.5">
-      <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+      <div className="flex items-center gap-1.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground">
         <Icon className="size-3.5 shrink-0 opacity-70" aria-hidden />
         {label}
       </div>
-      <p className="mt-1 text-lg font-semibold tabular-nums tracking-tight">{value}</p>
-      {hint ? <p className="mt-0.5 text-[11px] text-muted-foreground">{hint}</p> : null}
+      <p className="mt-1 font-mono-stats text-[30px] font-semibold leading-none tracking-tight">{value}</p>
+      {hint ? <p className="mt-1 text-[12px] leading-snug text-muted-foreground">{hint}</p> : null}
     </div>
   );
 }

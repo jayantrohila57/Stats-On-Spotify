@@ -8,9 +8,9 @@ import { fetchJson } from "@/lib/spotify/fetch-json";
 import { spotifyKeys } from "@/lib/spotify/query-keys";
 import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
 import type {
+  CurrentlyPlayingPayload,
   SpotifyAlbumRelease,
   SpotifyArtist,
-  SpotifyCurrentlyPlaying,
   SpotifyPlayHistoryItem,
   SpotifyPlaylist,
   SpotifySavedTrack,
@@ -69,10 +69,14 @@ export function useSpotifyAnalyticsQueries() {
     spotifyKeys.followedArtists(),
     "/api/spotify/followed-artists",
   );
-  const currentlyPlaying = useSpotifyQuery<SpotifyCurrentlyPlaying | null>(
-    spotifyKeys.currentlyPlaying(),
-    "/api/spotify/currently-playing",
-  );
+  const currentlyPlaying = useQuery({
+    queryKey: spotifyKeys.currentlyPlaying(),
+    queryFn: () => fetchJson<CurrentlyPlayingPayload>("/api/spotify/currently-playing"),
+    enabled,
+    staleTime: 15 * 1000,
+    refetchInterval: 30 * 1000,
+    retry: false,
+  });
   const newReleases = useSpotifyQuery<SpotifyAlbumRelease[]>(spotifyKeys.newReleases(), "/api/spotify/new-releases");
 
   const tracksByPeriod = useMemo(() => {

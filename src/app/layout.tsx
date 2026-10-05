@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Sans_JP } from "next/font/google";
+import { IBM_Plex_Mono, Inter, Noto_Sans_JP } from "next/font/google";
 import { AppProviders } from "@/components/providers/app-providers";
 import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
   display: "swap",
 });
 
@@ -29,7 +36,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${inter.variable} ${notoSansJp.variable} min-h-screen font-sans antialiased`}>
+      <body className={`${inter.variable} ${notoSansJp.variable} ${plexMono.variable} min-h-screen font-sans antialiased`}>
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

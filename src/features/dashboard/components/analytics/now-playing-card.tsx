@@ -1,60 +1,84 @@
 "use client";
 
 import Link from "next/link";
-import { Radio } from "lucide-react";
-import { SectionHeader } from "@/features/dashboard/components/analytics/section-header";
+import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 import { SpotifyThumbnail } from "@/components/spotify/spotify-media";
-import { albumImageFromTrack } from "@/lib/spotify/images";
-import type { SpotifyCurrentlyPlaying } from "@/lib/spotify/types";
+import type { CurrentlyPlayingPayload } from "@/lib/spotify/types";
+import {
+  playbackItemDurationMs,
+  playbackItemImageUrl,
+  playbackItemSpotifyUrl,
+  playbackItemSubtitle,
+  playbackItemTitle,
+} from "@/lib/spotify/currently-playing";
 import { formatDurationMs } from "@/lib/text/duration";
-import { StatsEmptyState, StatsErrorState } from "@/components/stats/stats-feedback";
-import { Skeleton } from "@/components/ui/skeleton";
 import { Progress } from "@/components/ui/progress";
+import { SPOTIFY_MEDIA_SIZE } from "@/components/spotify/spotify-media";
 
 type NowPlayingCardProps = {
-  data: SpotifyCurrentlyPlaying | null | undefined;
+  payload: CurrentlyPlayingPayload | undefined;
   isLoading: boolean;
-  error: string | null;
-  onRetry?: () => void;
 };
 
-export function NowPlayingCard({ data, isLoading, error, onRetry }: NowPlayingCardProps) {
+export function NowPlayingCard({ payload, isLoading }: NowPlayingCardProps) {
+  const data = payload?.playing;
+  const item = data?.item ?? null;
+  const scopeMissing = payload?.scopeMissing;
+
   return (
-    <section className="rounded-md border border-border/80 bg-card/30 p-4">
-      <SectionHeader
-        icon={Radio}
-        title="Now playing"
-        description="Live playback state from Spotify (requires active session)"
-      />
-      {isLoading ? (
-        <Skeleton className="mt-3 h-16 w-full" />
-      ) : error ? (
-        <StatsErrorState message={error} onRetry={onRetry} />
-      ) : !data?.item ? (
-        <StatsEmptyState
-          title="Nothing playing"
-          description="Spotify returned no active track. Start playback on a device or the Web Player."
-        />
-      ) : (
-        <div className="mt-3 flex gap-3">
-          <SpotifyThumbnail src={albumImageFromTrack(data.item)} alt={data.item.name} />
+    <SectionShell
+      title="Now playing"
+      description={
+        scopeMissing
+          ? "Playback scope missing — sign out and reconnect Spotify to enable live now playing"
+          : "Live playback from Spotify (polls every 30s when nothing is on screen)"
+      }
+      isLoading={isLoading}
+      error={null}
+      isEmpty={!isLoading && !item}
+      emptyTitle={scopeMissing ? "Reconnect Spotify for now playing" : "Nothing playing"}
+      emptyDescription={
+        scopeMissing
+          ? "Your session is missing user-read-currently-playing. Sign out and sign in again to grant playback read access."
+          : "Spotify returned no active track. Start playback on a device or the Web Player."
+      }
+    >
+      {item ? (
+        <div className="flex gap-4">
+          <SpotifyThumbnail
+            src={playbackItemImageUrl(item)}
+            alt={playbackItemTitle(item)}
+            size={SPOTIFY_MEDIA_SIZE.card}
+          />
           <div className="min-w-0 flex-1">
-            <Link href={data.item.external_urls.spotify} target="_blank" rel="noreferrer" className="truncate text-sm font-medium hover:underline">
-              {data.item.name}
-            </Link>
-            <p className="truncate text-xs text-muted-foreground">{data.item.artists.map((a) => a.name).join(", ")}</p>
-            {typeof data.progress_ms === "number" && data.item.duration_ms ? (
-              <div className="mt-2 space-y-1">
-                <Progress value={(data.progress_ms / data.item.duration_ms) * 100} className="h-1" />
-                <p className="text-[10px] tabular-nums text-muted-foreground">
-                  {formatDurationMs(data.progress_ms)} / {formatDurationMs(data.item.duration_ms)}
+            {playbackItemSpotifyUrl(item) ? (
+              <Link
+                href={playbackItemSpotifyUrl(item)!}
+                target="_blank"
+                rel="noreferrer"
+                className="truncate text-[15px] font-medium hover:underline"
+              >
+                {playbackItemTitle(item)}
+              </Link>
+            ) : (
+              <p className="truncate text-[15px] font-medium">{playbackItemTitle(item)}</p>
+            )}
+            <p className="truncate text-sm text-muted-foreground">{playbackItemSubtitle(item)}</p>
+            {data?.currently_playing_type === "episode" ? (
+              <p className="mt-0.5 text-[12px] text-muted-foreground">Podcast episode</p>
+            ) : null}
+            {typeof data?.progress_ms === "number" && playbackItemDurationMs(item) ? (
+              <div className="mt-3 space-y-1">
+                <Progress value={(data.progress_ms / playbackItemDurationMs(item)!) * 100} className="h-1.5" />
+                <p className="font-mono-stats text-[12px] text-muted-foreground">
+                  {formatDurationMs(data.progress_ms)} / {formatDurationMs(playbackItemDurationMs(item)!)}
                   {data.is_playing ? " · playing" : " · paused"}
                 </p>
               </div>
             ) : null}
           </div>
         </div>
-      )}
-    </section>
+      ) : null}
+    </SectionShell>
   );
 }

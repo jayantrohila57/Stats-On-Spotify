@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 
 /** Pixel sizes used across analytics tables and cards. */
 export const SPOTIFY_MEDIA_SIZE = {
-  table: 32,
-  card: 40,
-  release: 48,
+  table: 52,
+  card: 56,
+  release: 56,
   detail: 80,
 } as const;
 

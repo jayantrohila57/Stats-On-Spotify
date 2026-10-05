@@ -78,4 +78,10 @@
   html {
     scroll-behavior: smooth;
   }
+
+  .font-mono-stats {
+    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
 }

@@ -41,7 +41,11 @@ export function RecentlyPlayedSection({ items, isLoading, error, onRetry }: Rece
       <SectionHeader
         icon={History}
         title="Recently played"
-        description="Latest plays from Spotify (up to 50). Not a full listening history."
+        description={
+          items.length > 0
+            ? `${items.length} plays in Spotify’s recent window (max 50) — not full listening history`
+            : "Latest plays from Spotify (up to 50). Not a full listening history."
+        }
       />
       {isLoading ? (
         <div className="mt-3 space-y-2">

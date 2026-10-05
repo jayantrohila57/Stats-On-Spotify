@@ -12,7 +12,7 @@ type RankMovementProps = {
 export function RankMovement({ delta, className }: RankMovementProps) {
   if (delta.kind === "new") {
     return (
-      <span className={cn("inline-flex items-center gap-0.5 text-[10px] font-medium text-emerald-400", className)}>
+      <span className={cn("inline-flex items-center gap-0.5 font-mono-stats text-xs font-medium text-emerald-400", className)}>
         <Sparkles className="size-3" aria-hidden />
         NEW
       </span>
@@ -20,14 +20,14 @@ export function RankMovement({ delta, className }: RankMovementProps) {
   }
   if (delta.kind === "out") {
     return (
-      <span className={cn("inline-flex items-center gap-0.5 text-[10px] font-medium text-muted-foreground", className)}>
+      <span className={cn("inline-flex items-center gap-0.5 font-mono-stats text-xs font-medium text-muted-foreground", className)}>
         OUT
       </span>
     );
   }
   if (delta.kind === "same") {
     return (
-      <span className={cn("inline-flex items-center gap-0.5 text-[10px] text-muted-foreground", className)}>
+      <span className={cn("inline-flex items-center gap-0.5 font-mono-stats text-xs text-muted-foreground", className)}>
         <ArrowRight className="size-3" aria-hidden />
         <span className="sr-only">No change</span>
         —
@@ -36,14 +36,14 @@ export function RankMovement({ delta, className }: RankMovementProps) {
   }
   if (delta.kind === "up") {
     return (
-      <span className={cn("inline-flex items-center gap-0.5 text-[10px] font-medium text-emerald-400", className)}>
+      <span className={cn("inline-flex items-center gap-0.5 font-mono-stats text-xs font-medium text-emerald-400", className)}>
         <ArrowUp className="size-3" aria-hidden />
         {delta.delta}
       </span>
     );
   }
   return (
-    <span className={cn("inline-flex items-center gap-0.5 text-[10px] font-medium text-amber-400", className)}>
+    <span className={cn("inline-flex items-center gap-0.5 font-mono-stats text-xs font-medium text-amber-400", className)}>
       <ArrowDown className="size-3" aria-hidden />
       {delta.delta}
     </span>

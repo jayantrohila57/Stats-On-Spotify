@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
+import { analyticsCardClass } from "@/features/dashboard/lib/surface";
 import type { SpotifyPlaylist } from "@/lib/spotify/types";
 
 type PlaylistsStatsSectionProps = {
@@ -16,14 +17,14 @@ export function PlaylistsStatsSection({ playlists }: PlaylistsStatsSectionProps)
 
   if (!list.length) {
     return (
-      <section className="rounded-2xl border border-dashed border-white/10 p-6 text-center text-sm text-zinc-500">
+      <section className={`${analyticsCardClass} border-dashed p-6 text-center text-sm text-zinc-500`}>
         No playlists in your library yet.
       </section>
     );
   }
 
   return (
-    <section className="rounded-2xl border border-white/5 bg-zinc-950/60 p-4">
+    <section className={`${analyticsCardClass} p-4`}>
       <div className="mb-3 flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="text-lg font-semibold">Your playlists</h3>
         <p className="text-xs text-zinc-500">
@@ -35,7 +36,7 @@ export function PlaylistsStatsSection({ playlists }: PlaylistsStatsSectionProps)
         {list.map((playlist) => {
           const image = playlist.images[0]?.url;
           return (
-            <li key={playlist.id} className="rounded-xl border border-white/5 bg-zinc-900/40 p-3">
+            <li key={playlist.id} className="rounded-xl border border-zinc-800 bg-zinc-900 p-3">
               <div className="flex gap-3">
                 {image ? (
                   <Image

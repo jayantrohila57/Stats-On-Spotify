@@ -2,6 +2,7 @@
 
 import type { SpotifyArtist } from "@/lib/spotify/types";
 import { collectGenreStats } from "@/features/dashboard/lib/genres";
+import { analyticsCardClass } from "@/features/dashboard/lib/surface";
 import { timeRangeLabel, type SpotifyTimeRange } from "@/lib/spotify/time-range";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -24,7 +25,7 @@ export function GenresSection({
   const genres = collectGenreStats(artists);
 
   return (
-    <section className="rounded-2xl border border-white/5 bg-zinc-950/60 p-4">
+    <section className={`${analyticsCardClass} p-4`}>
       <div className="mb-3 flex items-baseline justify-between gap-2">
         <h3 className="text-lg font-semibold">Genres</h3>
         <p className="text-xs text-zinc-500">{timeRangeLabel(timeRange)}</p>

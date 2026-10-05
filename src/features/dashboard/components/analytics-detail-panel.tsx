@@ -28,10 +28,10 @@ export function AnalyticsDetailPanel({
 
   return (
     <aside
-      className="fixed inset-y-0 right-0 z-40 flex w-full max-w-md flex-col border-l border-white/10 bg-zinc-950 shadow-2xl sm:top-0"
+      className="fixed inset-y-0 right-0 z-40 flex w-full max-w-md flex-col border-l border-zinc-800 bg-zinc-950 sm:top-0"
       aria-label="Detail panel"
     >
-      <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+      <div className="flex items-center justify-between border-b border-zinc-800 px-4 py-3">
         <h2 className="text-sm font-semibold text-zinc-300">
           {selection.kind === "track" && "Track"}
           {selection.kind === "artist" && "Artist"}

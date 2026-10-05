@@ -1,7 +1,9 @@
 "use client";
 
+import { analyticsCardClass } from "@/features/dashboard/lib/surface";
 import type { SpotifyTrack, SpotifyUserProfile } from "@/lib/spotify/types";
 import { timeRangeLabel, type SpotifyTimeRange } from "@/lib/spotify/time-range";
+import { cn } from "@/lib/utils";
 
 type AnalyticsSummaryHeaderProps = {
   profile: SpotifyUserProfile | null;
@@ -21,7 +23,7 @@ export function AnalyticsSummaryHeader({
   const name = profile?.display_name ?? "there";
 
   return (
-    <section className="rounded-2xl border border-white/5 bg-gradient-to-br from-zinc-900/80 to-zinc-950 p-5">
+    <section className={cn(analyticsCardClass, "p-5")}>
       <p className="text-sm text-zinc-400">Overview · {timeRangeLabel(timeRange)}</p>
       <h2 className="mt-1 text-2xl font-bold">Hi, {name}</h2>
       <div className="mt-4 flex flex-wrap gap-4 text-sm">

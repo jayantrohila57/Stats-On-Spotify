@@ -3,8 +3,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { AnalyticsDetailPanel } from "@/features/dashboard/components/analytics-detail-panel";
 import { AnalyticsSummaryHeader } from "@/features/dashboard/components/analytics-summary-header";
-import { DashboardSidebar } from "@/features/dashboard/components/dashboard-sidebar";
-import { DashboardTopBar } from "@/features/dashboard/components/dashboard-top-bar";
+import { AnalyticsToolbar } from "@/features/dashboard/components/analytics-toolbar";
 import { GenresSection } from "@/features/dashboard/components/genres-section";
 import { PlaylistsStatsSection } from "@/features/dashboard/components/playlists-stats-section";
 import { TopArtistsSection } from "@/features/dashboard/components/top-artists-section";
@@ -39,12 +38,9 @@ export function DashboardShell({ data, timeRange, onTimeRangeChange, isRefreshin
     setSelection({ kind: "track", track });
   }, []);
 
-  const openArtist = useCallback(
-    (artist: SpotifyArtist) => {
-      setSelection({ kind: "artist", artist });
-    },
-    [],
-  );
+  const openArtist = useCallback((artist: SpotifyArtist) => {
+    setSelection({ kind: "artist", artist });
+  }, []);
 
   const openArtistById = useCallback(
     (artistId: string) => {
@@ -79,59 +75,53 @@ export function DashboardShell({ data, timeRange, onTimeRangeChange, isRefreshin
 
   const panelOpen = selection !== null;
 
-  const layoutClass = useMemo(
-    () => (panelOpen ? "lg:pr-[min(28rem,100%)]" : ""),
-    [panelOpen],
-  );
+  const layoutClass = useMemo(() => (panelOpen ? "lg:pr-[min(28rem,100%)]" : ""), [panelOpen]);
 
   return (
-    <div className="flex min-h-screen bg-[#050505] text-white">
-      <DashboardSidebar />
-      <div className={`flex min-w-0 flex-1 flex-col transition-[padding] ${layoutClass}`}>
-        <DashboardTopBar
+    <div className={`min-h-screen bg-[#0a0a0a] text-white transition-[padding] ${layoutClass}`}>
+      <div className="mx-auto max-w-6xl space-y-5 p-4">
+        <AnalyticsToolbar
           profile={data.profile}
           timeRange={timeRange}
           onTimeRangeChange={onTimeRangeChange}
           isRefreshingTops={isRefreshingTops}
         />
-        <main className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4">
-          <AnalyticsSummaryHeader
-            profile={data.profile}
-            topTrack={data.topTracks[0] ?? null}
+        <AnalyticsSummaryHeader
+          profile={data.profile}
+          topTrack={data.topTracks[0] ?? null}
+          timeRange={timeRange}
+          topTrackCount={data.topTracks.length}
+          topArtistCount={data.topArtists.length}
+        />
+        <GenresSection
+          artists={data.topArtists}
+          timeRange={timeRange}
+          selectedGenreKey={selectedGenreKey}
+          onSelectGenre={(key) => openGenre(key)}
+          isRefreshing={isRefreshingTops}
+        />
+        <div className="grid gap-5 xl:grid-cols-2">
+          <TopTracksSection
+            tracks={data.topTracks}
             timeRange={timeRange}
-            topTrackCount={data.topTracks.length}
-            topArtistCount={data.topArtists.length}
-          />
-          <GenresSection
-            artists={data.topArtists}
-            timeRange={timeRange}
-            selectedGenreKey={selectedGenreKey}
-            onSelectGenre={(key) => openGenre(key)}
+            selectedTrackId={selectedTrackId}
+            onSelectTrack={openTrack}
             isRefreshing={isRefreshingTops}
           />
-          <div className="grid gap-5 xl:grid-cols-2">
-            <TopTracksSection
-              tracks={data.topTracks}
-              timeRange={timeRange}
-              selectedTrackId={selectedTrackId}
-              onSelectTrack={openTrack}
-              isRefreshing={isRefreshingTops}
-            />
-            <TopArtistsSection
-              artists={data.topArtists}
-              timeRange={timeRange}
-              selectedArtistId={selectedArtistId}
-              onSelectArtist={openArtist}
-              isRefreshing={isRefreshingTops}
-            />
-          </div>
-          <PlaylistsStatsSection playlists={data.playlists} />
-        </main>
+          <TopArtistsSection
+            artists={data.topArtists}
+            timeRange={timeRange}
+            selectedArtistId={selectedArtistId}
+            onSelectArtist={openArtist}
+            isRefreshing={isRefreshingTops}
+          />
+        </div>
+        <PlaylistsStatsSection playlists={data.playlists} />
       </div>
       {panelOpen ? (
         <button
           type="button"
-          className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+          className="fixed inset-0 z-30 bg-black/60 lg:hidden"
           aria-label="Close detail panel"
           onClick={() => setSelection(null)}
         />

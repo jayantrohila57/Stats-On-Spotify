@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AnalyticsDetailPanel } from "@/features/dashboard/components/analytics-detail-panel";
 import { AnalyticsSummaryHeader } from "@/features/dashboard/components/analytics-summary-header";
 import { AnalyticsToolbar } from "@/features/dashboard/components/analytics-toolbar";
@@ -33,6 +33,10 @@ export function DashboardShell({ data, timeRange, onTimeRangeChange, isRefreshin
   const selectedTrackId = selection?.kind === "track" ? selection.track.id : null;
   const selectedArtistId = selection?.kind === "artist" ? selection.artist.id : null;
   const selectedGenreKey = selection?.kind === "genre" ? selection.genre : null;
+
+  const closePanel = useCallback(() => {
+    setSelection(null);
+  }, []);
 
   const openTrack = useCallback((track: SpotifyTrack) => {
     setSelection({ kind: "track", track });
@@ -75,32 +79,49 @@ export function DashboardShell({ data, timeRange, onTimeRangeChange, isRefreshin
 
   const panelOpen = selection !== null;
 
+  useEffect(() => {
+    if (!panelOpen) {
+      return;
+    }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closePanel();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [panelOpen, closePanel]);
+
   const layoutClass = useMemo(() => (panelOpen ? "lg:pr-[min(28rem,100%)]" : ""), [panelOpen]);
 
   return (
     <div className={`min-h-screen bg-[#0a0a0a] text-white transition-[padding] ${layoutClass}`}>
-      <div className="mx-auto max-w-6xl space-y-5 p-4">
-        <AnalyticsToolbar
-          profile={data.profile}
-          timeRange={timeRange}
-          onTimeRangeChange={onTimeRangeChange}
-          isRefreshingTops={isRefreshingTops}
-        />
-        <AnalyticsSummaryHeader
-          profile={data.profile}
-          topTrack={data.topTracks[0] ?? null}
-          timeRange={timeRange}
-          topTrackCount={data.topTracks.length}
-          topArtistCount={data.topArtists.length}
-        />
-        <GenresSection
-          artists={data.topArtists}
-          timeRange={timeRange}
-          selectedGenreKey={selectedGenreKey}
-          onSelectGenre={(key) => openGenre(key)}
-          isRefreshing={isRefreshingTops}
-        />
-        <div className="grid gap-5 xl:grid-cols-2">
+      <main className="mx-auto max-w-3xl px-4 py-6 sm:max-w-4xl lg:max-w-5xl">
+        <div className="sticky top-0 z-20 -mx-4 mb-8 border-b border-zinc-800/80 bg-[#0a0a0a]/95 px-4 py-4 backdrop-blur-sm">
+          <AnalyticsToolbar
+            profile={data.profile}
+            timeRange={timeRange}
+            onTimeRangeChange={onTimeRangeChange}
+            isRefreshingTops={isRefreshingTops}
+          />
+        </div>
+
+        <div className="flex flex-col gap-8 pb-12">
+          <AnalyticsSummaryHeader
+            profile={data.profile}
+            topTrack={data.topTracks[0] ?? null}
+            timeRange={timeRange}
+            topTrackCount={data.topTracks.length}
+            topArtistCount={data.topArtists.length}
+          />
+          <GenresSection
+            artists={data.topArtists}
+            timeRange={timeRange}
+            selectedGenreKey={selectedGenreKey}
+            onSelectGenre={(key) => openGenre(key)}
+            isRefreshing={isRefreshingTops}
+          />
           <TopTracksSection
             tracks={data.topTracks}
             timeRange={timeRange}
@@ -115,20 +136,21 @@ export function DashboardShell({ data, timeRange, onTimeRangeChange, isRefreshin
             onSelectArtist={openArtist}
             isRefreshing={isRefreshingTops}
           />
+          <PlaylistsStatsSection playlists={data.playlists} />
         </div>
-        <PlaylistsStatsSection playlists={data.playlists} />
-      </div>
+      </main>
+
       {panelOpen ? (
         <button
           type="button"
           className="fixed inset-0 z-30 bg-black/60 lg:hidden"
           aria-label="Close detail panel"
-          onClick={() => setSelection(null)}
+          onClick={closePanel}
         />
       ) : null}
       <AnalyticsDetailPanel
         selection={selection}
-        onClose={() => setSelection(null)}
+        onClose={closePanel}
         onSelectArtist={openArtistById}
         onSelectTrack={openTrackById}
       />

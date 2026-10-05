@@ -2,8 +2,8 @@
 
 import type { SpotifyArtist } from "@/lib/spotify/types";
 import { collectGenreStats } from "@/features/dashboard/lib/genres";
-import { analyticsCardClass } from "@/features/dashboard/lib/surface";
-import { timeRangeLabel, type SpotifyTimeRange } from "@/lib/spotify/time-range";
+import { AnalyticsSection } from "@/features/dashboard/components/analytics-section";
+import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -25,15 +25,15 @@ export function GenresSection({
   const genres = collectGenreStats(artists);
 
   return (
-    <section className={`${analyticsCardClass} p-4`}>
-      <div className="mb-3 flex items-baseline justify-between gap-2">
-        <h3 className="text-lg font-semibold">Genres</h3>
-        <p className="text-xs text-zinc-500">{timeRangeLabel(timeRange)}</p>
-      </div>
-      <p className="mb-3 text-xs text-zinc-500">Derived from your top artists in this period.</p>
-      {isRefreshing ? <p className="mb-2 text-xs text-[#1db954]">Updating…</p> : null}
+    <AnalyticsSection
+      id="genres"
+      title="Genres"
+      description="Derived from genre tags on your top artists in this period."
+      timeRange={timeRange}
+      isRefreshing={isRefreshing}
+    >
       {genres.length === 0 ? (
-        <p className="py-6 text-sm text-zinc-500">No genre tags available for your top artists.</p>
+        <p className="text-sm text-zinc-500">No genre tags available for your top artists.</p>
       ) : (
         <div className="flex flex-wrap gap-2">
           {genres.map((genre) => (
@@ -53,6 +53,6 @@ export function GenresSection({
           ))}
         </div>
       )}
-    </section>
+    </AnalyticsSection>
   );
 }

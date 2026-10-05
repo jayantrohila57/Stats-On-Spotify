@@ -38,6 +38,66 @@ export async function getCurrentUserProfile(accessToken: string): Promise<Spotif
   return spotifyFetch<SpotifyUserProfile>({ accessToken, path: "/me" });
 }
 
+function trackNeedsEnrichment(track: SpotifyTrack): boolean {
+  const missingArt = !track.album?.images?.length;
+  const missingPopularity = typeof track.popularity !== "number" || Number.isNaN(track.popularity);
+  return missingArt || missingPopularity;
+}
+
+async function getTracksByIds(accessToken: string, ids: string[]): Promise<Map<string, SpotifyTrack>> {
+  const map = new Map<string, SpotifyTrack>();
+  if (ids.length === 0) {
+    return map;
+  }
+
+  const chunkSize = 50;
+  for (let offset = 0; offset < ids.length; offset += chunkSize) {
+    const chunk = ids.slice(offset, offset + chunkSize);
+    const data = await spotifyFetch<{ tracks: (SpotifyTrack | null)[] }>({
+      accessToken,
+      path: "/tracks",
+      searchParams: { ids: chunk.join(",") },
+    });
+    for (const track of data.tracks) {
+      if (track) {
+        map.set(track.id, track);
+      }
+    }
+  }
+
+  return map;
+}
+
+function mergeTrack(base: SpotifyTrack, full: SpotifyTrack): SpotifyTrack {
+  const albumImages = full.album?.images?.length ? full.album.images : base.album.images;
+  const popularity =
+    typeof full.popularity === "number" && !Number.isNaN(full.popularity) ? full.popularity : base.popularity;
+
+  return {
+    ...base,
+    ...full,
+    popularity,
+    album: {
+      ...base.album,
+      ...full.album,
+      images: albumImages,
+    },
+  };
+}
+
+async function enrichTopTracks(accessToken: string, tracks: SpotifyTrack[]): Promise<SpotifyTrack[]> {
+  const ids = tracks.filter(trackNeedsEnrichment).map((track) => track.id);
+  if (ids.length === 0) {
+    return tracks;
+  }
+
+  const byId = await getTracksByIds(accessToken, ids);
+  return tracks.map((track) => {
+    const full = byId.get(track.id);
+    return full ? mergeTrack(track, full) : track;
+  });
+}
+
 export async function getMyTopTracks(
   accessToken: string,
   limit = 50,
@@ -48,7 +108,7 @@ export async function getMyTopTracks(
     path: "/me/top/tracks",
     searchParams: { limit, time_range: timeRange },
   });
-  return data.items;
+  return enrichTopTracks(accessToken, data.items);
 }
 
 export async function getMyTopArtists(

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Menu, Music2, X } from "lucide-react";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
+import { AccountLink } from "@/components/navigation/account-link";
 import { SpotifyAuthButton } from "@/features/auth/components/spotify-auth-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -14,8 +15,36 @@ const navLinks = [
   { href: "/#get-started", label: "Get started" },
   { href: "/#top-tracks", label: "Top tracks" },
   { href: "/#playlists", label: "Playlists" },
-  { href: "/account", label: "Account" },
-];
+  { href: "/account", label: "Account", account: true },
+] as const;
+
+function HeaderNavLink({
+  href,
+  label,
+  account,
+  className,
+  onClick,
+}: {
+  href: string;
+  label: string;
+  account?: boolean;
+  className?: string;
+  onClick?: () => void;
+}) {
+  if (account) {
+    return (
+      <AccountLink href={href} className={className} onClick={onClick}>
+        {label}
+      </AccountLink>
+    );
+  }
+
+  return (
+    <Link href={href} className={className} onClick={onClick}>
+      {label}
+    </Link>
+  );
+}
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
@@ -33,20 +62,24 @@ export function SiteHeader() {
 
         <nav className="hidden items-center gap-6 lg:flex">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="text-sm font-medium text-slate-200 hover:text-green-400">
-              {link.label}
-            </Link>
+            <HeaderNavLink
+              key={link.href}
+              href={link.href}
+              label={link.label}
+              account={"account" in link}
+              className="text-sm font-medium text-slate-200 hover:text-green-400"
+            />
           ))}
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
           {status === "authenticated" && session?.user ? (
-            <Link href="/account" className="flex items-center gap-2">
+            <AccountLink href="/account" className="flex items-center gap-2">
               <Avatar className="size-8 border border-white/10">
                 <AvatarImage src={session.user.image ?? undefined} alt={session.user.name ?? "You"} />
                 <AvatarFallback>{session.user.name?.slice(0, 1) ?? "S"}</AvatarFallback>
               </Avatar>
-            </Link>
+            </AccountLink>
           ) : null}
           <SpotifyAuthButton size="sm" />
         </div>
@@ -66,14 +99,14 @@ export function SiteHeader() {
       <div className={cn("border-t border-white/10 bg-black/95 md:hidden", open ? "block" : "hidden")}>
         <div className="flex flex-col gap-4 px-4 py-6">
           {navLinks.map((link) => (
-            <Link
+            <HeaderNavLink
               key={link.href}
               href={link.href}
+              label={link.label}
+              account={"account" in link}
               className="text-lg font-semibold text-white hover:text-green-400"
               onClick={() => setOpen(false)}
-            >
-              {link.label}
-            </Link>
+            />
           ))}
           <SpotifyAuthButton className="w-full" />
         </div>

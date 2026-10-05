@@ -43,14 +43,18 @@ Create `.env.local`:
 | `SPOTIFY_CLIENT_ID` | Yes | Spotify app client ID |
 | `SPOTIFY_CLIENT_SECRET` | Yes | Spotify app client secret |
 | `AUTH_SECRET` or `NEXTAUTH_SECRET` | Yes | Session encryption secret ([generate](https://generate-secret.vercel.app/32)) |
-| `AUTH_URL` or `NEXTAUTH_URL` | Yes in production | e.g. `https://statsonspotify.vercel.app` (local: `http://localhost:3000`) |
+| `AUTH_URL` or `NEXTAUTH_URL` | Yes in production | **Must** be `https://statsonspotify.vercel.app` on Vercel (not a Netlify or preview URL). Local: `http://localhost:3000` |
 
-`SPOTIFY_*` and `NEXTAUTH_*` names are still supported; Auth.js also reads `AUTH_SECRET` / `AUTH_URL` when set.
+`SPOTIFY_*` and `NEXTAUTH_*` names are still supported. At runtime, `src/lib/site-url.ts` ignores stale `*.netlify.app` values in `AUTH_URL` / `NEXTAUTH_URL` and falls back to the canonical Vercel URL so OAuth never redirects to Netlify.
 
-### Spotify redirect URIs
+### Spotify redirect URIs (Dashboard → your app → Redirect URIs)
+
+Register **exactly**:
 
 - Local: `http://localhost:3000/api/auth/callback/spotify`
 - Production: `https://statsonspotify.vercel.app/api/auth/callback/spotify`
+
+Do not use Netlify or old deploy URLs here — mismatched `AUTH_URL` causes Auth.js `Configuration` errors.
 
 ## Install & run
 

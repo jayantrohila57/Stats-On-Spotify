@@ -1,8 +1,11 @@
 import NextAuth, { type Session } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 import Spotify from "next-auth/providers/spotify";
+import { applyAuthUrlEnvDefaults } from "@/lib/site-url";
 import { SPOTIFY_SCOPE_STRING } from "@/lib/spotify/scopes";
 import { refreshSpotifyAccessToken } from "@/server/spotify/client";
+
+applyAuthUrlEnvDefaults();
 
 type SpotifyJwt = JWT & {
   accessToken?: string;
@@ -48,9 +51,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: {
     strategy: "jwt",
   },
-  pages: {
-    signIn: "/",
-  },
   callbacks: {
     async jwt({ token, account }) {
       const spotifyToken = token as SpotifyJwt;
@@ -84,13 +84,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         error: spotifyToken.error,
       };
       return enriched;
-    },
-    authorized({ auth: session, request }) {
-      const pathname = request.nextUrl.pathname;
-      if (pathname.startsWith("/account")) {
-        return Boolean(session?.user && "accessToken" in session.user && session.user.accessToken);
-      }
-      return true;
     },
   },
 });

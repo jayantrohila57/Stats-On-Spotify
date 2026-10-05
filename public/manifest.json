@@ -1,84 +1,39 @@
 {
   "name": "Stats On Spotify",
   "short_name": "Stats On Spotify",
+  "description": "Personal Spotify listening stats: top tracks, artists, and playlists.",
   "theme_color": "#000000",
-  "background_color": "#3B3B3B",
+  "background_color": "#0a0a0a",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
   "start_url": "/",
+  "lang": "en",
   "icons": [
     {
-      "src": "android/android-launchericon-192-192.png",
-      "sizes": "192x192"
+      "src": "/icon",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
-      "src": "ios/192.png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "ios/512.png",
-      "sizes": "512x512"
-    },
-    {
-      "src": "ios/1024.png",
-      "sizes": "1024x1024"
+      "src": "/apple-icon",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
-  "description": "Stats On Spotify a Secure, Free and Beautify UI for View and Managing Your Spotify Content",
-  "dir": "auto",
-  "lang": "en",
-  "display_override": ["standalone"],
   "shortcuts": [
     {
       "name": "Home",
-      "url": "/Home",
-      "icons": [
-        {
-          "src": "/home.png"
-        }
-      ],
-      "description": "Check The Available Options."
+      "url": "/",
+      "description": "View your listening stats"
     },
     {
       "name": "Account",
-      "url": "/Account",
-      "icons": [
-        {
-          "src": "/account.png"
-        }
-      ],
-      "description": "Check My Account on Stats On Spotify. "
+      "url": "/account",
+      "description": "Your Spotify profile"
     }
   ],
-  "screenshots": [
-    {
-      "src": "1.jpg",
-      "sizes": "1080x1920",
-      "type": "image/jpg",
-      "platform": "android",
-      "label": "Stats On Spotify a Secure, Free and Beautify UI for View and Managing Your Spotify Content"
-    },
-    {
-      "src": "2.jpg",
-      "sizes": "1080x1920",
-      "type": "image/jpg",
-      "platform": "android",
-      "label": "List of Awesome Resources available in Our App"
-    },
-    {
-      "src": "3.jpg",
-      "sizes": "1080x1920",
-      "type": "image/jpg",
-      "platform": "android",
-      "label": "Secure & Password less SignIn or Login with Spotify Login."
-    }
-  ],
-  "protocol_handlers": [
-    {
-      "protocol": "web+pwinter",
-      "url": "index.html?colors=%s"
-    }
-  ],
-  "categories": ["entertainment", "music", "social"]
+  "categories": ["entertainment", "music"]
 }

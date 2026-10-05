@@ -13,8 +13,9 @@ import { PlaylistsTable } from "@/features/dashboard/components/analytics/playli
 import { AlbumsFromTracksTable } from "@/features/dashboard/components/analytics/albums-from-tracks-table";
 import { UnavailableMetricsPanel } from "@/features/dashboard/components/analytics/unavailable-metrics";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
-import Image from "next/image";
 import Link from "next/link";
+import { pickSpotifyImageUrl } from "@/lib/spotify/images";
+import { SPOTIFY_MEDIA_SIZE, SpotifyThumbnail } from "@/components/spotify/spotify-media";
 
 function usePeriodEndpoint<T>(path: string) {
   const { timeRange } = useAnalyticsPeriod();
@@ -105,14 +106,10 @@ export function AnalyticsDashboard() {
         >
           <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
             {(newReleases.data ?? []).slice(0, 8).map((album) => {
-              const image = album.images[0]?.url;
+              const image = pickSpotifyImageUrl(album.images);
               return (
                 <li key={album.id} className="flex gap-2 rounded-md border border-border/70 p-2">
-                  {image ? (
-                    <Image src={image} alt="" width={48} height={48} className="size-12 rounded border border-border/60" />
-                  ) : (
-                    <div className="size-12 rounded bg-muted" />
-                  )}
+                  <SpotifyThumbnail src={image} alt={album.name} size={SPOTIFY_MEDIA_SIZE.release} />
                   <div className="min-w-0">
                     <Link
                       href={album.external_urls.spotify}

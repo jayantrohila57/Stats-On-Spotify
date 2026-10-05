@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { SpotifyPlaylist } from "@/lib/spotify/types";
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import { spotifyPlainText } from "@/lib/text/plaintext";
-import { SpotifyImage } from "@/components/spotify/spotify-image";
+import { SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -44,8 +44,8 @@ export function PlaylistsTable({ playlists, isLoading, error, onRetry }: Playlis
             const description = spotifyPlainText(playlist.description);
             return (
               <TableRow key={playlist.id}>
-                <TableCell className="px-2">
-                  <SpotifyImage src={image} alt="" size={32} className="border border-border/60" />
+                <TableCell className="w-10 shrink-0 px-2">
+                  <SpotifyThumbnail src={image} alt="" />
                 </TableCell>
                 <TableCell className="min-w-0 max-w-0">
                   <Link

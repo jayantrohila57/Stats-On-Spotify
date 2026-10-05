@@ -5,7 +5,7 @@ import type { SpotifyTrack } from "@/lib/spotify/types";
 import { albumImageFromTrack } from "@/lib/spotify/images";
 import { DetailSheet } from "@/features/dashboard/components/analytics/detail-sheet";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
-import { SpotifyImage } from "@/components/spotify/spotify-image";
+import { SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
@@ -87,8 +87,8 @@ export function TopTracksTable({ tracks, isLoading, error, onRetry }: TopTracksT
                   onClick={() => setSelected({ track, rank })}
                 >
                   <TableCell className="tabular-nums text-muted-foreground">{rank}</TableCell>
-                  <TableCell className="px-2">
-                    <SpotifyImage src={image} alt="" size={32} className="border border-border/60" />
+                  <TableCell className="w-10 shrink-0 px-2">
+                    <SpotifyThumbnail src={image} alt="" />
                   </TableCell>
                   <TableCell className="min-w-0">
                     <p className="truncate font-medium" title={track.name}>{track.name}</p>

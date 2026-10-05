@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SpotifyImage } from "@/components/spotify/spotify-image";
+import { SPOTIFY_MEDIA_SIZE, SpotifyArtistAvatar } from "@/components/spotify/spotify-media";
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import type { SpotifyArtist } from "@/lib/spotify/types";
 import { deriveRankShare, formatGenreLabel } from "@/lib/analytics/derive";
@@ -48,7 +48,7 @@ export function TopArtistsSection({ artists, isLoading, error, onRetry }: TopArt
                 >
                   <div className="flex w-full items-center gap-2">
                     <span className="text-xs font-medium text-muted-foreground tabular-nums">#{rank}</span>
-                    <SpotifyImage src={image} alt="" size={40} rounded="full" className="border border-border/60" />
+                    <SpotifyArtistAvatar src={image} name={artist.name} size={SPOTIFY_MEDIA_SIZE.card} />
                   </div>
                   <span className="line-clamp-2 text-xs font-medium leading-snug">{artist.name}</span>
                   <span className="text-[10px] text-muted-foreground">{(share * 100).toFixed(1)}% derived share</span>
@@ -78,8 +78,8 @@ export function TopArtistsSection({ artists, isLoading, error, onRetry }: TopArt
               return (
                 <TableRow key={artist.id} className="cursor-pointer" onClick={() => setSelected({ artist, rank, share })}>
                   <TableCell className="tabular-nums text-muted-foreground">{rank}</TableCell>
-                  <TableCell className="px-2">
-                    <SpotifyImage src={image} alt="" size={32} rounded="full" className="border border-border/60" />
+                  <TableCell className="w-10 shrink-0 px-2">
+                    <SpotifyArtistAvatar src={image} name={artist.name} />
                   </TableCell>
                   <TableCell className="min-w-0 max-w-0 truncate font-medium" title={artist.name}>{artist.name}</TableCell>
                   <TableCell className="hidden min-w-0 max-w-0 truncate text-xs text-muted-foreground md:table-cell" title={genres || undefined}>

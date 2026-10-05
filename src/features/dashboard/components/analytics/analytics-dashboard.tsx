@@ -31,13 +31,16 @@ import { SectionShell } from "@/features/dashboard/components/analytics/section-
 import { computeLibraryOverlapMetrics } from "@/lib/analytics/library-overlap";
 import { deriveGenreStatsWithOther, formatGenreLabel } from "@/lib/analytics/derive";
 import { SectionErrorBoundary } from "@/components/stats/section-error-boundary";
+import { useDashboardSectionSpy } from "@/features/dashboard/hooks/use-dashboard-section-spy";
 
 export function AnalyticsDashboard() {
+  const activeSectionId = useDashboardSectionSpy();
   const {
     topTracks,
     topArtists,
     artistsByPeriod,
     compareRange,
+    comparePeriodReady,
     timeRange,
     profile,
     playlists,
@@ -84,9 +87,9 @@ export function AnalyticsDashboard() {
     <div className="min-h-screen bg-background text-foreground">
       <AnalyticsHeader profile={profile.data ?? null} profileLoading={profile.isLoading} />
       <PeriodFilterBar />
-      <DashboardSectionNavMobile />
+      <DashboardSectionNavMobile activeSectionId={activeSectionId} />
       <div className="mx-auto flex max-w-[1400px] gap-8 px-4 py-6 md:px-6">
-        <DashboardSectionNav className="w-36 shrink-0 pt-1" />
+        <DashboardSectionNav className="w-36 shrink-0 pt-1" activeSectionId={activeSectionId} />
         <main className="min-w-0 flex-1 space-y-8">
           <section id="section-overview" aria-label="Listening overview" className="scroll-mt-20">
             <SectionHeader
@@ -123,6 +126,7 @@ export function AnalyticsDashboard() {
                 tracks={topTracks}
                 topArtists={topArtists}
                 compareRange={compareRange}
+                comparePeriodReady={comparePeriodReady}
                 isLoading={topsLoading}
                 error={topTracksError}
                 onRetry={() => void refetchTops()}
@@ -156,6 +160,7 @@ export function AnalyticsDashboard() {
               <TopArtistsSection
                 artists={topArtists}
                 compareRange={compareRange}
+                comparePeriodReady={comparePeriodReady}
                 isLoading={topsLoading}
                 error={topTracksError}
                 onRetry={() => void refetchTops()}

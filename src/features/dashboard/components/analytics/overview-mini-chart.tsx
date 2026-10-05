@@ -57,16 +57,33 @@ export function OverviewMiniChart({ topArtists, recentPlays }: OverviewMiniChart
           </p>
         </div>
         {pieData.length > 0 ? (
-          <ChartContainer config={pieConfig} className="mx-auto aspect-square h-[120px] w-[120px] shrink-0">
-            <PieChart>
-              <ChartTooltip content={<ChartTooltipContent nameKey="name" />} />
-              <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={32} outerRadius={52} strokeWidth={1}>
-                {pieData.map((entry, index) => (
-                  <Cell key={entry.name} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ChartContainer>
+          <div className="flex shrink-0 flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-4">
+            <ChartContainer config={pieConfig} className="mx-auto aspect-square h-[120px] w-[120px]">
+              <PieChart>
+                <ChartTooltip content={<ChartTooltipContent nameKey="name" />} />
+                <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={32} outerRadius={52} strokeWidth={1}>
+                  {pieData.map((entry, index) => (
+                    <Cell key={entry.name} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                  ))}
+                </Pie>
+              </PieChart>
+            </ChartContainer>
+            <ul className="grid min-w-[9rem] gap-1 text-[11px] leading-tight sm:gap-0.5" aria-label="Genre share legend">
+              {pieData.map((entry, index) => (
+                <li key={entry.name} className="flex items-center gap-1.5">
+                  <span
+                    className="size-2 shrink-0 rounded-[2px]"
+                    style={{ backgroundColor: PIE_COLORS[index % PIE_COLORS.length] }}
+                    aria-hidden
+                  />
+                  <span className="min-w-0 truncate text-muted-foreground">{entry.name}</span>
+                  <span className="ml-auto shrink-0 font-mono-stats text-foreground/90">
+                    {(entry.share * 100).toFixed(0)}%
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
         ) : null}
       </div>
     </div>

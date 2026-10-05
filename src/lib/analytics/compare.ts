@@ -7,13 +7,18 @@ export type RankDelta =
   | { kind: "down"; delta: number }
   | { kind: "same" }
   | { kind: "new" }
-  | { kind: "out" };
+  | { kind: "out" }
+  | { kind: "pending" };
 
 /** Lower rank number = better (1 is top). */
 export function getRankDelta(
   fromRank: number | undefined,
   toRank: number | undefined,
+  compareReady = true,
 ): RankDelta {
+  if (!compareReady) {
+    return { kind: "pending" };
+  }
   if (fromRank === undefined && toRank !== undefined) {
     return { kind: "new" };
   }

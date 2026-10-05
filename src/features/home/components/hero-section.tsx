@@ -6,6 +6,7 @@ import { ChevronDown } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { SpotifyAuthButton } from "@/features/auth/components/spotify-auth-button";
 
 export function HeroSection() {
   const { data: session, status } = useSession();
@@ -37,9 +38,13 @@ export function HeroSection() {
           Top tracks, top artists, playlists you own or follow, and your profile — all in one clean dashboard.
         </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Button asChild variant="spotify" size="lg">
-            <Link href="/#get-started">{status === "authenticated" ? "View your stats" : "Sign in with Spotify"}</Link>
-          </Button>
+          {status === "authenticated" ? (
+            <Button asChild variant="spotify" size="lg">
+              <Link href="/#top-tracks">View your stats</Link>
+            </Button>
+          ) : (
+            <SpotifyAuthButton size="lg" />
+          )}
           <Button asChild variant="outline" className="border-white/20 text-slate-200">
             <Link href="/#top-tracks">Jump to top tracks</Link>
           </Button>

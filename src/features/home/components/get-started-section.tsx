@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { AccountLink } from "@/components/navigation/account-link";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,8 +11,8 @@ const services = [
   { href: "/#top-tracks", title: "Top tracks", description: "Your 50 most-played songs (medium term)." },
   { href: "/#top-artists", title: "Top artists", description: "Artists you listen to most." },
   { href: "/#playlists", title: "Playlists", description: "Owned and followed playlists in your library." },
-  { href: "/account", title: "Profile", description: "Spotify profile details and sign-out." },
-];
+  { href: "/account", title: "Profile", description: "Spotify profile details and sign-out.", account: true },
+] as const;
 
 export function GetStartedSection() {
   const { data: session, status } = useSession();
@@ -42,8 +43,8 @@ export function GetStartedSection() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
-          {services.map((service) => (
-            <Link key={service.href} href={service.href}>
+          {services.map((service) => {
+            const card = (
               <Card className="h-full border-green-500/20 bg-green-500/5 transition hover:border-green-500/40 hover:bg-green-500/10">
                 <CardHeader>
                   <CardTitle className="text-green-400">{service.title}</CardTitle>
@@ -51,8 +52,22 @@ export function GetStartedSection() {
                 </CardHeader>
                 <CardContent />
               </Card>
-            </Link>
-          ))}
+            );
+
+            if ("account" in service) {
+              return (
+                <AccountLink key={service.href} href={service.href}>
+                  {card}
+                </AccountLink>
+              );
+            }
+
+            return (
+              <Link key={service.href} href={service.href}>
+                {card}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

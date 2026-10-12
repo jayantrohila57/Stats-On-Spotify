@@ -8,11 +8,17 @@ import { SectionShell } from "@/features/dashboard/components/analytics/section-
 import { SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
+const ALBUM_ART_SIZE = 40;
+
 type AlbumsFromTracksTableProps = {
   tracks: SpotifyTrack[];
   isLoading: boolean;
   error: string | null;
 };
+
+function trackCountLabel(count: number): string {
+  return `${count} ${count === 1 ? "track" : "tracks"}`;
+}
 
 export function AlbumsFromTracksTable({ tracks, isLoading, error }: AlbumsFromTracksTableProps) {
   const albums = useMemo(() => {
@@ -55,18 +61,13 @@ export function AlbumsFromTracksTable({ tracks, isLoading, error }: AlbumsFromTr
       emptyTitle="No albums"
       emptyDescription="Add top tracks for this period to see album groupings."
     >
-      <Table className="table-fixed" wrapperClassName="overflow-x-hidden">
-        <colgroup>
-          <col className="w-10" />
-          <col />
-          <col className="w-[5.5rem]" />
-        </colgroup>
+      <Table wrapperClassName="overflow-x-auto">
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead className="sr-only">Artwork</TableHead>
-            <TableHead>Album</TableHead>
-            <TableHead className="hidden 2xl:table-cell">Artists on tracks</TableHead>
-            <TableHead className="text-right" title="Number of top tracks from this album and best rank in your list">
+            <TableHead className="w-[52px] pr-0">Artwork</TableHead>
+            <TableHead className="min-w-[8rem]">Album</TableHead>
+            <TableHead className="hidden min-w-[6rem] md:table-cell">Artists on tracks</TableHead>
+            <TableHead className="w-[5.5rem] text-right sm:w-auto" title="Number of top tracks from this album and best rank in your list">
               In top list
             </TableHead>
           </TableRow>
@@ -74,32 +75,30 @@ export function AlbumsFromTracksTable({ tracks, isLoading, error }: AlbumsFromTr
         <TableBody>
           {albums.slice(0, 20).map((album) => (
             <TableRow key={album.id}>
-              <TableCell className="w-10 shrink-0 px-2">
-                <SpotifyThumbnail src={album.image} alt="" />
+              <TableCell className="w-[52px] py-2 pr-2 pl-2 align-middle">
+                <SpotifyThumbnail src={album.image} alt="" size={ALBUM_ART_SIZE} />
               </TableCell>
-              <TableCell className="min-w-0">
+              <TableCell className="min-w-0 max-w-[14rem] py-2 sm:max-w-none">
                 <Link
                   href={album.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="block truncate font-medium hover:underline"
+                  className="line-clamp-2 font-medium leading-snug hover:underline"
                   title={album.name}
                 >
                   {album.name}
                 </Link>
-                <p className="truncate text-xs text-muted-foreground 2xl:hidden" title={album.artists}>
+                <p className="line-clamp-2 text-xs text-muted-foreground md:hidden" title={album.artists}>
                   {album.artists}
                 </p>
               </TableCell>
-              <TableCell
-                className="hidden min-w-0 truncate text-muted-foreground 2xl:table-cell"
-                title={album.artists}
-              >
-                {album.artists}
+              <TableCell className="hidden min-w-0 py-2 text-muted-foreground md:table-cell">
+                <span className="line-clamp-2 text-sm" title={album.artists}>
+                  {album.artists}
+                </span>
               </TableCell>
-              <TableCell className="text-right text-xs text-muted-foreground">
-                <span className="tabular-nums">{album.trackCount}</span>
-                <span className="hidden sm:inline"> tracks</span>
+              <TableCell className="py-2 text-right text-xs text-muted-foreground whitespace-nowrap">
+                <span className="tabular-nums">{trackCountLabel(album.trackCount)}</span>
                 <span className="mx-1 text-border">·</span>
                 <span className="tabular-nums">#{album.bestRank}</span>
               </TableCell>

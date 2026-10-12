@@ -29,7 +29,7 @@ import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import { SPOTIFY_MEDIA_SIZE, SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 import { computeLibraryOverlapMetrics } from "@/lib/analytics/library-overlap";
-import { deriveGenreStatsWithOther, formatGenreLabel } from "@/lib/analytics/derive";
+import { countDistinctGenreTags, deriveGenreStatsWithOther, formatGenreLabel } from "@/lib/analytics/derive";
 import { SectionErrorBoundary } from "@/components/stats/section-error-boundary";
 import { useDashboardSectionSpy } from "@/features/dashboard/hooks/use-dashboard-section-spy";
 
@@ -77,14 +77,15 @@ export function AnalyticsDashboard() {
   const topsLoading = initialTopsLoading && topTracks.length === 0;
 
   const genreStats = deriveGenreStatsWithOther(topArtists, 3);
+  const distinctGenreTags = countDistinctGenreTags(topArtists);
   const topGenreLine = genreStats[0]
-    ? `${genreStats[0].genre === "other" ? "Other" : formatGenreLabel(genreStats[0].genre)} ${(genreStats[0].share * 100).toFixed(0)}% of top-artist genres · ${genreStats.length}+ tags in view`
+    ? `${genreStats[0].genre === "other" ? "Other" : formatGenreLabel(genreStats[0].genre)} ${(genreStats[0].share * 100).toFixed(0)}% of top-artist genre tags · ${distinctGenreTags} distinct tags`
     : "Genre tags from your top artists";
 
   const overviewDescription = `${topTracks.length} tracks · ${topArtists.length} artists · ${playlists.data?.length ?? 0} playlists · ${recentList.length} recent plays in sample`;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen overflow-x-clip bg-background text-foreground">
       <AnalyticsHeader profile={profile.data ?? null} profileLoading={profile.isLoading} />
       <PeriodFilterBar />
       <DashboardSectionNavMobile activeSectionId={activeSectionId} />

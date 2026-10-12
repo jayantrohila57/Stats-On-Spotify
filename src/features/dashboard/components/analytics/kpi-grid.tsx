@@ -16,7 +16,7 @@ import {
 import type { NormalizedArtist, NormalizedTrack } from "@/lib/analytics/normalize";
 import type { SpotifyPlaylist, SpotifyUserProfile } from "@/lib/spotify/types";
 import {
-  deriveGenreStats,
+  countDistinctGenreTags,
   medianTrackPopularity,
   totalPlaylistTracks,
   uniqueAlbumCountFromTracks,
@@ -68,8 +68,7 @@ export function KpiGrid({
   recentPlayCount,
 }: KpiGridProps) {
   const medianPop = medianTrackPopularity(topTracks);
-  const genreStats = deriveGenreStats(topArtists);
-  const uniqueGenres = genreStats.length;
+  const uniqueGenres = countDistinctGenreTags(topArtists);
   const top10Share = topNConcentrationShare(topTracks, 10);
   const { tracks: savedOverlap } = libraryOverlap;
 

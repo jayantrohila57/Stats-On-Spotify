@@ -1,20 +1,20 @@
 "use client";
 
-import { Cell, Pie, PieChart } from "recharts";
-import { deriveGenreStatsWithOther, formatGenreLabel } from "@/lib/analytics/derive";
-import { deriveHourDistribution } from "@/lib/analytics/listening-patterns";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts";
+import {
+  countDistinctGenreTags,
+  deriveGenreStatsWithOther,
+  formatGenreLabel,
+} from "@/lib/analytics/derive";
 import type { SpotifyArtist } from "@/lib/spotify/types";
 import type { SpotifyPlayHistoryItem } from "@/lib/spotify/types";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-
-const PIE_COLORS = [
-  "oklch(0.72 0.04 265)",
-  "oklch(0.65 0.03 265)",
-  "oklch(0.58 0.02 265)",
-  "oklch(0.52 0.02 265)",
-  "oklch(0.46 0.02 265)",
-  "oklch(0.4 0.02 265)",
-];
+import {
+  DASHBOARD_CHART_CLASS,
+  dashboardChartColors,
+  seriesChartConfig,
+} from "@/features/dashboard/lib/chart-theme";
+import { useClientListeningDistributions } from "@/features/dashboard/hooks/use-client-listening-distributions";
 
 type OverviewMiniChartProps = {
   topArtists: SpotifyArtist[];
@@ -23,67 +23,76 @@ type OverviewMiniChartProps = {
 
 export function OverviewMiniChart({ topArtists, recentPlays }: OverviewMiniChartProps) {
   const genreStats = deriveGenreStatsWithOther(topArtists, 5);
-  const hours = deriveHourDistribution(recentPlays);
+  const distinctTags = countDistinctGenreTags(topArtists);
+  const { hours } = useClientListeningDistributions(recentPlays);
   const peakHour = hours.reduce((best, bucket) => (bucket.count > best.count ? bucket : best), hours[0]);
   const topGenre = genreStats[0];
 
-  const pieData = genreStats.map((item) => ({
-    name: item.genre === "other" ? "Other" : formatGenreLabel(item.genre),
-    value: item.count,
-    share: item.share,
-  }));
+  const barData = genreStats.map((item) => {
+    const value = Math.round(item.share * 100);
+    return {
+      label: item.genre === "other" ? "Other" : formatGenreLabel(item.genre),
+      value,
+      valueLabel: `${value}%`,
+    };
+  });
 
-  const pieConfig = pieData.reduce<Record<string, { label: string }>>((acc, item) => {
-    acc[item.name] = { label: item.name };
-    return acc;
-  }, {});
+  const barChartConfig = {
+    ...seriesChartConfig,
+    value: { label: "Share", color: dashboardChartColors.primary },
+  };
 
-  if (pieData.length === 0 && recentPlays.length === 0) {
+  if (barData.length === 0 && recentPlays.length === 0) {
     return null;
   }
 
   return (
-    <div className="mt-4 rounded-md border border-border/70 bg-background/40 p-4">
-      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-        <div className="min-w-0 flex-1 space-y-1">
+    <div className="mt-4 rounded-md border border-border/70 bg-background/40 p-3 sm:p-4">
+      <div className="flex flex-col gap-3">
+        <div className="min-w-0 space-y-1">
           <p className="text-sm font-medium">Overview snapshot</p>
           <p className="text-[13px] leading-relaxed text-muted-foreground">
             {topGenre
-              ? `${topGenre.genre === "other" ? "Other" : formatGenreLabel(topGenre.genre)} covers ${(topGenre.share * 100).toFixed(0)}% of top-artist genre tags · ${genreStats.length} tags in mix`
+              ? `${topGenre.genre === "other" ? "Other" : formatGenreLabel(topGenre.genre)} covers ${(topGenre.share * 100).toFixed(0)}% of top-artist genre tags · ${distinctTags} distinct tags`
               : "No genre tags on top artists for this period"}
             {recentPlays.length > 0
               ? ` · Peak recent-play hour: ${peakHour.hour}:00 (${peakHour.count} of ${recentPlays.length} sample plays, ${(peakHour.share * 100).toFixed(0)}%)`
               : ""}
           </p>
         </div>
-        {pieData.length > 0 ? (
-          <div className="flex shrink-0 flex-col items-center gap-2 sm:flex-row sm:items-center sm:gap-4">
-            <ChartContainer config={pieConfig} className="mx-auto aspect-square h-[120px] w-[120px]">
-              <PieChart>
-                <ChartTooltip content={<ChartTooltipContent nameKey="name" />} />
-                <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={32} outerRadius={52} strokeWidth={1}>
-                  {pieData.map((entry, index) => (
-                    <Cell key={entry.name} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ChartContainer>
-            <ul className="grid min-w-[9rem] gap-1 text-[11px] leading-tight sm:gap-0.5" aria-label="Genre share legend">
-              {pieData.map((entry, index) => (
-                <li key={entry.name} className="flex items-center gap-1.5">
-                  <span
-                    className="size-2 shrink-0 rounded-[2px]"
-                    style={{ backgroundColor: PIE_COLORS[index % PIE_COLORS.length] }}
-                    aria-hidden
-                  />
-                  <span className="min-w-0 truncate text-muted-foreground">{entry.name}</span>
-                  <span className="ml-auto shrink-0 font-mono-stats text-foreground/90">
-                    {(entry.share * 100).toFixed(0)}%
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
+        {barData.length > 0 ? (
+          <ChartContainer config={barChartConfig} className={DASHBOARD_CHART_CLASS}>
+            <BarChart
+              accessibilityLayer
+              data={barData}
+              layout="vertical"
+              margin={{ right: 24, left: 4, top: 2, bottom: 2 }}
+            >
+              <CartesianGrid horizontal={false} strokeDasharray="3 3" />
+              <YAxis dataKey="label" type="category" hide />
+              <XAxis dataKey="value" type="number" hide />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent indicator="line" formatter={(v) => [`${v}%`, "Share"]} />}
+              />
+              <Bar dataKey="value" fill="var(--color-value)" radius={4} maxBarSize={18}>
+                <LabelList
+                  dataKey="label"
+                  position="insideLeft"
+                  offset={6}
+                  className="fill-[--color-label]"
+                  fontSize={10}
+                />
+                <LabelList
+                  dataKey="valueLabel"
+                  position="right"
+                  offset={6}
+                  className="fill-foreground"
+                  fontSize={10}
+                />
+              </Bar>
+            </BarChart>
+          </ChartContainer>
         ) : null}
       </div>
     </div>

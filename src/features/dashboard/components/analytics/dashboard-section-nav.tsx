@@ -58,7 +58,7 @@ export function DashboardSectionNavMobile({ activeSectionId }: { activeSectionId
   return (
     <nav
       aria-label="Dashboard sections"
-      className="sticky top-0 z-20 -mx-4 mb-4 flex gap-1 overflow-x-auto border-b border-border/60 bg-background/95 px-4 py-2 backdrop-blur-sm lg:hidden"
+      className="sticky top-14 z-30 mb-3 flex gap-1 overflow-x-auto overscroll-x-contain border-b border-border/60 bg-background/95 px-4 py-1.5 backdrop-blur-sm [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:hidden"
     >
       {DASHBOARD_SECTIONS.map((section) => {
         const isActive = activeSectionId === section.id;

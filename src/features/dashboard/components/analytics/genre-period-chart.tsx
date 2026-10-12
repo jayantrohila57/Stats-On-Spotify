@@ -1,11 +1,17 @@
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { deriveGenreStats, formatGenreLabel } from "@/lib/analytics/derive";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { deriveGenrePeriodComparison } from "@/lib/analytics/derive";
 import type { SpotifyArtist } from "@/lib/spotify/types";
 import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
 import { timeRangeLabel } from "@/lib/spotify/time-range";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { ChartLegend } from "@/features/dashboard/components/analytics/chart-legend";
+import {
+  DASHBOARD_CHART_CLASS_TALL,
+  dashboardChartColors,
+  periodCompareChartConfig,
+} from "@/features/dashboard/lib/chart-theme";
 
 type GenrePeriodChartProps = {
   artistsByPeriod: Record<SpotifyTimeRange, SpotifyArtist[]>;
@@ -13,40 +19,59 @@ type GenrePeriodChartProps = {
   compareRange: SpotifyTimeRange;
 };
 
-const chartConfig = {
-  active: { label: "Selected period", color: "oklch(0.72 0.04 265)" },
-  compare: { label: "Compare period", color: "oklch(0.55 0.02 265)" },
-};
-
 export function GenrePeriodChart({ artistsByPeriod, activeRange, compareRange }: GenrePeriodChartProps) {
-  const activeStats = deriveGenreStats(artistsByPeriod[activeRange] ?? [], 8);
-  const compareStats = deriveGenreStats(artistsByPeriod[compareRange] ?? [], 8);
-  const genres = [...new Set([...activeStats.map((g) => g.genre), ...compareStats.map((g) => g.genre)])].slice(0, 8);
+  const rows = deriveGenrePeriodComparison(
+    artistsByPeriod[activeRange] ?? [],
+    artistsByPeriod[compareRange] ?? [],
+    8,
+  );
 
-  const activeMap = new Map(activeStats.map((g) => [g.genre, g.share]));
-  const compareMap = new Map(compareStats.map((g) => [g.genre, g.share]));
-
-  const data = genres.map((genre) => ({
-    genre: formatGenreLabel(genre),
-    active: Math.round((activeMap.get(genre) ?? 0) * 100),
-    compare: Math.round((compareMap.get(genre) ?? 0) * 100),
+  const data = rows.map((row) => ({
+    label: row.label,
+    active: row.activePct,
+    compare: row.comparePct,
   }));
 
   if (!data.length) return null;
 
+  const activeLabel = timeRangeLabel(activeRange);
+  const compareLabel = timeRangeLabel(compareRange);
+
   return (
-    <div className="mt-4">
-      <p className="mb-2 text-xs text-muted-foreground">
-        Derived genre tag share by artist count — {timeRangeLabel(activeRange)} vs {timeRangeLabel(compareRange)}
+    <div className="mt-4 space-y-2">
+      <p className="text-xs text-muted-foreground">
+        Genre tag share by artist count (% of all tags in period) — {activeLabel} vs {compareLabel}
       </p>
-      <ChartContainer config={chartConfig} className="aspect-[2/1] min-h-[180px] w-full">
-        <BarChart data={data} layout="vertical" margin={{ left: 8, right: 8 }}>
-          <CartesianGrid horizontal={false} strokeDasharray="3 3" />
-          <XAxis type="number" tickLine={false} axisLine={false} unit="%" />
-          <YAxis type="category" dataKey="genre" width={88} tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
-          <ChartTooltip content={<ChartTooltipContent />} />
-          <Bar dataKey="active" fill="var(--color-active)" radius={[0, 2, 2, 0]} barSize={10} />
-          <Bar dataKey="compare" fill="var(--color-compare)" radius={[0, 2, 2, 0]} barSize={10} />
+      <ChartLegend
+        className="justify-end"
+        items={[
+          { key: "active", label: activeLabel, color: dashboardChartColors.primary },
+          { key: "compare", label: compareLabel, color: dashboardChartColors.secondary },
+        ]}
+      />
+      <ChartContainer config={periodCompareChartConfig} className={DASHBOARD_CHART_CLASS_TALL}>
+        <BarChart accessibilityLayer data={data} margin={{ top: 4, right: 4, left: 0, bottom: 0 }}>
+          <CartesianGrid vertical={false} strokeDasharray="3 3" />
+          <XAxis
+            dataKey="label"
+            tickLine={false}
+            axisLine={false}
+            tickMargin={8}
+            interval={0}
+            tick={{ fontSize: 10 }}
+            tickFormatter={(value) => (value.length > 10 ? `${value.slice(0, 9)}…` : value)}
+          />
+          <ChartTooltip
+            cursor={false}
+            content={
+              <ChartTooltipContent
+                indicator="dashed"
+                formatter={(value) => [`${value}%`, ""]}
+              />
+            }
+          />
+          <Bar dataKey="active" fill="var(--color-active)" radius={4} maxBarSize={28} />
+          <Bar dataKey="compare" fill="var(--color-compare)" radius={4} maxBarSize={28} />
         </BarChart>
       </ChartContainer>
     </div>

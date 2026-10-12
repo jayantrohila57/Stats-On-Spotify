@@ -28,7 +28,7 @@ export function PeriodFilterBar() {
             </button>
           ))}
         </div>
-        <p className="text-xs text-muted-foreground">
+        <p className="hidden min-w-0 text-xs text-muted-foreground sm:block">
           Applies to top tracks, top artists, and derived metrics. Rank “Was” / movement compares to{" "}
           {baselineCompareLabel(periodToTimeRange(period))}.
         </p>

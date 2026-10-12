@@ -32,15 +32,49 @@ export function deriveGenreStats(artists: SpotifyArtist[], limit = 12): GenreSta
       counts.set(genre, (counts.get(genre) ?? 0) + 1);
     }
   }
-  const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, limit);
-  const total = sorted.reduce((sum, [, c]) => sum + c, 0);
+  const total = [...counts.values()].reduce((sum, c) => sum + c, 0);
   if (total === 0) {
     return [];
   }
+  const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, limit);
   return sorted.map(([genre, count]) => ({
     genre,
     count,
     share: count / total,
+  }));
+}
+
+export type GenrePeriodRow = {
+  genre: string;
+  label: string;
+  activePct: number;
+  comparePct: number;
+};
+
+/** Top genres by max share across two periods; shares use full tag totals per period. */
+export function deriveGenrePeriodComparison(
+  activeArtists: SpotifyArtist[],
+  compareArtists: SpotifyArtist[],
+  limit = 8,
+): GenrePeriodRow[] {
+  const activeStats = deriveGenreStats(activeArtists, 50);
+  const compareStats = deriveGenreStats(compareArtists, 50);
+  const activeMap = new Map(activeStats.map((g) => [g.genre, g.share]));
+  const compareMap = new Map(compareStats.map((g) => [g.genre, g.share]));
+
+  const genres = [...new Set([...activeMap.keys(), ...compareMap.keys()])]
+    .sort((a, b) => {
+      const scoreA = Math.max(activeMap.get(a) ?? 0, compareMap.get(a) ?? 0);
+      const scoreB = Math.max(activeMap.get(b) ?? 0, compareMap.get(b) ?? 0);
+      return scoreB - scoreA;
+    })
+    .slice(0, limit);
+
+  return genres.map((genre) => ({
+    genre,
+    label: genre === "other" ? "Other" : formatGenreLabel(genre),
+    activePct: Math.round((activeMap.get(genre) ?? 0) * 100),
+    comparePct: Math.round((compareMap.get(genre) ?? 0) * 100),
   }));
 }
 
@@ -83,4 +117,15 @@ export function formatGenreLabel(genre: string): string {
     .split(" ")
     .map((part) => (part ? part.charAt(0).toUpperCase() + part.slice(1) : part))
     .join(" ");
+}
+
+/** Distinct genre tag strings across all top artists (not capped by display limit). */
+export function countDistinctGenreTags(artists: SpotifyArtist[]): number {
+  const tags = new Set<string>();
+  for (const artist of artists) {
+    for (const genre of artist.genres ?? []) {
+      tags.add(genre);
+    }
+  }
+  return tags.size;
 }

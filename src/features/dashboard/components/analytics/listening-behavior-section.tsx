@@ -1,12 +1,17 @@
 "use client";
 
-import { Radar, RadarChart, PolarAngleAxis, PolarGrid } from "recharts";
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts";
 import { Activity } from "lucide-react";
 import { SectionHeader } from "@/features/dashboard/components/analytics/section-header";
 import type { NormalizedArtist, NormalizedTrack } from "@/lib/analytics/normalize";
 import { deriveTasteDimensions, topNConcentrationShare, uniqueArtistRatioInTopTracks } from "@/lib/analytics/behavior";
 import type { SpotifyArtist, SpotifySavedTrack } from "@/lib/spotify/types";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import {
+  DASHBOARD_CHART_CLASS_TALL,
+  dashboardChartColors,
+  seriesChartConfig,
+} from "@/features/dashboard/lib/chart-theme";
 
 type ListeningBehaviorSectionProps = {
   topTracks: NormalizedTrack[];
@@ -15,8 +20,9 @@ type ListeningBehaviorSectionProps = {
   followedArtists: SpotifyArtist[];
 };
 
-const radarConfig = {
-  value: { label: "Score", color: "oklch(0.7 0.04 265)" },
+const barChartConfig = {
+  ...seriesChartConfig,
+  value: { label: "Score", color: dashboardChartColors.primary },
 };
 
 export function ListeningBehaviorSection({
@@ -29,10 +35,13 @@ export function ListeningBehaviorSection({
   const top10Share = topNConcentrationShare(topTracks, 10);
   const diversity = uniqueArtistRatioInTopTracks(topTracks);
 
-  const radarData = dimensions.map((d) => ({
-    dimension: d.label.replace("Top-10 concentration", "Top-10 focus").replace("Artist diversity", "Diversity"),
+  const barData = dimensions.map((d) => ({
+    label: d.label
+      .replace("Top-10 concentration", "Top-10 focus")
+      .replace("Artist diversity", "Diversity")
+      .replace("Saved overlap", "Saved overlap")
+      .replace("Follow overlap", "Follow overlap"),
     value: d.value,
-    fullLabel: d.label,
     hint: d.hint,
   }));
 
@@ -61,13 +70,45 @@ export function ListeningBehaviorSection({
             ))}
           </ul>
         </div>
-        <ChartContainer config={radarConfig} className="mx-auto aspect-square max-h-[240px]">
-          <RadarChart data={radarData} outerRadius="70%">
-            <PolarGrid />
-            <PolarAngleAxis dataKey="dimension" tick={{ fontSize: 9 }} />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <Radar dataKey="value" fill="var(--color-value)" fillOpacity={0.2} stroke="var(--color-value)" />
-          </RadarChart>
+        <ChartContainer config={barChartConfig} className={DASHBOARD_CHART_CLASS_TALL}>
+          <BarChart
+            accessibilityLayer
+            data={barData}
+            layout="vertical"
+            margin={{ right: 28, left: 4, top: 4, bottom: 4 }}
+          >
+            <CartesianGrid horizontal={false} strokeDasharray="3 3" />
+            <YAxis dataKey="label" type="category" hide />
+            <XAxis dataKey="value" type="number" hide domain={[0, 100]} />
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  indicator="line"
+                  formatter={(value, _name, item) => {
+                    const hint = (item.payload as { hint?: string }).hint;
+                    return [`${value}/100`, hint ?? "Score"];
+                  }}
+                />
+              }
+            />
+            <Bar dataKey="value" fill="var(--color-value)" radius={4} maxBarSize={24}>
+              <LabelList
+                dataKey="label"
+                position="insideLeft"
+                offset={8}
+                className="fill-[--color-label]"
+                fontSize={10}
+              />
+              <LabelList
+                dataKey="value"
+                position="right"
+                offset={8}
+                className="fill-foreground"
+                fontSize={11}
+              />
+            </Bar>
+          </BarChart>
         </ChartContainer>
       </div>
     </section>

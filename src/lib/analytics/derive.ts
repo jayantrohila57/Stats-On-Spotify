@@ -44,40 +44,6 @@ export function deriveGenreStats(artists: SpotifyArtist[], limit = 12): GenreSta
   }));
 }
 
-export type GenrePeriodRow = {
-  genre: string;
-  label: string;
-  activePct: number;
-  comparePct: number;
-};
-
-/** Top genres by max share across two periods; shares use full tag totals per period. */
-export function deriveGenrePeriodComparison(
-  activeArtists: SpotifyArtist[],
-  compareArtists: SpotifyArtist[],
-  limit = 8,
-): GenrePeriodRow[] {
-  const activeStats = deriveGenreStats(activeArtists, 50);
-  const compareStats = deriveGenreStats(compareArtists, 50);
-  const activeMap = new Map(activeStats.map((g) => [g.genre, g.share]));
-  const compareMap = new Map(compareStats.map((g) => [g.genre, g.share]));
-
-  const genres = [...new Set([...activeMap.keys(), ...compareMap.keys()])]
-    .sort((a, b) => {
-      const scoreA = Math.max(activeMap.get(a) ?? 0, compareMap.get(a) ?? 0);
-      const scoreB = Math.max(activeMap.get(b) ?? 0, compareMap.get(b) ?? 0);
-      return scoreB - scoreA;
-    })
-    .slice(0, limit);
-
-  return genres.map((genre) => ({
-    genre,
-    label: genre === "other" ? "Other" : formatGenreLabel(genre),
-    activePct: Math.round((activeMap.get(genre) ?? 0) * 100),
-    comparePct: Math.round((compareMap.get(genre) ?? 0) * 100),
-  }));
-}
-
 /** Derived: inverse-rank weighting — Spotify does not expose play counts on this endpoint. */
 export function deriveRankShare(rank: number, total: number): number {
   if (total <= 0) return 0;

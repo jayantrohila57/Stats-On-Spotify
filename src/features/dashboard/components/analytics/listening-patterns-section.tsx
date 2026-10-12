@@ -1,35 +1,52 @@
 "use client";
 
-import { Area, AreaChart, Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 import { Clock3 } from "lucide-react";
 import { SectionHeader } from "@/features/dashboard/components/analytics/section-header";
 import type { SpotifyPlayHistoryItem } from "@/lib/spotify/types";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { deriveHourDistribution, deriveWeekdayDistribution } from "@/lib/analytics/listening-patterns";
 import { StatsEmptyState } from "@/components/stats/stats-feedback";
-import { useClientListeningDistributions } from "@/features/dashboard/hooks/use-client-listening-distributions";
-import {
-  DASHBOARD_CHART_CLASS,
-  dashboardChartColors,
-  formatHourTick,
-  HOUR_AXIS_TICKS,
-  seriesChartConfig,
-} from "@/features/dashboard/lib/chart-theme";
 
 type ListeningPatternsSectionProps = {
   items: SpotifyPlayHistoryItem[];
 };
 
-const hourChartConfig = {
-  count: { label: "Plays", color: dashboardChartColors.primary },
-};
+function DistributionList({
+  title,
+  rows,
+}: {
+  title: string;
+  rows: Array<{ label: string; count: number; share: number }>;
+}) {
+  const max = Math.max(...rows.map((r) => r.count), 1);
 
-const weekdayBarConfig = {
-  ...seriesChartConfig,
-  count: { label: "Plays", color: dashboardChartColors.secondary },
-};
+  return (
+    <div className="space-y-2">
+      <h3 className="text-xs font-medium text-foreground">{title}</h3>
+      <ul className="space-y-1.5">
+        {rows.map((row) => (
+          <li key={row.label}>
+            <div className="mb-0.5 flex items-center justify-between gap-2 text-xs">
+              <span className="font-medium tabular-nums">{row.label}</span>
+              <span className="shrink-0 text-muted-foreground">
+                {row.count} · {(row.share * 100).toFixed(0)}%
+              </span>
+            </div>
+            <div className="h-1 overflow-hidden rounded-sm bg-muted">
+              <div
+                className="h-full bg-chart-2"
+                style={{ width: `${Math.max((row.count / max) * 100, row.count > 0 ? 4 : 0)}%` }}
+              />
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export function ListeningPatternsSection({ items }: ListeningPatternsSectionProps) {
-  const { hours, weekdays } = useClientListeningDistributions(items);
+  const hours = deriveHourDistribution(items);
+  const weekdays = deriveWeekdayDistribution(items);
   const hasData = items.length > 0;
   const peakHour = hours.reduce((best, b) => (b.count > best.count ? b : best), hours[0]);
   const peakDay = weekdays.reduce((best, b) => (b.count > best.count ? b : best), weekdays[0]);
@@ -37,6 +54,13 @@ export function ListeningPatternsSection({ items }: ListeningPatternsSectionProp
   const description = hasData
     ? `${items.length} plays in sample · busiest hour ${peakHour.hour}:00 (${peakHour.count} plays, ${(peakHour.share * 100).toFixed(0)}%) · busiest day ${peakDay.label} (${peakDay.count})`
     : "Hour and weekday distribution from your recent plays sample — not all-time history";
+
+  const hourRows = hours
+    .filter((b) => b.count > 0)
+    .sort((a, b) => a.hour - b.hour)
+    .map((b) => ({ label: `${b.hour}:00`, count: b.count, share: b.share }));
+
+  const weekdayRows = weekdays.map((b) => ({ label: b.label, count: b.count, share: b.share }));
 
   return (
     <section className="rounded-md border border-border/80 bg-card/30 p-4 md:p-5">
@@ -47,78 +71,9 @@ export function ListeningPatternsSection({ items }: ListeningPatternsSectionProp
           description="Load recently played data to see hour and weekday patterns from that window."
         />
       ) : (
-        <div className="mt-4 space-y-6">
-          <div className="space-y-2">
-            <h3 className="text-xs font-medium text-foreground">Plays by hour (local time)</h3>
-            <ChartContainer config={hourChartConfig} className={DASHBOARD_CHART_CLASS}>
-              <AreaChart
-                accessibilityLayer
-                data={hours}
-                margin={{ left: 4, right: 8, top: 8, bottom: 4 }}
-              >
-                <CartesianGrid vertical={false} strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="hour"
-                  tickLine={false}
-                  axisLine={false}
-                  tickMargin={8}
-                  ticks={HOUR_AXIS_TICKS}
-                  tickFormatter={formatHourTick}
-                />
-                <ChartTooltip
-                  cursor={false}
-                  content={
-                    <ChartTooltipContent
-                      hideLabel
-                      formatter={(value, _name, item) => {
-                        const hour = (item.payload as { hour?: number }).hour;
-                        return [`${value} plays`, `${hour ?? ""}:00`];
-                      }}
-                    />
-                  }
-                />
-                <Area
-                  dataKey="count"
-                  type="step"
-                  fill="var(--color-count)"
-                  fillOpacity={0.35}
-                  stroke="var(--color-count)"
-                  strokeWidth={2}
-                />
-              </AreaChart>
-            </ChartContainer>
-          </div>
-          <div className="space-y-2">
-            <h3 className="text-xs font-medium text-foreground">Plays by weekday</h3>
-            <ChartContainer config={weekdayBarConfig} className={DASHBOARD_CHART_CLASS}>
-              <BarChart
-                accessibilityLayer
-                data={weekdays}
-                layout="vertical"
-                margin={{ left: 4, right: 28, top: 4, bottom: 4 }}
-              >
-                <CartesianGrid horizontal={false} strokeDasharray="3 3" />
-                <XAxis dataKey="count" type="number" hide />
-                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" hideLabel />} />
-                <Bar dataKey="count" fill="var(--color-count)" radius={4} maxBarSize={20}>
-                  <LabelList
-                    dataKey="label"
-                    position="insideLeft"
-                    offset={8}
-                    className="fill-[--color-label]"
-                    fontSize={11}
-                  />
-                  <LabelList
-                    dataKey="count"
-                    position="right"
-                    offset={8}
-                    className="fill-foreground"
-                    fontSize={11}
-                  />
-                </Bar>
-              </BarChart>
-            </ChartContainer>
-          </div>
+        <div className="mt-4 grid gap-6 md:grid-cols-2">
+          <DistributionList title="Plays by hour (local time)" rows={hourRows} />
+          <DistributionList title="Plays by weekday" rows={weekdayRows} />
         </div>
       )}
     </section>

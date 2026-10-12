@@ -20,7 +20,7 @@ import { ListeningPatternsSection } from "@/features/dashboard/components/analyt
 import { TasteEvolutionSection } from "@/features/dashboard/components/analytics/taste-evolution-section";
 import { LibraryOverlapSection } from "@/features/dashboard/components/analytics/library-overlap-section";
 import { ListeningBehaviorSection } from "@/features/dashboard/components/analytics/listening-behavior-section";
-import { OverviewMiniChart } from "@/features/dashboard/components/analytics/overview-mini-chart";
+import { OverviewSnapshot } from "@/features/dashboard/components/analytics/overview-snapshot";
 import {
   DashboardSectionNav,
   DashboardSectionNavMobile,
@@ -110,7 +110,7 @@ export function AnalyticsDashboard() {
                   libraryOverlap={libraryOverlap}
                   recentPlayCount={recentList.length}
                 />
-                <OverviewMiniChart topArtists={topArtists} recentPlays={recentList} />
+                <OverviewSnapshot topArtists={topArtists} recentPlays={recentList} />
               </div>
             )}
           </section>
@@ -143,9 +143,6 @@ export function AnalyticsDashboard() {
             <SectionErrorBoundary sectionTitle="Genres and albums">
               <GenreDistribution
                 artists={topArtists}
-                artistsByPeriod={artistsByPeriod}
-                activeRange={timeRange}
-                compareRange={compareRange}
                 isLoading={topsLoading}
                 error={topTracksError}
                 description={topGenreLine}

@@ -3,21 +3,31 @@
 import { useCallback, useEffect, useState } from "react";
 import { DASHBOARD_SECTIONS } from "@/features/dashboard/components/analytics/dashboard-section-nav";
 
-/** Matches section `scroll-mt-20` anchor offset. */
+/** Matches section anchor `scroll-mt-20` and sticky chrome. */
 export const DASHBOARD_SECTION_SCROLL_OFFSET_PX = 80;
 
 const SECTION_IDS = DASHBOARD_SECTIONS.map((section) => section.id);
 
+/**
+ * Picks the section whose anchor contains the scroll probe line (below sticky header).
+ * Anchors are zero-height elements at each section start — not the full section box.
+ */
 function pickActiveSectionId(): string {
+  const probeY = DASHBOARD_SECTION_SCROLL_OFFSET_PX + 1;
   let active = SECTION_IDS[0] ?? "section-overview";
+  let fallbackTop = -Infinity;
 
   for (const id of SECTION_IDS) {
     const element = document.getElementById(id);
     if (!element) {
       continue;
     }
-    const top = element.getBoundingClientRect().top;
-    if (top <= DASHBOARD_SECTION_SCROLL_OFFSET_PX + 2) {
+    const rect = element.getBoundingClientRect();
+    if (rect.top <= probeY && rect.bottom > probeY) {
+      return id;
+    }
+    if (rect.top <= probeY && rect.top > fallbackTop) {
+      fallbackTop = rect.top;
       active = id;
     }
   }

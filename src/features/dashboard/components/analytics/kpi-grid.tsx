@@ -26,6 +26,7 @@ import { topNConcentrationShare } from "@/lib/analytics/behavior";
 import type { LibraryOverlapMetrics } from "@/lib/analytics/library-overlap";
 import { topTracksSavedOverlapHint } from "@/lib/analytics/library-overlap";
 import type { LucideIcon } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type KpiGridProps = {
   topTracks: NormalizedTrack[];
@@ -34,6 +35,7 @@ type KpiGridProps = {
   profile: SpotifyUserProfile | null;
   libraryOverlap: LibraryOverlapMetrics;
   recentPlayCount: number;
+  overlapHintsReady?: boolean;
 };
 
 function KpiCell({
@@ -41,11 +43,13 @@ function KpiCell({
   label,
   value,
   hint,
+  hintLoading,
 }: {
   icon: LucideIcon;
   label: string;
   value: string;
   hint?: string;
+  hintLoading?: boolean;
 }) {
   return (
     <div className="border border-border bg-muted/20 px-3 py-2.5">
@@ -54,7 +58,11 @@ function KpiCell({
         {label}
       </div>
       <p className="mt-1 font-mono-stats text-3xl font-semibold leading-none tracking-tight">{value}</p>
-      {hint ? <p className="mt-1 text-xs leading-snug text-muted-foreground">{hint}</p> : null}
+      {hintLoading ? (
+        <Skeleton className="mt-1 h-3 w-full max-w-[140px]" aria-hidden />
+      ) : hint ? (
+        <p className="mt-1 text-xs leading-snug text-muted-foreground">{hint}</p>
+      ) : null}
     </div>
   );
 }
@@ -66,6 +74,7 @@ export function KpiGrid({
   profile,
   libraryOverlap,
   recentPlayCount,
+  overlapHintsReady = true,
 }: KpiGridProps) {
   const medianPop = medianTrackPopularity(topTracks);
   const uniqueGenres = countDistinctGenreTags(topArtists);
@@ -111,8 +120,9 @@ export function KpiGrid({
       <KpiCell
         icon={Heart}
         label="Saved overlap"
-        value={`${savedOverlap.overlapPercentOfTop}%`}
-        hint={topTracksSavedOverlapHint(savedOverlap)}
+        value={overlapHintsReady ? `${savedOverlap.overlapPercentOfTop}%` : "—"}
+        hint={overlapHintsReady ? topTracksSavedOverlapHint(savedOverlap) : undefined}
+        hintLoading={!overlapHintsReady}
       />
       <KpiCell
         icon={History}

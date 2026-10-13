@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { AnalyticsDashboardPreview } from "@/features/dashboard/components/analytics/analytics-dashboard-preview";
 
 export const metadata = {
@@ -5,7 +6,11 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-/** Signed-out QA page with fixture data — no Spotify session required. */
+/** Fixture dashboard for local/CI QA — not exposed in production. */
 export default function PreviewPage() {
+  if (process.env.NODE_ENV === "production") {
+    notFound();
+  }
+
   return <AnalyticsDashboardPreview />;
 }

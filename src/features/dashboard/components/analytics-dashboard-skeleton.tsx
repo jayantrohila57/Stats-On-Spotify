@@ -3,7 +3,11 @@
 import type { ReactNode } from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { SEGMENTED_CONTROL_CLASS } from "@/lib/ui/layout-classes";
+import {
+  HEADER_ACCOUNT_BUTTON_SKELETON_CLASS,
+  MOBILE_NAV_CHIP_SKELETON_CLASS,
+  SEGMENTED_CONTROL_CLASS,
+} from "@/lib/ui/layout-classes";
 import { DASHBOARD_SECTIONS } from "@/features/dashboard/components/analytics/dashboard-section-nav";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -69,7 +73,7 @@ export function AnalyticsDashboardSkeleton() {
             <Skeleton className="h-4 w-36" />
             <Skeleton className="h-3 w-56 max-w-full" />
           </div>
-          <Skeleton className="h-9 w-28 rounded-md" />
+          <Skeleton className={HEADER_ACCOUNT_BUTTON_SKELETON_CLASS} />
         </PageContainer>
       </header>
 
@@ -88,7 +92,7 @@ export function AnalyticsDashboardSkeleton() {
       <div className="sticky top-14 z-30 mb-3 border-b border-border bg-background/95 lg:hidden" aria-hidden>
         <PageContainer className="flex gap-1 overflow-x-auto overscroll-x-contain py-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {DASHBOARD_SECTIONS_PREVIEW.map((label) => (
-            <Skeleton key={label} className="h-7 w-[4.5rem] shrink-0 rounded-md" />
+            <Skeleton key={label} className={MOBILE_NAV_CHIP_SKELETON_CLASS} />
           ))}
         </PageContainer>
       </div>

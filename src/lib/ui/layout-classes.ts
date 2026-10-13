@@ -20,3 +20,9 @@ export const TABLE_SCROLL_WRAPPER_CLASS = "min-w-0 max-w-full overflow-x-auto";
 
 /** Major section grid gap (pair cards, two-column layouts). */
 export const SECTION_GRID_GAP_CLASS = "gap-8";
+
+/** Account menu trigger in analytics header (avatar + chevron, no name on narrow viewports). */
+export const HEADER_ACCOUNT_BUTTON_SKELETON_CLASS = "h-9 w-[4.25rem] shrink-0 rounded-md";
+
+/** Mobile section nav chip — matches `py-1` + `text-xs` + border. */
+export const MOBILE_NAV_CHIP_SKELETON_CLASS = "h-[26px] w-[4.5rem] shrink-0 rounded-md border border-transparent";

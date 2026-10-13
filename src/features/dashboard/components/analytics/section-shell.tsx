@@ -48,9 +48,11 @@ export function SectionShell({
   return (
     <Card className={cn("shadow-sm", className)}>
       <CardHeader className="flex flex-col gap-3 border-b pb-4 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
-        <div className="space-y-1.5">
-          <CardTitle className="text-lg font-semibold tracking-tight">{title}</CardTitle>
-          {description ? <CardDescription className="leading-snug">{description}</CardDescription> : null}
+        <div className="min-w-0 flex-1 space-y-1.5">
+          <CardTitle className="truncate text-lg font-semibold tracking-tight">{title}</CardTitle>
+          {description ? (
+            <CardDescription className="line-clamp-3 min-w-0 leading-snug sm:line-clamp-none">{description}</CardDescription>
+          ) : null}
         </div>
         {meta}
       </CardHeader>

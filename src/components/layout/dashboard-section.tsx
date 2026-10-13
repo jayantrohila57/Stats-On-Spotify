@@ -18,11 +18,9 @@ export function DashboardSection({
   stack = false,
 }: DashboardSectionProps) {
   return (
-    <section
-      id={id}
-      aria-label={ariaLabel}
-      className={cn(SECTION_SCROLL_MARGIN_CLASS, stack && SECTION_STACK_CLASS, className)}
-    >
+    <section aria-label={ariaLabel} className={cn(stack && SECTION_STACK_CLASS, className)}>
+      {/* Scroll-spy + hash target: top of section only (not the full tall section box). */}
+      <div id={id} className={cn(SECTION_SCROLL_MARGIN_CLASS, "h-0 w-full")} aria-hidden />
       {children}
     </section>
   );

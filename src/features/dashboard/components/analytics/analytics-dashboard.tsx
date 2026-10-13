@@ -77,6 +77,14 @@ export function AnalyticsDashboard() {
     (profile.isLoading && !profile.data) ||
     (savedTracks.isLoading && savedTracks.data === undefined);
 
+  const overlapHintsReady =
+    topTracks.length > 0 &&
+    topArtists.length > 0 &&
+    savedTracks.data !== undefined &&
+    !savedTracks.isLoading &&
+    followedArtists.data !== undefined &&
+    !followedArtists.isLoading;
+
   const topsLoading = initialTopsLoading && topTracks.length === 0;
 
   const genreStats = deriveGenreStatsWithOther(topArtists, 3);
@@ -117,7 +125,17 @@ export function AnalyticsDashboard() {
                     </div>
                   ))}
                 </div>
-                <Skeleton className="h-24 w-full rounded-md" />
+                <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
+                  <div className="space-y-2 border-b border-border p-6 pb-4">
+                    <Skeleton className="h-5 w-40" />
+                    <Skeleton className="h-4 w-full max-w-lg" />
+                  </div>
+                  <div className="space-y-3 p-6 pt-4">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Skeleton key={i} className="h-6 w-full" />
+                    ))}
+                  </div>
+                </div>
               </div>
             ) : (
               <div className="mt-3 space-y-0">
@@ -128,6 +146,7 @@ export function AnalyticsDashboard() {
                   profile={profile.data ?? null}
                   libraryOverlap={libraryOverlap}
                   recentPlayCount={recentList.length}
+                  overlapHintsReady={overlapHintsReady}
                 />
                 <OverviewSnapshot topArtists={topArtists} recentPlays={recentList} />
               </div>

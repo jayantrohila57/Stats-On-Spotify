@@ -118,7 +118,7 @@ export function AnalyticsDashboard() {
               icon={BarChart3}
               title="Listening overview"
               description={
-                overviewDescription ?? <Skeleton className="mt-1 h-4 w-full max-w-md" aria-hidden />
+                overviewDescription ?? <Skeleton className="h-4 w-full max-w-md" aria-hidden />
               }
             />
             {kpiLoading ? (

@@ -36,7 +36,7 @@ export function AnalyticsDashboardPreview() {
           payload={{
             scopeMissing: false,
             playing: {
-              timestamp: Date.now(),
+              timestamp: 1_700_000_000_000,
               is_playing: true,
               progress_ms: 86000,
               currently_playing_type: "track",

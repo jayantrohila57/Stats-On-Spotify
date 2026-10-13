@@ -89,15 +89,14 @@ export function AnalyticsDashboardSkeleton() {
 
         <main className="min-w-0 flex-1 space-y-8">
           <section className="scroll-mt-20 space-y-3">
-            <div className="space-y-3">
+            <div className="border-b border-border pb-4">
               <div className="flex gap-2">
-                <Skeleton className="size-5 rounded-sm" />
-                <div className="space-y-2">
+                <Skeleton className="mt-1 size-5 shrink-0 rounded-sm" />
+                <div className="min-w-0 flex-1 space-y-1.5">
                   <Skeleton className="h-5 w-44" />
                   <Skeleton className="h-4 w-full max-w-lg" />
                 </div>
               </div>
-              <Skeleton className="h-px w-full" />
             </div>
             <KpiGridSkeleton />
             <Skeleton className="h-24 w-full rounded-md" />

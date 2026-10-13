@@ -42,6 +42,7 @@ export function OverviewSnapshot({ topArtists, recentPlays }: OverviewSnapshotPr
     <SectionShell
       icon={LayoutDashboard}
       className="mt-8"
+      headingLevel={3}
       title="Overview snapshot"
       description={description}
       isLoading={false}

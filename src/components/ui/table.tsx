@@ -8,7 +8,7 @@ type TableProps = React.ComponentProps<"table"> & {
 function Table({ className, wrapperClassName, ...props }: TableProps) {
   return (
     <div className={cn("relative w-full max-w-full", wrapperClassName)}>
-      <table className={cn("w-full caption-bottom text-[14px]", className)} {...props} />
+      <table className={cn("w-full caption-bottom text-sm", className)} {...props} />
     </div>
   );
 }
@@ -24,7 +24,7 @@ function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
 function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
   return (
     <tr
-      className={cn("border-b border-border/60 transition-colors hover:bg-muted/40 data-[state=selected]:bg-muted", className)}
+      className={cn("border-b border-border transition-colors hover:bg-muted/40 data-[state=selected]:bg-muted", className)}
       {...props}
     />
   );
@@ -34,7 +34,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
   return (
     <th
       className={cn(
-        "h-10 px-3 text-left align-middle text-[13px] font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
+        "h-10 px-3 text-left align-middle text-xs sm:text-sm font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0",
         className,
       )}
       {...props}

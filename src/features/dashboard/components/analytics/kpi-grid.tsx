@@ -48,13 +48,13 @@ function KpiCell({
   hint?: string;
 }) {
   return (
-    <div className="border border-border/60 bg-background/40 px-3 py-2.5">
-      <div className="flex items-center gap-1.5 text-[12px] font-medium uppercase tracking-wide text-muted-foreground">
+    <div className="border border-border bg-muted/20 px-3 py-2.5">
+      <div className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-muted-foreground">
         <Icon className="size-3.5 shrink-0 opacity-70" aria-hidden />
         {label}
       </div>
-      <p className="mt-1 font-mono-stats text-[30px] font-semibold leading-none tracking-tight">{value}</p>
-      {hint ? <p className="mt-1 text-[12px] leading-snug text-muted-foreground">{hint}</p> : null}
+      <p className="mt-1 font-mono-stats text-3xl font-semibold leading-none tracking-tight">{value}</p>
+      {hint ? <p className="mt-1 text-xs leading-snug text-muted-foreground">{hint}</p> : null}
     </div>
   );
 }
@@ -73,7 +73,7 @@ export function KpiGrid({
   const { tracks: savedOverlap } = libraryOverlap;
 
   return (
-    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-md border border-border/80 bg-border/40 md:grid-cols-4 lg:grid-cols-6">
+    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-4 lg:grid-cols-6">
       <KpiCell icon={Music2} label="Top tracks" value={String(topTracks.length)} hint="Spotify top tracks (max 50)" />
       <KpiCell icon={Mic2} label="Top artists" value={String(topArtists.length)} hint="Spotify top artists (max 50)" />
       <KpiCell

@@ -33,7 +33,7 @@ export function DashboardSectionNav({ className, activeSectionId }: DashboardSec
     <nav
       aria-label="Dashboard sections"
       className={cn(
-        "sticky top-0 z-20 -mx-1 hidden max-h-[calc(100vh-2rem)] flex-col gap-0.5 overflow-y-auto border-r border-border/60 pr-3 lg:flex",
+        "sticky top-0 z-20 -mx-1 hidden max-h-[calc(100vh-2rem)] flex-col gap-0.5 overflow-y-auto border-r border-border pr-3 lg:flex",
         className,
       )}
     >
@@ -44,7 +44,7 @@ export function DashboardSectionNav({ className, activeSectionId }: DashboardSec
             key={section.id}
             href={`#${section.id}`}
             aria-current={isActive ? "location" : undefined}
-            className={navLinkClassName(isActive, "rounded-sm px-2 py-1.5 text-[13px] transition-colors")}
+            className={navLinkClassName(isActive, "rounded-sm px-2 py-1.5 text-xs transition-colors")}
           >
             {section.label}
           </a>
@@ -58,7 +58,7 @@ export function DashboardSectionNavMobile({ activeSectionId }: { activeSectionId
   return (
     <nav
       aria-label="Dashboard sections"
-      className="sticky top-14 z-30 mb-3 flex gap-1 overflow-x-auto overscroll-x-contain border-b border-border/60 bg-background/95 px-4 py-1.5 backdrop-blur-sm [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:hidden"
+      className="sticky top-14 z-30 mb-3 flex gap-1 overflow-x-auto overscroll-x-contain border-b border-border bg-background/95 px-4 py-1.5 backdrop-blur-sm [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:hidden"
     >
       {DASHBOARD_SECTIONS.map((section) => {
         const isActive = activeSectionId === section.id;
@@ -69,7 +69,7 @@ export function DashboardSectionNavMobile({ activeSectionId }: { activeSectionId
             aria-current={isActive ? "location" : undefined}
             className={navLinkClassName(
               isActive,
-              "shrink-0 rounded-md border border-border/70 px-2.5 py-1 text-xs transition-colors",
+              "shrink-0 rounded-md border border-border px-2.5 py-1 text-xs transition-colors",
             )}
           >
             {section.label}

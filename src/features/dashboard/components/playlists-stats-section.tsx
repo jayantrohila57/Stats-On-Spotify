@@ -18,7 +18,7 @@ export function PlaylistsStatsSection({ playlists }: PlaylistsStatsSectionProps)
   if (!list.length) {
     return (
       <AnalyticsSection id="playlists" title="Playlists" description="Playlists in your Spotify library.">
-        <p className="text-center text-sm text-zinc-500">No playlists in your library yet.</p>
+        <p className="text-center text-sm text-muted-foreground">No playlists in your library yet.</p>
       </AnalyticsSection>
     );
   }
@@ -33,7 +33,7 @@ export function PlaylistsStatsSection({ playlists }: PlaylistsStatsSectionProps)
         {list.map((playlist) => {
           const image = playlist.images[0]?.url;
           return (
-            <li key={playlist.id} className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-3">
+            <li key={playlist.id} className="rounded-xl border border-border bg-muted/40 p-3">
               <div className="flex gap-3">
                 {image ? (
                   <Image
@@ -44,16 +44,16 @@ export function PlaylistsStatsSection({ playlists }: PlaylistsStatsSectionProps)
                     className="size-16 shrink-0 rounded-md object-cover"
                   />
                 ) : (
-                  <div className="size-16 shrink-0 rounded-md bg-zinc-800" />
+                  <div className="size-16 shrink-0 rounded-md bg-muted" />
                 )}
                 <div className="min-w-0 flex-1">
                   <p className="line-clamp-2 text-sm font-semibold leading-snug">{playlist.name}</p>
-                  <p className="mt-1 text-xs text-zinc-500">{playlist.tracks.total} tracks</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{playlist.tracks.total} tracks</p>
                   <Link
                     href={playlist.external_urls.spotify}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-2 inline-flex items-center gap-1 text-xs text-[#1db954] hover:underline"
+                    className="mt-2 inline-flex items-center gap-1 text-xs text-green-500 hover:underline"
                   >
                     Spotify
                     <ExternalLink className="size-3" />

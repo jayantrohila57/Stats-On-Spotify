@@ -32,16 +32,16 @@ export function AnalyticsSummaryHeader({
     >
       <p className="text-2xl font-bold tracking-tight">Hi, {name}</p>
       <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 px-4 py-3">
-          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Top tracks</p>
+        <div className="rounded-xl border border-border bg-muted/40 px-4 py-3">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Top tracks</p>
           <p className="mt-1 text-2xl font-semibold tabular-nums">{topTrackCount}</p>
         </div>
-        <div className="rounded-xl border border-zinc-800 bg-zinc-900/40 px-4 py-3">
-          <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">Top artists</p>
+        <div className="rounded-xl border border-border bg-muted/40 px-4 py-3">
+          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Top artists</p>
           <p className="mt-1 text-2xl font-semibold tabular-nums">{topArtistCount}</p>
         </div>
         {topTrack ? (
-          <div className="flex min-w-0 gap-3 rounded-xl border border-zinc-800 bg-zinc-900/40 p-3 sm:col-span-2 lg:col-span-1">
+          <div className="flex min-w-0 gap-3 rounded-xl border border-border bg-muted/40 p-3 sm:col-span-2 lg:col-span-1">
             {topTrackImage ? (
               <Image
                 src={topTrackImage}
@@ -51,16 +51,16 @@ export function AnalyticsSummaryHeader({
                 className="size-14 shrink-0 rounded-md object-cover"
               />
             ) : (
-              <div className="size-14 shrink-0 rounded-md bg-zinc-800" />
+              <div className="size-14 shrink-0 rounded-md bg-muted" />
             )}
             <div className="min-w-0">
-              <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">#1 track</p>
+              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">#1 track</p>
               <p className="mt-0.5 truncate font-semibold">{topTrack.name}</p>
-              <p className="truncate text-sm text-zinc-500">{topTrack.artists.map((a) => a.name).join(", ")}</p>
+              <p className="truncate text-sm text-muted-foreground">{topTrack.artists.map((a) => a.name).join(", ")}</p>
             </div>
           </div>
         ) : (
-          <div className="rounded-xl border border-dashed border-zinc-800 px-4 py-3 text-sm text-zinc-500 sm:col-span-2 lg:col-span-1">
+          <div className="rounded-xl border border-dashed border-border px-4 py-3 text-sm text-muted-foreground sm:col-span-2 lg:col-span-1">
             No top track data for this period yet.
           </div>
         )}

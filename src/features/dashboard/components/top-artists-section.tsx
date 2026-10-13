@@ -32,7 +32,7 @@ export function TopArtistsSection({
       isRefreshing={isRefreshing}
     >
       {list.length === 0 ? (
-        <p className="py-4 text-center text-sm text-zinc-500">No top artists for this period.</p>
+        <p className="py-4 text-center text-sm text-muted-foreground">No top artists for this period.</p>
       ) : (
         <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {list.map((artist, index) => {
@@ -43,8 +43,8 @@ export function TopArtistsSection({
                   type="button"
                   onClick={() => onSelectArtist(artist)}
                   className={cn(
-                    "group w-full overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/40 text-left transition hover:border-zinc-700 hover:bg-zinc-900",
-                    isSelected && "ring-2 ring-[#1db954]/50",
+                    "group w-full overflow-hidden rounded-xl border border-border bg-muted/40 text-left transition hover:border-border hover:bg-muted",
+                    isSelected && "ring-2 ring-green-500/50",
                   )}
                 >
                   {artist.images?.[0]?.url ? (
@@ -56,13 +56,13 @@ export function TopArtistsSection({
                       className="aspect-square w-full object-cover transition group-hover:scale-[1.02]"
                     />
                   ) : (
-                    <div className="flex aspect-square items-center justify-center bg-zinc-800 text-sm text-zinc-400">
+                    <div className="flex aspect-square items-center justify-center bg-muted text-sm text-muted-foreground">
                       {artist.name.slice(0, 1)}
                     </div>
                   )}
                   <div className="px-2.5 py-2.5">
                     <p className="truncate text-sm font-medium">{artist.name}</p>
-                    <p className="text-xs text-zinc-500">#{index + 1}</p>
+                    <p className="text-xs text-muted-foreground">#{index + 1}</p>
                   </div>
                 </button>
               </li>

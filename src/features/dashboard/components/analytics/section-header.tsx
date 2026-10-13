@@ -24,7 +24,7 @@ export function SectionHeader({ icon: Icon, title, description, meta }: SectionH
         </div>
         {meta}
       </div>
-      <Separator className="bg-border/60" />
+      <Separator />
     </div>
   );
 }

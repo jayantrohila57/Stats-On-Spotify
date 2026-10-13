@@ -68,7 +68,7 @@ export function TopArtistsSection({
                   <button
                     type="button"
                     onClick={() => setSelected({ artist, rank, share })}
-                    className="flex w-full flex-col items-start gap-2 rounded-md border border-border/70 bg-background/50 p-2 text-left transition-colors hover:bg-muted/40"
+                    className="flex w-full flex-col items-start gap-2 rounded-md border border-border bg-background/50 p-2 text-left transition-colors hover:bg-muted/40"
                   >
                     <div className="flex w-full items-center justify-between gap-2">
                       <span className="text-xs font-medium text-muted-foreground tabular-nums">#{rank}</span>
@@ -76,7 +76,7 @@ export function TopArtistsSection({
                     </div>
                     <SpotifyArtistAvatar src={image} name={artist.name} size={SPOTIFY_MEDIA_SIZE.card} />
                     <span className="line-clamp-2 text-sm font-medium leading-snug">{artist.name}</span>
-                    <span className="font-mono-stats text-[12px] text-muted-foreground">{(share * 100).toFixed(1)}% derived share</span>
+                    <span className="font-mono-stats text-xs text-muted-foreground">{(share * 100).toFixed(1)}% derived share</span>
                   </button>
                 </SpotifyEntityPreview>
               );
@@ -169,7 +169,7 @@ export function TopArtistsSection({
             })}
           </TableBody>
         </Table>
-        <p className="mt-3 text-[11px] text-muted-foreground">
+        <p className="mt-3 text-xs text-muted-foreground">
           Derived share uses inverse rank weighting across your top artist list — not personal play counts from Spotify.
         </p>
       </SectionShell>

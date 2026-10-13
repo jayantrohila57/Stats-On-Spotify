@@ -33,7 +33,7 @@ export function GenresSection({
       isRefreshing={isRefreshing}
     >
       {genres.length === 0 ? (
-        <p className="text-sm text-zinc-500">No genre tags available for your top artists.</p>
+        <p className="text-sm text-muted-foreground">No genre tags available for your top artists.</p>
       ) : (
         <div className="flex flex-wrap gap-2">
           {genres.map((genre) => (
@@ -43,12 +43,12 @@ export function GenresSection({
               variant="secondary"
               onClick={() => onSelectGenre(genre.key)}
               className={cn(
-                "h-auto rounded-full bg-zinc-900 px-3 py-1.5 text-xs text-zinc-300 hover:bg-zinc-800",
-                selectedGenreKey === genre.key && "ring-1 ring-[#1db954]",
+                "h-auto rounded-full bg-muted px-3 py-1.5 text-xs text-foreground hover:bg-muted",
+                selectedGenreKey === genre.key && "ring-1 ring-green-500",
               )}
             >
               {genre.label}
-              <span className="ml-1.5 text-zinc-500">({genre.artistCount})</span>
+              <span className="ml-1.5 text-muted-foreground">({genre.artistCount})</span>
             </Button>
           ))}
         </div>

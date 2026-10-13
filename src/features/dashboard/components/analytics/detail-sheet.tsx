@@ -57,7 +57,7 @@ export function DetailSheet({ open, onClose, track, artist, rank, derivedShare }
         aria-modal="true"
         aria-label={title}
       >
-        <div className="flex items-center justify-between border-b border-border/80 px-4 py-3">
+        <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <h3 className="text-sm font-semibold">Details</h3>
           <Button type="button" variant="ghost" size="icon" className="size-8" onClick={onClose}>
             <X className="size-4" />
@@ -66,9 +66,9 @@ export function DetailSheet({ open, onClose, track, artist, rank, derivedShare }
         <div className="flex-1 overflow-y-auto p-4">
           <div className="flex gap-3">
             {track ? (
-              <SpotifyThumbnail src={image} alt={title} size={SPOTIFY_MEDIA_SIZE.detail} className="border-border/80" />
+              <SpotifyThumbnail src={image} alt={title} size={SPOTIFY_MEDIA_SIZE.detail} className="border-border" />
             ) : (
-              <SpotifyArtistAvatar src={image} name={title} size={SPOTIFY_MEDIA_SIZE.detail} className="border-border/80" />
+              <SpotifyArtistAvatar src={image} name={title} size={SPOTIFY_MEDIA_SIZE.detail} className="border-border" />
             )}
             <div className="min-w-0 flex-1">
               <p className="text-base font-semibold leading-tight">{title}</p>
@@ -82,19 +82,19 @@ export function DetailSheet({ open, onClose, track, artist, rank, derivedShare }
           <dl className="mt-6 space-y-3 text-sm">
             {track ? (
               <>
-                <div className="flex justify-between gap-4 border-b border-border/50 pb-2">
+                <div className="flex justify-between gap-4 border-b border-border pb-2">
                   <dt className="text-muted-foreground">Album</dt>
                   <dd className="text-right font-medium">{track.album.name}</dd>
                 </div>
-                <div className="flex justify-between gap-4 border-b border-border/50 pb-2">
+                <div className="flex justify-between gap-4 border-b border-border pb-2">
                   <dt className="text-muted-foreground">Track #</dt>
                   <dd className="tabular-nums">{track.track_number}</dd>
                 </div>
-                <div className="flex justify-between gap-4 border-b border-border/50 pb-2">
+                <div className="flex justify-between gap-4 border-b border-border pb-2">
                   <dt className="text-muted-foreground">Spotify popularity</dt>
                   <dd className="tabular-nums">{track.popularity}</dd>
                 </div>
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   Popularity is Spotify&apos;s global score (0–100), not your personal play count.
                 </p>
               </>
@@ -102,24 +102,24 @@ export function DetailSheet({ open, onClose, track, artist, rank, derivedShare }
             {artist ? (
               <>
                 {artist.popularity !== undefined ? (
-                  <div className="flex justify-between gap-4 border-b border-border/50 pb-2">
+                  <div className="flex justify-between gap-4 border-b border-border pb-2">
                     <dt className="text-muted-foreground">Spotify popularity</dt>
                     <dd className="tabular-nums">{artist.popularity}</dd>
                   </div>
                 ) : null}
                 {artist.followers ? (
-                  <div className="flex justify-between gap-4 border-b border-border/50 pb-2">
+                  <div className="flex justify-between gap-4 border-b border-border pb-2">
                     <dt className="text-muted-foreground">Followers</dt>
                     <dd className="tabular-nums">{artist.followers.total.toLocaleString()}</dd>
                   </div>
                 ) : null}
                 {derivedShare !== undefined ? (
-                  <div className="flex justify-between gap-4 border-b border-border/50 pb-2">
+                  <div className="flex justify-between gap-4 border-b border-border pb-2">
                     <dt className="text-muted-foreground">Derived rank share</dt>
                     <dd className="tabular-nums">{(derivedShare * 100).toFixed(1)}%</dd>
                   </div>
                 ) : null}
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   Derived share weights list position only — Spotify does not return play counts here.
                 </p>
                 {artist.genres?.length ? (
@@ -127,7 +127,7 @@ export function DetailSheet({ open, onClose, track, artist, rank, derivedShare }
                     <dt className="text-muted-foreground">Genres</dt>
                     <dd className="mt-2 flex flex-wrap gap-1">
                       {artist.genres.map((g) => (
-                        <span key={g} className="rounded border border-border/80 px-2 py-0.5 text-xs">
+                        <span key={g} className="rounded border border-border px-2 py-0.5 text-xs">
                           {formatGenreLabel(g)}
                         </span>
                       ))}

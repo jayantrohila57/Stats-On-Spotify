@@ -12,6 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { PageContainer } from "@/components/layout/page-container";
 import { cn } from "@/lib/utils";
 
 type AnalyticsHeaderProps = {
@@ -25,8 +26,8 @@ export function AnalyticsHeader({ profile, profileLoading }: AnalyticsHeaderProp
   const connected = status === "authenticated" && !profileLoading;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/80 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-      <div className="mx-auto flex h-14 max-w-[1400px] items-center gap-4 px-4 md:px-6">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <PageContainer className="flex h-14 items-center gap-4">
         <div className="min-w-0 flex-1">
           <h1 className="truncate text-sm font-semibold tracking-tight text-foreground">Stats On Spotify</h1>
           <p className="truncate text-xs text-muted-foreground">Personal listening analytics from your Spotify account</p>
@@ -46,7 +47,7 @@ export function AnalyticsHeader({ profile, profileLoading }: AnalyticsHeaderProp
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="flex items-center gap-2 rounded-md border border-border/80 bg-card px-2 py-1.5 text-left transition-colors hover:bg-muted/50"
+                className="flex items-center gap-2 rounded-md border border-border bg-card px-2 py-1.5 text-left transition-colors hover:bg-muted/50"
               >
                 <Avatar className="size-7">
                   <AvatarImage src={session?.user?.image ?? profile?.images[0]?.url ?? undefined} alt={displayName} />
@@ -79,7 +80,7 @@ export function AnalyticsHeader({ profile, profileLoading }: AnalyticsHeaderProp
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </div>
+      </PageContainer>
     </header>
   );
 }

@@ -28,6 +28,8 @@ import {
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import { SPOTIFY_MEDIA_SIZE, SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
+import { PageContainer } from "@/components/layout/page-container";
+import { DashboardSection } from "@/components/layout/dashboard-section";
 import { computeLibraryOverlapMetrics } from "@/lib/analytics/library-overlap";
 import { countDistinctGenreTags, deriveGenreStatsWithOther, formatGenreLabel } from "@/lib/analytics/derive";
 import { SectionErrorBoundary } from "@/components/stats/section-error-boundary";
@@ -89,17 +91,17 @@ export function AnalyticsDashboard() {
       <AnalyticsHeader profile={profile.data ?? null} profileLoading={profile.isLoading} />
       <PeriodFilterBar />
       <DashboardSectionNavMobile activeSectionId={activeSectionId} />
-      <div className="mx-auto flex max-w-[1400px] gap-8 px-4 py-6 md:px-6">
+      <PageContainer className="flex gap-8 py-6">
         <DashboardSectionNav className="w-36 shrink-0 pt-1" activeSectionId={activeSectionId} />
         <main className="min-w-0 flex-1 space-y-8">
-          <section id="section-overview" aria-label="Listening overview" className="scroll-mt-20">
+          <DashboardSection id="section-overview" aria-label="Listening overview">
             <SectionHeader
               icon={BarChart3}
               title="Listening overview"
               description={overviewDescription}
             />
             {kpiLoading ? (
-              <div className="mt-3 h-28 animate-pulse rounded-md border border-border/80 bg-muted/30" />
+              <div className="mt-3 h-28 animate-pulse rounded-md border border-border bg-muted/30" />
             ) : (
               <div className="mt-3 space-y-0">
                 <KpiGrid
@@ -113,15 +115,15 @@ export function AnalyticsDashboard() {
                 <OverviewSnapshot topArtists={topArtists} recentPlays={recentList} />
               </div>
             )}
-          </section>
+          </DashboardSection>
 
-          <section id="section-patterns" className="scroll-mt-20 space-y-8">
+          <DashboardSection id="section-patterns" stack>
             <SectionErrorBoundary sectionTitle="Listening patterns">
               <ListeningPatternsSection items={recentList} />
             </SectionErrorBoundary>
-          </section>
+          </DashboardSection>
 
-          <section id="section-tracks" className="scroll-mt-20 space-y-8">
+          <DashboardSection id="section-tracks" stack>
             <SectionErrorBoundary sectionTitle="Top tracks">
               <TopTracksTable
                 tracks={topTracks}
@@ -137,9 +139,9 @@ export function AnalyticsDashboard() {
                 isLoading={currentlyPlaying.isLoading && currentlyPlaying.data === undefined}
               />
             </SectionErrorBoundary>
-          </section>
+          </DashboardSection>
 
-          <section id="section-genres" className="scroll-mt-20">
+          <DashboardSection id="section-genres">
             <SectionErrorBoundary sectionTitle="Genres and albums">
               <GenreDistribution
                 artists={topArtists}
@@ -151,9 +153,9 @@ export function AnalyticsDashboard() {
                 <AlbumsFromTracksTable tracks={topTracks} isLoading={topsLoading} error={topTracksError} />
               </div>
             </SectionErrorBoundary>
-          </section>
+          </DashboardSection>
 
-          <section id="section-artists" className="scroll-mt-20">
+          <DashboardSection id="section-artists">
             <SectionErrorBoundary sectionTitle="Top artists">
               <TopArtistsSection
                 artists={topArtists}
@@ -164,9 +166,9 @@ export function AnalyticsDashboard() {
                 onRetry={() => void refetchTops()}
               />
             </SectionErrorBoundary>
-          </section>
+          </DashboardSection>
 
-          <section id="section-taste" className="scroll-mt-20 space-y-8">
+          <DashboardSection id="section-taste" stack>
             <SectionErrorBoundary sectionTitle="Taste evolution">
               <TasteEvolutionSection
                 artists={topArtists}
@@ -181,15 +183,15 @@ export function AnalyticsDashboard() {
                 followedArtists={followedArtists.data ?? []}
               />
             </SectionErrorBoundary>
-          </section>
+          </DashboardSection>
 
-          <section id="section-library" className="scroll-mt-20">
+          <DashboardSection id="section-library">
             <SectionErrorBoundary sectionTitle="Library overlap">
               <LibraryOverlapSection libraryOverlap={libraryOverlap} />
             </SectionErrorBoundary>
-          </section>
+          </DashboardSection>
 
-          <section id="section-playlists" className="scroll-mt-20">
+          <DashboardSection id="section-playlists">
             <SectionErrorBoundary sectionTitle="Playlists">
               <PlaylistsTable
                 playlists={playlists.data ?? []}
@@ -198,9 +200,9 @@ export function AnalyticsDashboard() {
                 onRetry={() => playlists.refetch()}
               />
             </SectionErrorBoundary>
-          </section>
+          </DashboardSection>
 
-          <section id="section-recent" className="scroll-mt-20 space-y-8">
+          <DashboardSection id="section-recent" stack>
             <SectionErrorBoundary sectionTitle="Recently played">
               <RecentlyPlayedSection
                 items={recentList}
@@ -209,7 +211,7 @@ export function AnalyticsDashboard() {
                 onRetry={() => recentlyPlayed.refetch()}
               />
             </SectionErrorBoundary>
-          </section>
+          </DashboardSection>
 
           <SectionShell
             title="New releases (browse)"
@@ -226,7 +228,7 @@ export function AnalyticsDashboard() {
               {(newReleases.data ?? []).slice(0, 4).map((album) => {
                 const image = pickSpotifyImageUrl(album.images);
                 return (
-                  <li key={album.id} className="flex gap-3 rounded-md border border-border/70 p-3">
+                  <li key={album.id} className="flex gap-3 rounded-md border border-border p-3">
                     <SpotifyThumbnail src={image} alt={album.name} size={SPOTIFY_MEDIA_SIZE.release} />
                     <div className="min-w-0">
                       <Link
@@ -237,7 +239,7 @@ export function AnalyticsDashboard() {
                       >
                         {album.name}
                       </Link>
-                      <p className="truncate text-[13px] text-muted-foreground">
+                      <p className="truncate text-xs text-muted-foreground">
                         {album.artists.map((a) => a.name).join(", ")}
                       </p>
                     </div>
@@ -249,7 +251,7 @@ export function AnalyticsDashboard() {
 
           <UnavailableMetricsPanel />
         </main>
-      </div>
+      </PageContainer>
     </div>
   );
 }

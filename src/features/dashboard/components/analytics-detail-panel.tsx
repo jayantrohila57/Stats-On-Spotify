@@ -28,11 +28,11 @@ export function AnalyticsDetailPanel({
 
   return (
     <aside
-      className="fixed inset-y-0 right-0 z-40 flex w-full max-w-md flex-col border-l border-zinc-800 bg-zinc-950 sm:top-0"
+      className="fixed inset-y-0 right-0 z-40 flex w-full max-w-md flex-col border-l border-border bg-card sm:top-0"
       aria-label="Detail panel"
     >
-      <div className="flex items-center justify-between border-b border-zinc-800 px-4 py-3">
-        <h2 className="text-sm font-semibold text-zinc-300">
+      <div className="flex items-center justify-between border-b border-border px-4 py-3">
+        <h2 className="text-sm font-semibold text-foreground">
           {selection.kind === "track" && "Track"}
           {selection.kind === "artist" && "Artist"}
           {selection.kind === "genre" && "Genre"}
@@ -76,17 +76,17 @@ function TrackDetail({
             className="size-[120px] shrink-0 rounded-lg object-cover"
           />
         ) : (
-          <div className="size-[120px] shrink-0 rounded-lg bg-zinc-800" />
+          <div className="size-[120px] shrink-0 rounded-lg bg-muted" />
         )}
         <div className="min-w-0 flex-1">
           <p className="text-lg font-bold leading-snug text-white">{track.name}</p>
-          <p className="mt-1 text-sm text-zinc-400">
+          <p className="mt-1 text-sm text-muted-foreground">
             {track.artists.map((artist, index) => (
               <span key={artist.id}>
                 {index > 0 ? ", " : null}
                 <button
                   type="button"
-                  className="text-left hover:text-[#1db954]"
+                  className="text-left hover:text-green-500"
                   onClick={() => onSelectArtist(artist.id)}
                 >
                   {artist.name}
@@ -94,7 +94,7 @@ function TrackDetail({
               </span>
             ))}
           </p>
-          <p className="mt-2 text-sm text-zinc-500">{track.album.name}</p>
+          <p className="mt-2 text-sm text-muted-foreground">{track.album.name}</p>
         </div>
       </div>
 
@@ -102,11 +102,11 @@ function TrackDetail({
 
       <dl className="grid grid-cols-2 gap-3 text-sm">
         <div>
-          <dt className="text-zinc-500">Popularity</dt>
+          <dt className="text-muted-foreground">Popularity</dt>
           <dd className="font-medium">{track.popularity}/100</dd>
         </div>
         <div>
-          <dt className="text-zinc-500">Track #</dt>
+          <dt className="text-muted-foreground">Track #</dt>
           <dd className="font-medium">{track.track_number}</dd>
         </div>
       </dl>
@@ -115,7 +115,7 @@ function TrackDetail({
         href={track.external_urls.spotify}
         target="_blank"
         rel="noreferrer"
-        className="inline-flex w-full items-center justify-center rounded-full bg-[#1db954] px-4 py-2 text-sm font-medium text-black hover:bg-[#1ed760]"
+        className="inline-flex w-full items-center justify-center rounded-full bg-green-500 px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-green-500/90"
       >
         Open in Spotify
         <ExternalLink className="ml-2 size-4" />
@@ -135,10 +135,10 @@ function ArtistDetail({ artist }: { artist: SpotifyArtist; onSelectTrack: (track
           alt={artist.name}
           width={280}
           height={280}
-          className="mx-auto aspect-square w-full max-w-[240px] rounded-2xl object-cover"
+          className="mx-auto aspect-square w-full max-w-[240px] rounded-xl object-cover"
         />
       ) : (
-        <div className="mx-auto flex aspect-square w-full max-w-[240px] items-center justify-center rounded-2xl bg-zinc-800 text-zinc-400">
+        <div className="mx-auto flex aspect-square w-full max-w-[240px] items-center justify-center rounded-xl bg-muted text-muted-foreground">
           {artist.name}
         </div>
       )}
@@ -146,7 +146,7 @@ function ArtistDetail({ artist }: { artist: SpotifyArtist; onSelectTrack: (track
       <div className="text-center">
         <p className="text-xl font-bold">{artist.name}</p>
         {artist.followers ? (
-          <p className="mt-1 text-sm text-zinc-500">{artist.followers.total.toLocaleString()} followers on Spotify</p>
+          <p className="mt-1 text-sm text-muted-foreground">{artist.followers.total.toLocaleString()} followers on Spotify</p>
         ) : null}
       </div>
 
@@ -154,12 +154,12 @@ function ArtistDetail({ artist }: { artist: SpotifyArtist; onSelectTrack: (track
         <>
           <Separator className="bg-white/10" />
           <div>
-            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-zinc-500">Genres</p>
+            <p className="mb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground">Genres</p>
             <ul className="flex flex-wrap gap-2">
               {artist.genres.slice(0, 8).map((genre) => (
                 <li
                   key={genre}
-                  className="rounded-full bg-zinc-900 px-3 py-1 text-xs capitalize text-zinc-300"
+                  className="rounded-full bg-muted px-3 py-1 text-xs capitalize text-foreground"
                 >
                   {genre}
                 </li>
@@ -171,7 +171,7 @@ function ArtistDetail({ artist }: { artist: SpotifyArtist; onSelectTrack: (track
 
       {typeof artist.popularity === "number" ? (
         <dl className="text-sm">
-          <dt className="text-zinc-500">Popularity</dt>
+          <dt className="text-muted-foreground">Popularity</dt>
           <dd className="font-medium">{artist.popularity}/100</dd>
         </dl>
       ) : null}
@@ -180,7 +180,7 @@ function ArtistDetail({ artist }: { artist: SpotifyArtist; onSelectTrack: (track
         href={artist.external_urls.spotify}
         target="_blank"
         rel="noreferrer"
-        className="inline-flex w-full items-center justify-center rounded-full bg-[#1db954] px-4 py-2 text-sm font-medium text-black hover:bg-[#1ed760]"
+        className="inline-flex w-full items-center justify-center rounded-full bg-green-500 px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-green-500/90"
       >
         Open in Spotify
         <ExternalLink className="ml-2 size-4" />
@@ -202,7 +202,7 @@ function GenreDetail({
     <div className="space-y-4">
       <div>
         <p className="text-2xl font-bold capitalize">{genre}</p>
-        <p className="mt-1 text-sm text-zinc-500">
+        <p className="mt-1 text-sm text-muted-foreground">
           From your top artists in this period — {artists.length} match{artists.length === 1 ? "" : "es"}
         </p>
       </div>
@@ -215,7 +215,7 @@ function GenreDetail({
             <button
               type="button"
               onClick={() => onSelectArtist(artist.id)}
-              className="flex w-full items-center gap-3 rounded-xl bg-zinc-900/60 px-3 py-2 text-left hover:bg-zinc-900"
+              className="flex w-full items-center gap-3 rounded-xl bg-muted/60 px-3 py-2 text-left hover:bg-muted"
             >
               {artist.images?.[0]?.url ? (
                 <Image
@@ -226,14 +226,14 @@ function GenreDetail({
                   className="size-10 rounded-full object-cover"
                 />
               ) : (
-                <div className="size-10 rounded-full bg-zinc-800" />
+                <div className="size-10 rounded-full bg-muted" />
               )}
               <span className="truncate font-medium">{artist.name}</span>
             </button>
           </li>
         ))}
         {artists.length === 0 ? (
-          <p className="text-sm text-zinc-500">No top artists tagged with this genre for the selected range.</p>
+          <p className="text-sm text-muted-foreground">No top artists tagged with this genre for the selected range.</p>
         ) : null}
       </ul>
     </div>

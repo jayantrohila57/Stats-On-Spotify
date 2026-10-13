@@ -1,7 +1,8 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { analyticsCardClass } from "@/features/dashboard/lib/surface";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { SECTION_SCROLL_MARGIN_CLASS } from "@/lib/ui/layout-classes";
 import { timeRangeLabel, type SpotifyTimeRange } from "@/lib/spotify/time-range";
 import { cn } from "@/lib/utils";
 
@@ -27,28 +28,24 @@ export function AnalyticsSection({
   const titleId = `${id}-title`;
 
   return (
-    <section
-      id={id}
-      aria-labelledby={titleId}
-      className={cn(analyticsCardClass, "scroll-mt-24 p-5 sm:p-6", className)}
-    >
-      <header className="mb-5 border-b border-zinc-800/80 pb-4">
+    <Card id={id} aria-labelledby={titleId} className={cn(SECTION_SCROLL_MARGIN_CLASS, "shadow-sm", className)}>
+      <CardHeader className="border-b pb-4">
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h2 id={titleId} className="text-xl font-semibold tracking-tight text-white">
+          <div className="min-w-0 space-y-1.5">
+            <CardTitle id={titleId} className="text-xl font-semibold tracking-tight">
               {title}
-            </h2>
-            {description ? <p className="mt-1.5 text-sm leading-relaxed text-zinc-500">{description}</p> : null}
+            </CardTitle>
+            {description ? <CardDescription className="leading-relaxed">{description}</CardDescription> : null}
           </div>
           {timeRange ? (
-            <p className="shrink-0 text-xs font-medium uppercase tracking-wide text-zinc-500">
+            <p className="shrink-0 text-xs font-medium uppercase tracking-wide text-muted-foreground">
               {timeRangeLabel(timeRange)}
             </p>
           ) : null}
         </div>
-        {isRefreshing ? <p className="mt-2 text-xs text-[#1db954]">Updating…</p> : null}
-      </header>
-      {children}
-    </section>
+        {isRefreshing ? <p className="text-xs text-green-500">Updating…</p> : null}
+      </CardHeader>
+      <CardContent className="pt-6">{children}</CardContent>
+    </Card>
   );
 }

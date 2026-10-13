@@ -1,116 +1,159 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { PageContainer } from "@/components/layout/page-container";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { SEGMENTED_CONTROL_CLASS } from "@/lib/ui/layout-classes";
 import { Skeleton } from "@/components/ui/skeleton";
 
-function SectionCard({ children, className }: { children: ReactNode; className?: string }) {
+function SectionCardSkeleton({ children }: { children?: ReactNode }) {
   return (
-    <div className={`scroll-mt-24 rounded-2xl border border-zinc-800 bg-zinc-950 p-5 sm:p-6 ${className ?? ""}`}>
-      {children}
+    <Card className="shadow-sm">
+      <CardHeader className="flex flex-col gap-3 border-b pb-4 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
+        <div className="space-y-2">
+          <Skeleton className="h-5 w-40" />
+          <Skeleton className="h-4 w-full max-w-md" />
+        </div>
+        <Skeleton className="h-8 w-24 rounded-md" />
+      </CardHeader>
+      <CardContent className="pt-6">{children}</CardContent>
+    </Card>
+  );
+}
+
+function KpiGridSkeleton() {
+  return (
+    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-4 lg:grid-cols-6">
+      {Array.from({ length: 12 }).map((_, i) => (
+        <div key={i} className="space-y-2 border border-border bg-muted/20 px-3 py-2.5">
+          <Skeleton className="h-3 w-20" />
+          <Skeleton className="h-8 w-16" />
+          <Skeleton className="h-3 w-full max-w-[140px]" />
+        </div>
+      ))}
     </div>
   );
 }
 
-function SectionHeaderSkeleton() {
+function TableRowsSkeleton({ rows = 8 }: { rows?: number }) {
   return (
-    <div className="mb-5 border-b border-zinc-800/80 pb-4">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="space-y-2">
-          <Skeleton className="h-6 w-32 bg-zinc-800" />
-          <Skeleton className="h-4 w-56 max-w-full bg-zinc-800" />
-        </div>
-        <Skeleton className="h-3 w-20 bg-zinc-800" />
-      </div>
-    </div>
+    <ul className="divide-y divide-border">
+      {Array.from({ length: rows }).map((_, i) => (
+        <li key={i} className="flex items-center gap-3 py-3">
+          <Skeleton className="size-6 rounded-sm" />
+          <Skeleton className="size-12 shrink-0 rounded-md" />
+          <div className="min-w-0 flex-1 space-y-2">
+            <Skeleton className="h-4 w-3/4 max-w-[220px]" />
+            <Skeleton className="h-3 w-1/2 max-w-[160px]" />
+          </div>
+          <Skeleton className="h-3 w-10" />
+        </li>
+      ))}
+    </ul>
   );
 }
 
 export function AnalyticsDashboardSkeleton() {
   return (
     <div
-      className="mx-auto min-h-screen max-w-3xl px-4 py-6 text-white sm:max-w-4xl lg:max-w-5xl"
+      className="min-h-screen overflow-x-clip bg-background text-foreground"
       aria-busy="true"
       aria-label="Loading listening analytics"
     >
-      <div className="sticky top-0 z-20 -mx-4 mb-8 border-b border-zinc-800/80 bg-[#0a0a0a]/95 px-4 py-4 backdrop-blur-sm">
-        <div className="flex flex-col gap-3 rounded-2xl border border-zinc-800 bg-zinc-950 p-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-32 bg-zinc-800" />
-            <Skeleton className="h-3 w-24 bg-zinc-800" />
+      <header className="sticky top-0 z-40 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <PageContainer className="flex h-14 items-center gap-4">
+          <div className="min-w-0 flex-1 space-y-1.5">
+            <Skeleton className="h-4 w-36" />
+            <Skeleton className="h-3 w-56 max-w-full" />
           </div>
-          <Skeleton className="h-10 w-full max-w-md rounded-xl bg-zinc-800 sm:w-80" />
-          <Skeleton className="h-10 w-36 rounded-xl bg-zinc-800" />
+          <Skeleton className="h-9 w-32 rounded-md" />
+        </PageContainer>
+      </header>
+
+      <div className="border-b border-border bg-background">
+        <PageContainer className="flex flex-wrap items-center gap-3 py-2.5">
+          <Skeleton className="h-3 w-12" />
+          <div className={SEGMENTED_CONTROL_CLASS}>
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Skeleton key={i} className="mx-0.5 h-7 w-16 rounded-sm" />
+            ))}
+          </div>
+          <Skeleton className="hidden h-3 w-64 sm:block" />
+        </PageContainer>
+      </div>
+
+      <nav
+        className="sticky top-14 z-30 mb-3 flex gap-1 overflow-x-auto border-b border-border bg-background/95 px-4 py-1.5 lg:hidden"
+        aria-hidden
+      >
+        {Array.from({ length: 7 }).map((_, i) => (
+          <Skeleton key={i} className="h-7 w-16 shrink-0 rounded-md" />
+        ))}
+      </nav>
+
+      <PageContainer className="flex gap-8 py-6">
+        <div className="hidden w-36 shrink-0 flex-col gap-1 border-r border-border pr-3 lg:flex" aria-hidden>
+          {Array.from({ length: 9 }).map((_, i) => (
+            <Skeleton key={i} className="h-7 w-full rounded-sm" />
+          ))}
         </div>
-      </div>
 
-      <div className="flex flex-col gap-8 pb-12">
-        <SectionCard>
-          <SectionHeaderSkeleton />
-          <Skeleton className="h-8 w-40 bg-zinc-800" />
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <Skeleton className="h-20 rounded-xl bg-zinc-800" />
-            <Skeleton className="h-20 rounded-xl bg-zinc-800" />
-            <Skeleton className="h-20 rounded-xl bg-zinc-800 sm:col-span-2 lg:col-span-1" />
-          </div>
-        </SectionCard>
-
-        <SectionCard>
-          <SectionHeaderSkeleton />
-          <div className="flex flex-wrap gap-2">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <Skeleton key={i} className="h-8 w-24 rounded-full bg-zinc-800" />
-            ))}
-          </div>
-        </SectionCard>
-
-        <SectionCard>
-          <SectionHeaderSkeleton />
-          <ul className="divide-y divide-zinc-800/80">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <li key={i} className="flex items-center gap-3 px-2 py-3">
-                <Skeleton className="size-6 rounded bg-zinc-800" />
-                <Skeleton className="size-12 shrink-0 rounded-md bg-zinc-800" />
-                <div className="min-w-0 flex-1 space-y-2">
-                  <Skeleton className="h-4 w-3/4 max-w-[220px] bg-zinc-800" />
-                  <Skeleton className="h-3 w-1/2 max-w-[160px] bg-zinc-800" />
-                </div>
-                <Skeleton className="h-3 w-8 bg-zinc-800" />
-              </li>
-            ))}
-          </ul>
-        </SectionCard>
-
-        <SectionCard>
-          <SectionHeaderSkeleton />
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/40">
-                <Skeleton className="aspect-square w-full rounded-none bg-zinc-800" />
-                <div className="space-y-2 p-2.5">
-                  <Skeleton className="h-4 w-full bg-zinc-800" />
-                  <Skeleton className="h-3 w-8 bg-zinc-800" />
+        <main className="min-w-0 flex-1 space-y-8">
+          <section className="scroll-mt-20 space-y-3">
+            <div className="space-y-3">
+              <div className="flex gap-2">
+                <Skeleton className="size-5 rounded-sm" />
+                <div className="space-y-2">
+                  <Skeleton className="h-5 w-44" />
+                  <Skeleton className="h-4 w-full max-w-lg" />
                 </div>
               </div>
-            ))}
-          </div>
-        </SectionCard>
+              <Skeleton className="h-px w-full" />
+            </div>
+            <KpiGridSkeleton />
+            <Skeleton className="h-24 w-full rounded-md" />
+          </section>
 
-        <SectionCard>
-          <SectionHeaderSkeleton />
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <div key={i} className="flex gap-3 rounded-xl border border-zinc-800 bg-zinc-900/40 p-3">
-                <Skeleton className="size-16 shrink-0 rounded-md bg-zinc-800" />
-                <div className="min-w-0 flex-1 space-y-2">
-                  <Skeleton className="h-4 w-full bg-zinc-800" />
-                  <Skeleton className="h-3 w-16 bg-zinc-800" />
-                  <Skeleton className="h-3 w-14 bg-zinc-800" />
+          <SectionCardSkeleton>
+            <div className="grid gap-6 md:grid-cols-2">
+              <Skeleton className="h-40 w-full rounded-md" />
+              <Skeleton className="h-40 w-full rounded-md" />
+            </div>
+          </SectionCardSkeleton>
+
+          <SectionCardSkeleton>
+            <TableRowsSkeleton />
+          </SectionCardSkeleton>
+
+          <SectionCardSkeleton>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="overflow-hidden rounded-md border border-border">
+                  <Skeleton className="aspect-square w-full rounded-none" />
+                  <div className="space-y-2 p-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-3 w-10" />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </SectionCard>
-      </div>
+              ))}
+            </div>
+          </SectionCardSkeleton>
+
+          <SectionCardSkeleton>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="flex gap-3 rounded-md border border-border p-3">
+                  <Skeleton className="size-16 shrink-0 rounded-md" />
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-3 w-20" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </SectionCardSkeleton>
+        </main>
+      </PageContainer>
     </div>
   );
 }

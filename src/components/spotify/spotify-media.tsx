@@ -58,7 +58,7 @@ export function SpotifyThumbnail({ src, alt, size = SPOTIFY_MEDIA_SIZE.table, cl
   const showImage = Boolean(src?.trim()) && !failed;
 
   return (
-    <FixedMediaFrame size={size} rounded="sm" className={cn("border border-border/60", className)}>
+    <FixedMediaFrame size={size} rounded="sm" className={cn("border border-border", className)}>
       {showImage ? (
         <Image
           src={src!}
@@ -97,7 +97,7 @@ export function SpotifyArtistAvatar({
 
   return (
     <Avatar
-      className={cn("shrink-0 overflow-hidden border border-border/60", className)}
+      className={cn("shrink-0 overflow-hidden border border-border", className)}
       style={{
         width: size,
         height: size,

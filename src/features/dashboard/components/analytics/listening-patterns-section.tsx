@@ -4,6 +4,7 @@ import { Clock3 } from "lucide-react";
 import { SectionHeader } from "@/features/dashboard/components/analytics/section-header";
 import type { SpotifyPlayHistoryItem } from "@/lib/spotify/types";
 import { deriveHourDistribution, deriveWeekdayDistribution } from "@/lib/analytics/listening-patterns";
+import { AnalyticsSectionCard } from "@/components/layout/analytics-section-card";
 import { StatsEmptyState } from "@/components/stats/stats-feedback";
 
 type ListeningPatternsSectionProps = {
@@ -63,7 +64,7 @@ export function ListeningPatternsSection({ items }: ListeningPatternsSectionProp
   const weekdayRows = weekdays.map((b) => ({ label: b.label, count: b.count, share: b.share }));
 
   return (
-    <section className="rounded-md border border-border/80 bg-card/30 p-4 md:p-5">
+    <AnalyticsSectionCard>
       <SectionHeader icon={Clock3} title="Listening patterns" description={description} />
       {!hasData ? (
         <StatsEmptyState
@@ -76,6 +77,6 @@ export function ListeningPatternsSection({ items }: ListeningPatternsSectionProp
           <DistributionList title="Plays by weekday" rows={weekdayRows} />
         </div>
       )}
-    </section>
+    </AnalyticsSectionCard>
   );
 }

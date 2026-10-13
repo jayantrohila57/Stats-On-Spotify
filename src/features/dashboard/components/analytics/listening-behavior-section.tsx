@@ -4,6 +4,7 @@ import { Activity } from "lucide-react";
 import { SectionHeader } from "@/features/dashboard/components/analytics/section-header";
 import type { NormalizedArtist, NormalizedTrack } from "@/lib/analytics/normalize";
 import { deriveTasteDimensions, topNConcentrationShare, uniqueArtistRatioInTopTracks } from "@/lib/analytics/behavior";
+import { AnalyticsSectionCard } from "@/components/layout/analytics-section-card";
 import type { SpotifyArtist, SpotifySavedTrack } from "@/lib/spotify/types";
 
 type ListeningBehaviorSectionProps = {
@@ -24,7 +25,7 @@ export function ListeningBehaviorSection({
   const diversity = uniqueArtistRatioInTopTracks(topTracks);
 
   return (
-    <section className="rounded-md border border-border/80 bg-card/30 p-4">
+    <AnalyticsSectionCard>
       <SectionHeader
         icon={Activity}
         title="Listening behavior (derived)"
@@ -49,11 +50,11 @@ export function ListeningBehaviorSection({
               <div className="h-1 overflow-hidden rounded-sm bg-muted">
                 <div className="h-full bg-chart-1" style={{ width: `${Math.max(d.value, 2)}%` }} />
               </div>
-              <p className="mt-1 text-[11px] text-muted-foreground">{d.hint}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{d.hint}</p>
             </li>
           ))}
         </ul>
       </div>
-    </section>
+    </AnalyticsSectionCard>
   );
 }

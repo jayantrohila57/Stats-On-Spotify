@@ -7,6 +7,7 @@ import { SpotifyEntityPreview } from "@/features/dashboard/components/analytics/
 import { SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { albumImageFromTrack } from "@/lib/spotify/images";
 import type { SpotifyPlayHistoryItem } from "@/lib/spotify/types";
+import { AnalyticsSectionCard } from "@/components/layout/analytics-section-card";
 import { StatsEmptyState, StatsErrorState } from "@/components/stats/stats-feedback";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -37,7 +38,7 @@ export function RecentlyPlayedSection({ items, isLoading, error, onRetry }: Rece
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <section className="rounded-md border border-border/80 bg-card/30 p-4">
+    <AnalyticsSectionCard>
       <SectionHeader
         icon={History}
         title="Recently played"
@@ -125,6 +126,6 @@ export function RecentlyPlayedSection({ items, isLoading, error, onRetry }: Rece
           </TableBody>
         </Table>
       )}
-    </section>
+    </AnalyticsSectionCard>
   );
 }

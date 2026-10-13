@@ -8,6 +8,8 @@ import {
 import { deriveHourDistribution } from "@/lib/analytics/listening-patterns";
 import type { SpotifyArtist } from "@/lib/spotify/types";
 import type { SpotifyPlayHistoryItem } from "@/lib/spotify/types";
+import { INSET_PANEL_CLASS } from "@/lib/ui/layout-classes";
+import { cn } from "@/lib/utils";
 
 type OverviewSnapshotProps = {
   topArtists: SpotifyArtist[];
@@ -26,9 +28,9 @@ export function OverviewSnapshot({ topArtists, recentPlays }: OverviewSnapshotPr
   }
 
   return (
-    <div className="mt-4 rounded-md border border-border/70 bg-background/40 p-3 sm:p-4">
+    <div className={cn(INSET_PANEL_CLASS, "mt-4")}>
       <p className="text-sm font-medium">Overview snapshot</p>
-      <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
+      <p className="mt-1 text-xs leading-relaxed text-muted-foreground sm:text-sm">
         {topGenre
           ? `${topGenre.genre === "other" ? "Other" : formatGenreLabel(topGenre.genre)} covers ${(topGenre.share * 100).toFixed(0)}% of top-artist genre tags · ${distinctTags} distinct tags`
           : "No genre tags on top artists for this period"}
@@ -37,7 +39,7 @@ export function OverviewSnapshot({ topArtists, recentPlays }: OverviewSnapshotPr
           : ""}
       </p>
       {genreStats.length > 0 ? (
-        <ul className="mt-3 space-y-2 border-t border-border/50 pt-3">
+        <ul className="mt-3 space-y-2 border-t border-border pt-3">
           {genreStats.map((item) => (
             <li key={item.genre}>
               <div className="mb-1 flex items-center justify-between gap-2 text-xs">

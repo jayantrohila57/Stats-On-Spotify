@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { StatsEmptyState, StatsErrorState } from "@/components/stats/stats-feedback";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +18,18 @@ type SectionShellProps = {
   emptyDescription?: string;
   children?: ReactNode;
   className?: string;
+  loadingSkeleton?: ReactNode;
 };
+
+function DefaultSectionSkeleton() {
+  return (
+    <div className="space-y-2" aria-busy="true">
+      <Skeleton className="h-8 w-full" />
+      <Skeleton className="h-8 w-full" />
+      <Skeleton className="h-8 w-3/4" />
+    </div>
+  );
+}
 
 export function SectionShell({
   title,
@@ -31,23 +43,20 @@ export function SectionShell({
   emptyDescription = "Nothing to show for this period.",
   children,
   className,
+  loadingSkeleton,
 }: SectionShellProps) {
   return (
-    <section className={cn("rounded-md border border-border/80 bg-card/30", className)}>
-      <div className="flex flex-wrap items-start justify-between gap-2 border-b border-border/60 px-4 py-3">
-        <div>
-          <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
-          {description ? <p className="mt-1 text-sm leading-snug text-muted-foreground">{description}</p> : null}
+    <Card className={cn("shadow-sm", className)}>
+      <CardHeader className="flex flex-col gap-3 border-b pb-4 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
+        <div className="space-y-1.5">
+          <CardTitle className="text-lg font-semibold tracking-tight">{title}</CardTitle>
+          {description ? <CardDescription className="leading-snug">{description}</CardDescription> : null}
         </div>
         {meta}
-      </div>
-      <div className="p-4 md:p-5">
+      </CardHeader>
+      <CardContent className="pt-6">
         {isLoading ? (
-          <div className="space-y-2" aria-busy="true">
-            <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-full" />
-            <Skeleton className="h-8 w-3/4" />
-          </div>
+          loadingSkeleton ?? <DefaultSectionSkeleton />
         ) : error ? (
           <StatsErrorState message={error} onRetry={onRetry} />
         ) : isEmpty ? (
@@ -55,7 +64,7 @@ export function SectionShell({
         ) : (
           children
         )}
-      </div>
-    </section>
+      </CardContent>
+    </Card>
   );
 }

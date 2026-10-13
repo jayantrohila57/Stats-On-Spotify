@@ -11,6 +11,7 @@ import { timeRangeLabel } from "@/lib/spotify/time-range";
 import { baselineCompareLabel } from "@/lib/spotify/period";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { SpotifyArtistAvatar } from "@/components/spotify/spotify-media";
+import { AnalyticsSectionCard } from "@/components/layout/analytics-section-card";
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 
 type TasteEvolutionSectionProps = {
@@ -40,7 +41,7 @@ export function TasteEvolutionSection({
   const enteredCount = comparisons.filter((c) => c.compareRank === undefined).length;
 
   return (
-    <section className="rounded-md border border-border/80 bg-card/30 p-4">
+    <AnalyticsSectionCard>
       <SectionHeader
         icon={GitCompareArrows}
         title="Taste evolution"
@@ -82,7 +83,7 @@ export function TasteEvolutionSection({
                   <TableCell className="text-right">
                     <RankMovement delta={delta} />
                   </TableCell>
-                  <TableCell className="hidden text-[10px] text-muted-foreground lg:table-cell">
+                  <TableCell className="hidden text-xs text-muted-foreground lg:table-cell">
                     {(["short_term", "medium_term", "long_term"] as SpotifyTimeRange[])
                       .map((r) => (periods[r] ? `${r === "short_term" ? "4w" : r === "medium_term" ? "6m" : "all"}:#${periods[r]}` : null))
                       .filter(Boolean)
@@ -94,6 +95,6 @@ export function TasteEvolutionSection({
           </TableBody>
         </Table>
       )}
-    </section>
+    </AnalyticsSectionCard>
   );
 }

@@ -56,21 +56,21 @@ export function NowPlayingCard({ payload, isLoading }: NowPlayingCardProps) {
                 href={playbackItemSpotifyUrl(item)!}
                 target="_blank"
                 rel="noreferrer"
-                className="truncate text-[15px] font-medium hover:underline"
+                className="truncate text-base font-medium hover:underline"
               >
                 {playbackItemTitle(item)}
               </Link>
             ) : (
-              <p className="truncate text-[15px] font-medium">{playbackItemTitle(item)}</p>
+              <p className="truncate text-base font-medium">{playbackItemTitle(item)}</p>
             )}
             <p className="truncate text-sm text-muted-foreground">{playbackItemSubtitle(item)}</p>
             {data?.currently_playing_type === "episode" ? (
-              <p className="mt-0.5 text-[12px] text-muted-foreground">Podcast episode</p>
+              <p className="mt-0.5 text-xs text-muted-foreground">Podcast episode</p>
             ) : null}
             {typeof data?.progress_ms === "number" && playbackItemDurationMs(item) ? (
               <div className="mt-3 space-y-1">
                 <Progress value={(data.progress_ms / playbackItemDurationMs(item)!) * 100} className="h-1.5" />
-                <p className="font-mono-stats text-[12px] text-muted-foreground">
+                <p className="font-mono-stats text-xs text-muted-foreground">
                   {formatDurationMs(data.progress_ms)} / {formatDurationMs(playbackItemDurationMs(item)!)}
                   {data.is_playing ? " · playing" : " · paused"}
                 </p>

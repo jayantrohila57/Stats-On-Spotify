@@ -1,5 +1,6 @@
 "use client";
 
+import { SEGMENTED_CONTROL_CLASS } from "@/lib/ui/layout-classes";
 import { TIME_RANGE_OPTIONS, type SpotifyTimeRange } from "@/lib/spotify/time-range";
 import { cn } from "@/lib/utils";
 
@@ -11,11 +12,7 @@ type TimeRangeControlProps = {
 
 export function TimeRangeControl({ value, onChange, disabled }: TimeRangeControlProps) {
   return (
-    <div
-      className="inline-flex w-full flex-wrap gap-1 rounded-xl border border-zinc-800 bg-zinc-900 p-1 sm:w-auto"
-      role="group"
-      aria-label="Listening time range"
-    >
+    <div className={cn(SEGMENTED_CONTROL_CLASS, "w-full flex-wrap gap-1 sm:w-auto")} role="group" aria-label="Listening time range">
       {TIME_RANGE_OPTIONS.map((option) => (
         <button
           key={option.value}
@@ -24,10 +21,10 @@ export function TimeRangeControl({ value, onChange, disabled }: TimeRangeControl
           title={option.label}
           onClick={() => onChange(option.value)}
           className={cn(
-            "rounded-lg px-3 py-1.5 text-xs font-medium transition sm:px-4 sm:text-sm",
+            "rounded-md px-3 py-1.5 text-xs font-medium transition sm:px-4 sm:text-sm",
             value === option.value
-              ? "bg-[#1db954] text-black"
-              : "text-zinc-400 hover:bg-zinc-800 hover:text-white",
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "text-muted-foreground hover:bg-muted hover:text-foreground",
             disabled && "pointer-events-none opacity-60",
           )}
         >

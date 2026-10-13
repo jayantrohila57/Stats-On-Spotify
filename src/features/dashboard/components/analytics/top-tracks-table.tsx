@@ -13,6 +13,7 @@ import { SPOTIFY_MEDIA_SIZE, SpotifyThumbnail } from "@/components/spotify/spoti
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { SEGMENTED_CONTROL_CLASS } from "@/lib/ui/layout-classes";
 import { cn } from "@/lib/utils";
 import { getRankDelta } from "@/lib/analytics/compare";
 import type { SpotifyArtist } from "@/lib/spotify/types";
@@ -69,7 +70,7 @@ export function TopTracksTable({
         emptyTitle="No top tracks"
         emptyDescription="Spotify returned an empty list for this time range. Try another period or listen more on Spotify."
         meta={
-          <div className="flex items-center gap-1 rounded-md border border-border/80 p-0.5">
+          <div className={SEGMENTED_CONTROL_CLASS}>
             {PAGE_SIZES.map((size) => (
               <Button
                 key={size}
@@ -85,7 +86,7 @@ export function TopTracksTable({
           </div>
         }
       >
-        <Table className="table-fixed text-[14px]" wrapperClassName="overflow-x-hidden">
+        <Table className="table-fixed text-sm" wrapperClassName="overflow-x-hidden">
           <colgroup>
             <col className="w-9" />
             <col className="w-10" />
@@ -149,19 +150,19 @@ export function TopTracksTable({
                         <div className="min-w-0 text-left">
                           <Tooltip>
                             <TooltipTrigger asChild>
-                              <span className="block truncate text-[15px] font-medium">{track.name}</span>
+                              <span className="block truncate text-base font-medium">{track.name}</span>
                             </TooltipTrigger>
                             <TooltipContent>{track.name}</TooltipContent>
                           </Tooltip>
-                          <p className="truncate text-[13px] text-muted-foreground">{artistLine}</p>
-                          <p className="mt-0.5 hidden font-mono-stats text-[12px] text-muted-foreground/90 sm:block">
+                          <p className="truncate text-xs sm:text-sm text-muted-foreground">{artistLine}</p>
+                          <p className="mt-0.5 hidden font-mono-stats text-xs text-muted-foreground/90 sm:block">
                             {(share * 100).toFixed(1)}% derived share · {track.album.name}
                           </p>
                         </div>
                       </SpotifyEntityPreview>
                     </TableCell>
                     <TableCell
-                      className="hidden text-right font-mono-stats text-[13px] text-muted-foreground sm:table-cell"
+                      className="hidden text-right font-mono-stats text-xs sm:text-sm text-muted-foreground sm:table-cell"
                       onClick={() => setSelected({ track, rank })}
                     >
                       {formatDurationMs(track.duration_ms)}

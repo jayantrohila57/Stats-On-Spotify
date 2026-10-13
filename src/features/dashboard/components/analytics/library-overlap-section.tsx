@@ -1,10 +1,9 @@
 "use client";
 
 import { Library } from "lucide-react";
-import { SectionHeader } from "@/features/dashboard/components/analytics/section-header";
+import { DashboardIconSection } from "@/components/layout/dashboard-icon-section";
 import type { LibraryOverlapMetrics } from "@/lib/analytics/library-overlap";
 import { SAVED_TRACKS_SAMPLE_LIMIT } from "@/lib/analytics/library-overlap";
-import { AnalyticsSectionCard } from "@/components/layout/analytics-section-card";
 import { INSET_PANEL_CLASS } from "@/lib/ui/layout-classes";
 import { Progress } from "@/components/ui/progress";
 
@@ -20,13 +19,12 @@ export function LibraryOverlapSection({ libraryOverlap }: LibraryOverlapSectionP
     : `Saved tracks: ${tracks.savedSampleFetched} fetched (${tracks.savedSampleWithIds} with IDs)`;
 
   return (
-    <AnalyticsSectionCard>
-      <SectionHeader
-        icon={Library}
-        title="Library & follows overlap"
-        description={`Overlap with your current top lists. ${savedSampleNote}. Followed artists sample: ${artists.followedSampleFetched}.`}
-      />
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+    <DashboardIconSection
+      icon={Library}
+      title="Library & follows overlap"
+      description={`Overlap with your current top lists. ${savedSampleNote}. Followed artists sample: ${artists.followedSampleFetched}.`}
+    >
+      <div className="grid gap-8 sm:grid-cols-2">
         <div className={INSET_PANEL_CLASS}>
           <p className="text-xs font-medium">Top tracks in saved library</p>
           <p className="text-lg font-semibold tabular-nums">
@@ -51,6 +49,6 @@ export function LibraryOverlapSection({ libraryOverlap }: LibraryOverlapSectionP
           </p>
         </div>
       </div>
-    </AnalyticsSectionCard>
+    </DashboardIconSection>
   );
 }

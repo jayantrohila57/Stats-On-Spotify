@@ -1,7 +1,7 @@
 import type { SpotifyImage } from "@/lib/spotify/types";
 
 /** Prefer a ~64px cover; fall back to any image with a URL. */
-export function pickSpotifyImageUrl(images?: SpotifyImage[] | null, targetSize = 64): string | undefined {
+export function pickSpotifyImageUrl(images?: SpotifyImage[] | null, targetSize = 48): string | undefined {
   if (!images?.length) {
     return undefined;
   }

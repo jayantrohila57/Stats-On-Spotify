@@ -7,10 +7,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
 /** Pixel sizes used across analytics tables and cards. */
+/** Unified square artwork size for tables, lists, and release rows. */
+export const SPOTIFY_ARTWORK_PX = 48;
+
 export const SPOTIFY_MEDIA_SIZE = {
-  table: 52,
-  card: 56,
-  release: 56,
+  artwork: SPOTIFY_ARTWORK_PX,
+  table: SPOTIFY_ARTWORK_PX,
+  card: SPOTIFY_ARTWORK_PX,
+  release: SPOTIFY_ARTWORK_PX,
   detail: 80,
 } as const;
 

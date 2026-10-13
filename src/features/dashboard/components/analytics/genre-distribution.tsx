@@ -37,11 +37,11 @@ export function GenreDistribution({ artists, description, isLoading, error }: Ge
         ) : null
       }
     >
-      <ul className="min-w-0 space-y-2 md:max-w-lg">
+      <ul className="min-w-0 w-full space-y-2">
         {stats.map((item) => (
           <li key={item.genre}>
-            <div className="mb-1 flex items-center justify-between gap-2 text-sm">
-              <span className="truncate font-medium">
+            <div className="mb-1 flex items-center justify-between gap-4 text-sm">
+              <span className="min-w-0 truncate font-medium">
                 {item.genre === "other" ? "Other" : formatGenreLabel(item.genre)}
               </span>
               <span className="shrink-0 font-mono-stats text-muted-foreground">

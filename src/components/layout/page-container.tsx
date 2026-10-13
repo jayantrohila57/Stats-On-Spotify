@@ -5,10 +5,15 @@ import { cn } from "@/lib/utils";
 type PageContainerProps = {
   children: ReactNode;
   className?: string;
-  as?: "div" | "main";
+  as?: "div" | "main" | "nav";
+  "aria-label"?: string;
 };
 
-export function PageContainer({ children, className, as = "div" }: PageContainerProps) {
+export function PageContainer({ children, className, as = "div", "aria-label": ariaLabel }: PageContainerProps) {
   const Tag = as;
-  return <Tag className={cn(PAGE_CONTAINER_CLASS, className)}>{children}</Tag>;
+  return (
+    <Tag className={cn(PAGE_CONTAINER_CLASS, className)} aria-label={ariaLabel}>
+      {children}
+    </Tag>
+  );
 }

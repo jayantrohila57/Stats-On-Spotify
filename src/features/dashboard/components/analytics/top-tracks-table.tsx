@@ -86,7 +86,7 @@ export function TopTracksTable({
           </div>
         }
       >
-        <Table className="table-fixed text-sm" wrapperClassName="overflow-x-hidden">
+        <Table className="min-w-[36rem] text-sm">
           <colgroup>
             <col className="w-9" />
             <col className="w-10" />

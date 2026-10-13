@@ -1,10 +1,9 @@
 "use client";
 
 import { Clock3 } from "lucide-react";
-import { SectionHeader } from "@/features/dashboard/components/analytics/section-header";
+import { DashboardIconSection } from "@/components/layout/dashboard-icon-section";
 import type { SpotifyPlayHistoryItem } from "@/lib/spotify/types";
 import { deriveHourDistribution, deriveWeekdayDistribution } from "@/lib/analytics/listening-patterns";
-import { AnalyticsSectionCard } from "@/components/layout/analytics-section-card";
 import { StatsEmptyState } from "@/components/stats/stats-feedback";
 
 type ListeningPatternsSectionProps = {
@@ -21,13 +20,13 @@ function DistributionList({
   const max = Math.max(...rows.map((r) => r.count), 1);
 
   return (
-    <div className="space-y-2">
+    <div className="min-w-0 space-y-2">
       <h3 className="text-xs font-medium text-foreground">{title}</h3>
       <ul className="space-y-1.5">
         {rows.map((row) => (
           <li key={row.label}>
-            <div className="mb-0.5 flex items-center justify-between gap-2 text-xs">
-              <span className="font-medium tabular-nums">{row.label}</span>
+            <div className="mb-0.5 flex items-center justify-between gap-4 text-xs">
+              <span className="min-w-0 truncate font-medium tabular-nums">{row.label}</span>
               <span className="shrink-0 text-muted-foreground">
                 {row.count} · {(row.share * 100).toFixed(0)}%
               </span>
@@ -64,19 +63,18 @@ export function ListeningPatternsSection({ items }: ListeningPatternsSectionProp
   const weekdayRows = weekdays.map((b) => ({ label: b.label, count: b.count, share: b.share }));
 
   return (
-    <AnalyticsSectionCard>
-      <SectionHeader icon={Clock3} title="Listening patterns" description={description} />
+    <DashboardIconSection icon={Clock3} title="Listening patterns" description={description}>
       {!hasData ? (
         <StatsEmptyState
           title="Not enough recent plays"
           description="Load recently played data to see hour and weekday patterns from that window."
         />
       ) : (
-        <div className="mt-4 grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2">
           <DistributionList title="Plays by hour (local time)" rows={hourRows} />
           <DistributionList title="Plays by weekday" rows={weekdayRows} />
         </div>
       )}
-    </AnalyticsSectionCard>
+    </DashboardIconSection>
   );
 }

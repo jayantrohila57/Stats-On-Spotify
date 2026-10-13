@@ -42,11 +42,11 @@ export function OverviewSnapshot({ topArtists, recentPlays }: OverviewSnapshotPr
         <ul className="mt-3 space-y-2 border-t border-border pt-3">
           {genreStats.map((item) => (
             <li key={item.genre}>
-              <div className="mb-1 flex items-center justify-between gap-2 text-xs">
-                <span className="truncate font-medium">
+              <div className="mb-1 flex items-center justify-between gap-4 text-xs">
+                <span className="min-w-0 truncate font-medium">
                   {item.genre === "other" ? "Other" : formatGenreLabel(item.genre)}
                 </span>
-                <span className="shrink-0 font-mono-stats text-muted-foreground">
+                <span className="shrink-0 tabular-nums font-mono-stats text-muted-foreground">
                   {(item.share * 100).toFixed(0)}%
                 </span>
               </div>

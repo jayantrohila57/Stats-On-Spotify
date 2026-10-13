@@ -4,7 +4,7 @@ import { SectionShell } from "@/features/dashboard/components/analytics/section-
 
 export function UnavailableMetricsPanel() {
   return (
-    <div className="grid gap-4 lg:grid-cols-2">
+    <div className="grid gap-8 lg:grid-cols-2">
       <SectionShell
         title="Listening activity over time"
         description="Play counts by day or week"

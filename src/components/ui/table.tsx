@@ -1,4 +1,5 @@
 import * as React from "react";
+import { TABLE_SCROLL_WRAPPER_CLASS } from "@/lib/ui/layout-classes";
 import { cn } from "@/lib/utils";
 
 type TableProps = React.ComponentProps<"table"> & {
@@ -7,7 +8,7 @@ type TableProps = React.ComponentProps<"table"> & {
 
 function Table({ className, wrapperClassName, ...props }: TableProps) {
   return (
-    <div className={cn("relative w-full max-w-full", wrapperClassName)}>
+    <div className={cn("relative w-full max-w-full", TABLE_SCROLL_WRAPPER_CLASS, wrapperClassName)}>
       <table className={cn("w-full caption-bottom text-sm", className)} {...props} />
     </div>
   );

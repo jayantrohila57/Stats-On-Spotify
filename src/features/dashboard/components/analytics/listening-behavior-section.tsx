@@ -1,10 +1,9 @@
 "use client";
 
 import { Activity } from "lucide-react";
-import { SectionHeader } from "@/features/dashboard/components/analytics/section-header";
+import { DashboardIconSection } from "@/components/layout/dashboard-icon-section";
 import type { NormalizedArtist, NormalizedTrack } from "@/lib/analytics/normalize";
 import { deriveTasteDimensions, topNConcentrationShare, uniqueArtistRatioInTopTracks } from "@/lib/analytics/behavior";
-import { AnalyticsSectionCard } from "@/components/layout/analytics-section-card";
 import type { SpotifyArtist, SpotifySavedTrack } from "@/lib/spotify/types";
 
 type ListeningBehaviorSectionProps = {
@@ -25,13 +24,12 @@ export function ListeningBehaviorSection({
   const diversity = uniqueArtistRatioInTopTracks(topTracks);
 
   return (
-    <AnalyticsSectionCard>
-      <SectionHeader
-        icon={Activity}
-        title="Listening behavior (derived)"
-        description="Concentration and overlap metrics from top lists — not true play counts or repeat rate"
-      />
-      <div className="mt-3 space-y-3 text-sm">
+    <DashboardIconSection
+      icon={Activity}
+      title="Listening behavior (derived)"
+      description="Concentration and overlap metrics from top lists — not true play counts or repeat rate"
+    >
+      <div className="space-y-3 text-sm">
         <p>
           <span className="text-muted-foreground">Top-10 inverse-rank share:</span>{" "}
           <span className="font-medium tabular-nums">{(top10Share * 100).toFixed(1)}%</span>
@@ -43,8 +41,8 @@ export function ListeningBehaviorSection({
         <ul className="space-y-3">
           {dimensions.map((d) => (
             <li key={d.label}>
-              <div className="mb-1 flex items-center justify-between gap-2 text-xs">
-                <span className="font-medium text-foreground">{d.label}</span>
+              <div className="mb-1 flex items-center justify-between gap-4 text-xs">
+                <span className="min-w-0 truncate font-medium text-foreground">{d.label}</span>
                 <span className="shrink-0 font-mono-stats text-muted-foreground">{d.value}/100</span>
               </div>
               <div className="h-1 overflow-hidden rounded-sm bg-muted">
@@ -55,6 +53,6 @@ export function ListeningBehaviorSection({
           ))}
         </ul>
       </div>
-    </AnalyticsSectionCard>
+    </DashboardIconSection>
   );
 }

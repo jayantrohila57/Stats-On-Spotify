@@ -34,6 +34,7 @@ import { computeLibraryOverlapMetrics } from "@/lib/analytics/library-overlap";
 import { countDistinctGenreTags, deriveGenreStatsWithOther, formatGenreLabel } from "@/lib/analytics/derive";
 import { SectionErrorBoundary } from "@/components/stats/section-error-boundary";
 import { useDashboardSectionSpy } from "@/features/dashboard/hooks/use-dashboard-section-spy";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function AnalyticsDashboard() {
   const activeSectionId = useDashboardSectionSpy();
@@ -84,24 +85,40 @@ export function AnalyticsDashboard() {
     ? `${genreStats[0].genre === "other" ? "Other" : formatGenreLabel(genreStats[0].genre)} ${(genreStats[0].share * 100).toFixed(0)}% of top-artist genre tags · ${distinctGenreTags} distinct tags`
     : "Genre tags from your top artists";
 
-  const overviewDescription = `${topTracks.length} tracks · ${topArtists.length} artists · ${playlists.data?.length ?? 0} playlists · ${recentList.length} recent plays in sample`;
+  const overviewDescription = kpiLoading
+    ? null
+    : `${topTracks.length} tracks · ${topArtists.length} artists · ${playlists.data?.length ?? 0} playlists · ${recentList.length} recent plays in sample`;
 
   return (
     <div className="min-h-screen overflow-x-clip bg-background text-foreground">
       <AnalyticsHeader profile={profile.data ?? null} profileLoading={profile.isLoading} />
       <PeriodFilterBar />
       <DashboardSectionNavMobile activeSectionId={activeSectionId} />
-      <PageContainer className="flex gap-8 py-6">
-        <DashboardSectionNav className="w-36 shrink-0 pt-1" activeSectionId={activeSectionId} />
+      <PageContainer className="flex items-stretch gap-8 py-6">
+        <aside className="hidden w-36 shrink-0 border-r border-border pr-3 lg:block">
+          <DashboardSectionNav className="pt-1" activeSectionId={activeSectionId} />
+        </aside>
         <main className="min-w-0 flex-1 space-y-8">
           <DashboardSection id="section-overview" aria-label="Listening overview">
             <SectionHeader
               icon={BarChart3}
               title="Listening overview"
-              description={overviewDescription}
+              description={
+                overviewDescription ?? <Skeleton className="mt-1 h-4 w-full max-w-md" aria-hidden />
+              }
             />
             {kpiLoading ? (
-              <div className="mt-3 h-28 animate-pulse rounded-md border border-border bg-muted/30" />
+              <div className="mt-3 space-y-4" aria-busy="true">
+                <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-4 lg:grid-cols-6">
+                  {Array.from({ length: 12 }).map((_, i) => (
+                    <div key={i} className="space-y-2 border border-border bg-muted/20 px-3 py-2.5">
+                      <Skeleton className="h-3 w-16" />
+                      <Skeleton className="h-8 w-12" />
+                    </div>
+                  ))}
+                </div>
+                <Skeleton className="h-24 w-full rounded-md" />
+              </div>
             ) : (
               <div className="mt-3 space-y-0">
                 <KpiGrid

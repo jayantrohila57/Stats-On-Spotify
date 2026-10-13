@@ -5,10 +5,8 @@ import { useMemo } from "react";
 import type { SpotifyTrack } from "@/lib/spotify/types";
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
-import { SpotifyThumbnail } from "@/components/spotify/spotify-media";
+import { SPOTIFY_MEDIA_SIZE, SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-
-const ALBUM_ART_SIZE = 40;
 
 type AlbumsFromTracksTableProps = {
   tracks: SpotifyTrack[];
@@ -61,10 +59,10 @@ export function AlbumsFromTracksTable({ tracks, isLoading, error }: AlbumsFromTr
       emptyTitle="No albums"
       emptyDescription="Add top tracks for this period to see album groupings."
     >
-      <Table wrapperClassName="overflow-x-auto">
+      <Table className="min-w-[32rem]">
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead className="w-[52px] pr-0">Artwork</TableHead>
+            <TableHead className="w-14 pr-0">Artwork</TableHead>
             <TableHead className="min-w-[8rem]">Album</TableHead>
             <TableHead className="hidden min-w-[6rem] md:table-cell">Artists on tracks</TableHead>
             <TableHead className="w-[5.5rem] text-right sm:w-auto" title="Number of top tracks from this album and best rank in your list">
@@ -75,10 +73,10 @@ export function AlbumsFromTracksTable({ tracks, isLoading, error }: AlbumsFromTr
         <TableBody>
           {albums.slice(0, 20).map((album) => (
             <TableRow key={album.id}>
-              <TableCell className="w-[52px] py-2 pr-2 pl-2 align-middle">
-                <SpotifyThumbnail src={album.image} alt="" size={ALBUM_ART_SIZE} />
+              <TableCell className="w-14 py-2 pr-2 pl-2 align-middle">
+                <SpotifyThumbnail src={album.image} alt="" size={SPOTIFY_MEDIA_SIZE.artwork} />
               </TableCell>
-              <TableCell className="min-w-0 max-w-[14rem] py-2 sm:max-w-none">
+              <TableCell className="min-w-0 py-2">
                 <Link
                   href={album.url}
                   target="_blank"

@@ -4,7 +4,10 @@ import type { ReactNode } from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { SEGMENTED_CONTROL_CLASS } from "@/lib/ui/layout-classes";
+import { DASHBOARD_SECTIONS } from "@/features/dashboard/components/analytics/dashboard-section-nav";
 import { Skeleton } from "@/components/ui/skeleton";
+
+const DASHBOARD_SECTIONS_PREVIEW = DASHBOARD_SECTIONS.map((s) => s.label);
 
 function SectionCardSkeleton({ children }: { children?: ReactNode }) {
   return (
@@ -41,7 +44,7 @@ function TableRowsSkeleton({ rows = 8 }: { rows?: number }) {
       {Array.from({ length: rows }).map((_, i) => (
         <li key={i} className="flex items-center gap-3 py-3">
           <Skeleton className="size-6 rounded-sm" />
-          <Skeleton className="size-12 shrink-0 rounded-md" />
+          <Skeleton className="size-12 shrink-0 rounded-sm" />
           <div className="min-w-0 flex-1 space-y-2">
             <Skeleton className="h-4 w-3/4 max-w-[220px]" />
             <Skeleton className="h-3 w-1/2 max-w-[160px]" />
@@ -66,7 +69,7 @@ export function AnalyticsDashboardSkeleton() {
             <Skeleton className="h-4 w-36" />
             <Skeleton className="h-3 w-56 max-w-full" />
           </div>
-          <Skeleton className="h-9 w-32 rounded-md" />
+          <Skeleton className="h-9 w-28 rounded-md" />
         </PageContainer>
       </header>
 
@@ -82,21 +85,22 @@ export function AnalyticsDashboardSkeleton() {
         </PageContainer>
       </div>
 
-      <nav
-        className="sticky top-14 z-30 mb-3 flex gap-1 overflow-x-auto border-b border-border bg-background/95 px-4 py-1.5 lg:hidden"
-        aria-hidden
-      >
-        {Array.from({ length: 7 }).map((_, i) => (
-          <Skeleton key={i} className="h-7 w-16 shrink-0 rounded-md" />
-        ))}
-      </nav>
-
-      <PageContainer className="flex gap-8 py-6">
-        <div className="hidden w-36 shrink-0 flex-col gap-1 border-r border-border pr-3 lg:flex" aria-hidden>
-          {Array.from({ length: 9 }).map((_, i) => (
-            <Skeleton key={i} className="h-7 w-full rounded-sm" />
+      <div className="sticky top-14 z-30 mb-3 border-b border-border bg-background/95 lg:hidden" aria-hidden>
+        <PageContainer className="flex gap-1 overflow-x-auto overscroll-x-contain py-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {DASHBOARD_SECTIONS_PREVIEW.map((label) => (
+            <Skeleton key={label} className="h-7 w-[4.5rem] shrink-0 rounded-md" />
           ))}
-        </div>
+        </PageContainer>
+      </div>
+
+      <PageContainer className="flex items-stretch gap-8 py-6">
+        <aside className="hidden w-36 shrink-0 border-r border-border pr-3 lg:block" aria-hidden>
+          <div className="flex flex-col gap-1 pt-1">
+            {Array.from({ length: 9 }).map((_, i) => (
+              <Skeleton key={i} className="h-7 w-full rounded-sm" />
+            ))}
+          </div>
+        </aside>
 
         <main className="min-w-0 flex-1 space-y-8">
           <section className="scroll-mt-20 space-y-3">

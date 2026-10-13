@@ -2,12 +2,11 @@
 
 import { Fragment, useState } from "react";
 import { History, ChevronDown } from "lucide-react";
-import { SectionHeader } from "@/features/dashboard/components/analytics/section-header";
+import { DashboardIconSection } from "@/components/layout/dashboard-icon-section";
 import { SpotifyEntityPreview } from "@/features/dashboard/components/analytics/spotify-entity-preview";
 import { SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { albumImageFromTrack } from "@/lib/spotify/images";
 import type { SpotifyPlayHistoryItem } from "@/lib/spotify/types";
-import { AnalyticsSectionCard } from "@/components/layout/analytics-section-card";
 import { StatsEmptyState, StatsErrorState } from "@/components/stats/stats-feedback";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -38,16 +37,15 @@ export function RecentlyPlayedSection({ items, isLoading, error, onRetry }: Rece
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   return (
-    <AnalyticsSectionCard>
-      <SectionHeader
-        icon={History}
-        title="Recently played"
-        description={
-          items.length > 0
-            ? `${items.length} plays in Spotify’s recent window (max 50) — not full listening history`
-            : "Latest plays from Spotify (up to 50). Not a full listening history."
-        }
-      />
+    <DashboardIconSection
+      icon={History}
+      title="Recently played"
+      description={
+        items.length > 0
+          ? `${items.length} plays in Spotify’s recent window (max 50) — not full listening history`
+          : "Latest plays from Spotify (up to 50). Not a full listening history."
+      }
+    >
       {isLoading ? (
         <div className="mt-3 space-y-2">
           <Skeleton className="h-8 w-full" />
@@ -58,7 +56,7 @@ export function RecentlyPlayedSection({ items, isLoading, error, onRetry }: Rece
       ) : items.length === 0 ? (
         <StatsEmptyState title="No recent plays" description="Spotify returned an empty recently played list." />
       ) : (
-        <Table className="mt-3">
+        <Table className="min-w-[32rem]">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               <TableHead className="w-8" />
@@ -126,6 +124,6 @@ export function RecentlyPlayedSection({ items, isLoading, error, onRetry }: Rece
           </TableBody>
         </Table>
       )}
-    </AnalyticsSectionCard>
+    </DashboardIconSection>
   );
 }

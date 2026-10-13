@@ -84,17 +84,24 @@ export function TopArtistsSection({
           </div>
         ) : null}
 
-        <Table>
+        <Table className="min-w-[40rem]">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               <TableHead className="w-8" />
               <TableHead className="w-10">#</TableHead>
-              <TableHead className="w-10" />
-              <TableHead>Artist</TableHead>
-              <TableHead className="hidden md:table-cell">Genres</TableHead>
-              <TableHead className="w-20 text-right">Move</TableHead>
-              <TableHead className="w-24 text-right">Derived share</TableHead>
-              <TableHead className="w-28 text-right">Popularity</TableHead>
+              <TableHead className="w-12" />
+              <TableHead className="min-w-[8rem]">Artist</TableHead>
+              <TableHead className="hidden min-w-[6rem] lg:table-cell">Genres</TableHead>
+              <TableHead className="w-16 text-right">Move</TableHead>
+              <TableHead className="hidden w-16 text-right whitespace-nowrap sm:table-cell">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span className="cursor-default">Share</span>
+                  </TooltipTrigger>
+                  <TooltipContent>Derived inverse-rank share</TooltipContent>
+                </Tooltip>
+              </TableHead>
+              <TableHead className="w-20 text-right whitespace-nowrap">Pop.</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -125,7 +132,7 @@ export function TopArtistsSection({
                     <TableCell className="w-10 shrink-0 px-2" onClick={() => setSelected({ artist, rank, share })}>
                       <SpotifyArtistAvatar src={image} name={artist.name} size={SPOTIFY_MEDIA_SIZE.table} />
                     </TableCell>
-                    <TableCell className="min-w-0 max-w-0" onClick={() => setSelected({ artist, rank, share })}>
+                    <TableCell className="min-w-0" onClick={() => setSelected({ artist, rank, share })}>
                       <SpotifyEntityPreview kind="artist" artist={artist}>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -136,7 +143,7 @@ export function TopArtistsSection({
                       </SpotifyEntityPreview>
                     </TableCell>
                     <TableCell
-                      className="hidden min-w-0 max-w-0 truncate text-xs text-muted-foreground md:table-cell"
+                      className="hidden min-w-0 truncate text-xs text-muted-foreground lg:table-cell"
                       title={genres || undefined}
                     >
                       {genres ? genres : <span className="text-muted-foreground/70">No genres listed</span>}
@@ -144,7 +151,9 @@ export function TopArtistsSection({
                     <TableCell className="text-right">
                       <RankMovement delta={delta} />
                     </TableCell>
-                    <TableCell className="text-right tabular-nums text-xs">{(share * 100).toFixed(1)}%</TableCell>
+                    <TableCell className="hidden text-right tabular-nums text-xs sm:table-cell">
+                      {(share * 100).toFixed(1)}%
+                    </TableCell>
                     <TableCell className="text-right tabular-nums">{artist.popularity ?? "—"}</TableCell>
                   </TableRow>
                   {isExpanded ? (

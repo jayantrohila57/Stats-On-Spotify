@@ -1,7 +1,7 @@
 "use client";
 
 import { GitCompareArrows } from "lucide-react";
-import { SectionHeader } from "@/features/dashboard/components/analytics/section-header";
+import { DashboardIconSection } from "@/components/layout/dashboard-icon-section";
 import { RankMovement } from "@/features/dashboard/components/analytics/rank-movement";
 import { comparePeriods } from "@/lib/analytics/compare";
 import type { NormalizedArtist } from "@/lib/analytics/normalize";
@@ -11,7 +11,6 @@ import { timeRangeLabel } from "@/lib/spotify/time-range";
 import { baselineCompareLabel } from "@/lib/spotify/period";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { SpotifyArtistAvatar } from "@/components/spotify/spotify-media";
-import { AnalyticsSectionCard } from "@/components/layout/analytics-section-card";
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 
 type TasteEvolutionSectionProps = {
@@ -41,21 +40,20 @@ export function TasteEvolutionSection({
   const enteredCount = comparisons.filter((c) => c.compareRank === undefined).length;
 
   return (
-    <AnalyticsSectionCard>
-      <SectionHeader
-        icon={GitCompareArrows}
-        title="Taste evolution"
-        description={`Rank changes among artists in both ${timeRangeLabel(timeRange)} and ${timeRangeLabel(compareRange)} top-50 lists. “Was” = rank in ${baselineCompareLabel(timeRange)}.`}
-      />
+    <DashboardIconSection
+      icon={GitCompareArrows}
+      title="Taste evolution"
+      description={`Rank changes among artists in both ${timeRangeLabel(timeRange)} and ${timeRangeLabel(compareRange)} top-50 lists. “Was” = rank in ${baselineCompareLabel(timeRange)}.`}
+    >
       {movers.length === 0 ? (
-        <p className="mt-3 text-xs text-muted-foreground">
+        <p className="text-xs text-muted-foreground">
           No rank changes between these windows for artists that appear in both top-50 lists.
           {enteredCount > 0
             ? ` ${enteredCount} artist${enteredCount === 1 ? "" : "s"} in your current top 50 ${enteredCount === 1 ? "is" : "are"} not ranked in the comparison window (shown as NEW in track/artist tables, omitted here).`
             : null}
         </p>
       ) : (
-        <Table className="mt-3">
+        <Table className="min-w-[36rem]">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
               <TableHead>Artist</TableHead>
@@ -95,6 +93,6 @@ export function TasteEvolutionSection({
           </TableBody>
         </Table>
       )}
-    </AnalyticsSectionCard>
+    </DashboardIconSection>
   );
 }

@@ -36,7 +36,7 @@ export function PlaylistsTable({ playlists, isLoading, error, onRetry }: Playlis
       emptyTitle="No playlists"
       emptyDescription="No playlists were returned for your account."
     >
-      <Table>
+      <Table className="min-w-[28rem]">
         <TableHeader>
           <TableRow className="hover:bg-transparent">
             <TableHead className="w-8" />

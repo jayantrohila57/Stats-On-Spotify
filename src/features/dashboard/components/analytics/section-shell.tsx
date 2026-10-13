@@ -54,7 +54,7 @@ export function SectionShell({
         </div>
         {meta}
       </CardHeader>
-      <CardContent className="pt-6">
+      <CardContent className="min-w-0 pt-6">
         {isLoading ? (
           loadingSkeleton ?? <DefaultSectionSkeleton />
         ) : error ? (

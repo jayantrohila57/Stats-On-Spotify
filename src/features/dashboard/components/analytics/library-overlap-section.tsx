@@ -1,28 +1,50 @@
 "use client";
 
 import { Library } from "lucide-react";
-import { DashboardIconSection } from "@/components/layout/dashboard-icon-section";
+import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 import type { LibraryOverlapMetrics } from "@/lib/analytics/library-overlap";
 import { SAVED_TRACKS_SAMPLE_LIMIT } from "@/lib/analytics/library-overlap";
 import { INSET_PANEL_CLASS } from "@/lib/ui/layout-classes";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type LibraryOverlapSectionProps = {
   libraryOverlap: LibraryOverlapMetrics;
+  metricsReady: boolean;
 };
 
-export function LibraryOverlapSection({ libraryOverlap }: LibraryOverlapSectionProps) {
+function OverlapPanelsSkeleton() {
+  return (
+    <div className="grid gap-8 sm:grid-cols-2">
+      {[0, 1].map((key) => (
+        <div key={key} className={INSET_PANEL_CLASS}>
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="mt-2 h-8 w-28" />
+          <Skeleton className="mt-3 h-1.5 w-full" />
+          <Skeleton className="mt-3 h-10 w-full" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function LibraryOverlapSection({ libraryOverlap, metricsReady }: LibraryOverlapSectionProps) {
   const { tracks, artists } = libraryOverlap;
 
   const savedSampleNote = tracks.savedSampleCapped
     ? `Saved tracks: first ~${SAVED_TRACKS_SAMPLE_LIMIT} from your library (${tracks.savedSampleWithIds} with IDs)`
     : `Saved tracks: ${tracks.savedSampleFetched} fetched (${tracks.savedSampleWithIds} with IDs)`;
 
+  const description = `Overlap with your current top lists. ${savedSampleNote}. Followed artists sample: ${artists.followedSampleFetched}.`;
+
   return (
-    <DashboardIconSection
+    <SectionShell
       icon={Library}
       title="Library & follows overlap"
-      description={`Overlap with your current top lists. ${savedSampleNote}. Followed artists sample: ${artists.followedSampleFetched}.`}
+      description={metricsReady ? description : <Skeleton className="mt-1 h-4 w-full max-w-lg" aria-hidden />}
+      isLoading={!metricsReady}
+      error={null}
+      loadingSkeleton={<OverlapPanelsSkeleton />}
     >
       <div className="grid gap-8 sm:grid-cols-2">
         <div className={INSET_PANEL_CLASS}>
@@ -49,6 +71,6 @@ export function LibraryOverlapSection({ libraryOverlap }: LibraryOverlapSectionP
           </p>
         </div>
       </div>
-    </DashboardIconSection>
+    </SectionShell>
   );
 }

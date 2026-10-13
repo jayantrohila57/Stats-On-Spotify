@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { CirclePlay } from "lucide-react";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 import { SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import type { CurrentlyPlayingPayload } from "@/lib/spotify/types";
@@ -27,6 +28,7 @@ export function NowPlayingCard({ payload, isLoading }: NowPlayingCardProps) {
 
   return (
     <SectionShell
+      icon={CirclePlay}
       title="Now playing"
       description={
         scopeMissing
@@ -44,19 +46,19 @@ export function NowPlayingCard({ payload, isLoading }: NowPlayingCardProps) {
       }
     >
       {item ? (
-        <div className="flex gap-4">
+        <div className="flex min-w-0 gap-4">
           <SpotifyThumbnail
             src={playbackItemImageUrl(item)}
             alt={playbackItemTitle(item)}
             size={SPOTIFY_MEDIA_SIZE.card}
           />
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-1 overflow-hidden">
             {playbackItemSpotifyUrl(item) ? (
               <Link
                 href={playbackItemSpotifyUrl(item)!}
                 target="_blank"
                 rel="noreferrer"
-                className="truncate text-base font-medium hover:underline"
+                className="block w-full min-w-0 truncate text-base font-medium hover:underline"
               >
                 {playbackItemTitle(item)}
               </Link>

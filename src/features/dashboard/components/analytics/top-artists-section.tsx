@@ -15,7 +15,7 @@ import { SpotifyEntityPreview } from "@/features/dashboard/components/analytics/
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Mic2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type TopArtistsSectionProps = {
@@ -43,6 +43,7 @@ export function TopArtistsSection({
   return (
     <>
       <SectionShell
+        icon={Mic2}
         title="Top artists"
         description={
           artists.length > 0

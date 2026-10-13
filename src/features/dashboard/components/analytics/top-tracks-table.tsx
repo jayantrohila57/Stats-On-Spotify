@@ -19,7 +19,7 @@ import { getRankDelta } from "@/lib/analytics/compare";
 import type { SpotifyArtist } from "@/lib/spotify/types";
 import type { SpotifyTimeRange } from "@/lib/spotify/time-range";
 import { formatDurationMs } from "@/lib/text/duration";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Music2 } from "lucide-react";
 
 const PAGE_SIZES = [10, 25, 50] as const;
 
@@ -61,6 +61,7 @@ export function TopTracksTable({
   return (
     <>
       <SectionShell
+        icon={Music2}
         title="Top tracks"
         description={description}
         isLoading={isLoading}
@@ -86,7 +87,7 @@ export function TopTracksTable({
           </div>
         }
       >
-        <Table className="min-w-[36rem] text-sm">
+        <Table className="min-w-0 text-sm lg:min-w-[36rem]">
           <colgroup>
             <col className="w-9" />
             <col className="w-10" />
@@ -103,8 +104,8 @@ export function TopTracksTable({
               <TableHead className="sr-only">Artwork</TableHead>
               <TableHead>Track</TableHead>
               <TableHead className="hidden text-right sm:table-cell">Length</TableHead>
-              <TableHead className="text-right">Move</TableHead>
-              <TableHead className="text-right" title={POPULARITY_HEADER_TITLE}>
+              <TableHead className="hidden text-right lg:table-cell">Move</TableHead>
+              <TableHead className="hidden text-right lg:table-cell" title={POPULARITY_HEADER_TITLE}>
                 Pop.
               </TableHead>
             </TableRow>
@@ -167,10 +168,10 @@ export function TopTracksTable({
                     >
                       {formatDurationMs(track.duration_ms)}
                     </TableCell>
-                    <TableCell className="text-right">
+                    <TableCell className="hidden text-right lg:table-cell">
                       <RankMovement delta={delta} />
                     </TableCell>
-                    <TableCell className="text-right font-mono-stats">{track.popularity}</TableCell>
+                    <TableCell className="hidden text-right font-mono-stats lg:table-cell">{track.popularity}</TableCell>
                   </TableRow>
                   {isExpanded ? (
                     <TableRow key={`${track.id}-detail`} className="bg-muted/20 hover:bg-muted/20">

@@ -80,6 +80,7 @@ export function KpiGrid({
   const uniqueGenres = countDistinctGenreTags(topArtists);
   const top10Share = topNConcentrationShare(topTracks, 10);
   const { tracks: savedOverlap } = libraryOverlap;
+  const savedOverlapReady = overlapHintsReady && savedOverlap.topTrackTotal > 0;
 
   return (
     <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-border bg-border md:grid-cols-4 lg:grid-cols-6">
@@ -120,9 +121,9 @@ export function KpiGrid({
       <KpiCell
         icon={Heart}
         label="Saved overlap"
-        value={overlapHintsReady ? `${savedOverlap.overlapPercentOfTop}%` : "—"}
-        hint={overlapHintsReady ? topTracksSavedOverlapHint(savedOverlap) : undefined}
-        hintLoading={!overlapHintsReady}
+        value={savedOverlapReady ? `${savedOverlap.overlapPercentOfTop}%` : "—"}
+        hint={savedOverlapReady ? topTracksSavedOverlapHint(savedOverlap) : undefined}
+        hintLoading={!savedOverlapReady}
       />
       <KpiCell
         icon={History}

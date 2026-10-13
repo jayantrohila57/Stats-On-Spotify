@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import { cn } from "@/lib/utils";
 
@@ -56,9 +57,20 @@ export function DashboardSectionNav({ className, activeSectionId }: DashboardSec
 }
 
 export function DashboardSectionNavMobile({ activeSectionId }: { activeSectionId?: string }) {
+  const scrollRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!activeSectionId || !scrollRef.current) {
+      return;
+    }
+    const link = scrollRef.current.querySelector<HTMLAnchorElement>(`a[href="#${activeSectionId}"]`);
+    link?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  }, [activeSectionId]);
+
   return (
     <div className="sticky top-14 z-30 mb-3 border-b border-border bg-background/95 backdrop-blur-sm lg:hidden">
       <PageContainer
+        ref={scrollRef}
         className="flex gap-1 overflow-x-auto overscroll-x-contain py-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         aria-label="Dashboard sections"
         as="nav"

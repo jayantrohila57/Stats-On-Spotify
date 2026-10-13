@@ -1,7 +1,7 @@
 "use client";
 
 import { Activity } from "lucide-react";
-import { DashboardIconSection } from "@/components/layout/dashboard-icon-section";
+import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 import type { NormalizedArtist, NormalizedTrack } from "@/lib/analytics/normalize";
 import { deriveTasteDimensions, topNConcentrationShare, uniqueArtistRatioInTopTracks } from "@/lib/analytics/behavior";
 import type { SpotifyArtist, SpotifySavedTrack } from "@/lib/spotify/types";
@@ -24,10 +24,13 @@ export function ListeningBehaviorSection({
   const diversity = uniqueArtistRatioInTopTracks(topTracks);
 
   return (
-    <DashboardIconSection
+    <SectionShell
       icon={Activity}
       title="Listening behavior (derived)"
       description="Concentration and overlap metrics from top lists — not true play counts or repeat rate"
+      isLoading={false}
+      error={null}
+      className="mt-8"
     >
       <div className="space-y-3 text-sm">
         <p>
@@ -53,6 +56,6 @@ export function ListeningBehaviorSection({
           ))}
         </ul>
       </div>
-    </DashboardIconSection>
+    </SectionShell>
   );
 }

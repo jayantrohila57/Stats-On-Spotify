@@ -2,7 +2,7 @@
 
 import { Fragment, useState } from "react";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ListMusic } from "lucide-react";
 import type { SpotifyPlaylist } from "@/lib/spotify/types";
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
 import { spotifyPlainText } from "@/lib/text/plaintext";
@@ -27,6 +27,7 @@ export function PlaylistsTable({ playlists, isLoading, error, onRetry }: Playlis
 
   return (
     <SectionShell
+      icon={ListMusic}
       title="Playlists"
       description="Your Spotify playlists (not filtered by period)"
       isLoading={isLoading}

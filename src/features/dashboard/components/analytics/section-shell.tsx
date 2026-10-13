@@ -1,5 +1,6 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { StatsEmptyState, StatsErrorState } from "@/components/stats/stats-feedback";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,8 +8,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
 type SectionShellProps = {
+  icon: LucideIcon;
   title: string;
-  description?: string;
+  description?: ReactNode;
   meta?: ReactNode;
   isLoading: boolean;
   error: string | null;
@@ -32,6 +34,7 @@ function DefaultSectionSkeleton() {
 }
 
 export function SectionShell({
+  icon: Icon,
   title,
   description,
   meta,
@@ -48,11 +51,20 @@ export function SectionShell({
   return (
     <Card className={cn("shadow-sm", className)}>
       <CardHeader className="flex flex-col gap-3 border-b pb-4 sm:flex-row sm:items-start sm:justify-between sm:space-y-0">
-        <div className="min-w-0 flex-1 space-y-1.5">
-          <CardTitle className="truncate text-lg font-semibold tracking-tight">{title}</CardTitle>
-          {description ? (
-            <CardDescription className="line-clamp-3 min-w-0 leading-snug sm:line-clamp-none">{description}</CardDescription>
-          ) : null}
+        <div className="flex min-w-0 flex-1 gap-2">
+          <Icon className="mt-1 size-5 shrink-0 text-muted-foreground" aria-hidden />
+          <div className="min-w-0 flex-1 space-y-1.5">
+            <CardTitle className="truncate text-lg font-semibold tracking-tight">{title}</CardTitle>
+            {description ? (
+              typeof description === "string" ? (
+                <CardDescription className="line-clamp-3 min-w-0 leading-snug sm:line-clamp-none">
+                  {description}
+                </CardDescription>
+              ) : (
+                description
+              )
+            ) : null}
+          </div>
         </div>
         {meta}
       </CardHeader>

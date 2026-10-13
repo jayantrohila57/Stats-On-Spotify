@@ -5,7 +5,10 @@ const cover = "https://i.scdn.co/image/ab67616d0000b273c8a11e48c91a982d086afc69"
 
 export const fixtureTracks: NormalizedTrack[] = Array.from({ length: 12 }, (_, i) => ({
   id: `track-${i}`,
-  name: `Fixture Track ${i + 1} With A Long Title For Overflow Testing`,
+  name:
+    i === 0
+      ? "Lose My Mind (feat. Doja Cat) [From F1 The Album] — Extended Overflow Fixture Title"
+      : `Fixture Track ${i + 1} With A Long Title For Overflow Testing`,
   uri: `spotify:track:track-${i}`,
   popularity: 70 - i,
   duration_ms: 200000 + i * 1000,

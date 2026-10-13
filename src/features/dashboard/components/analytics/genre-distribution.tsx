@@ -5,6 +5,7 @@ import {
   deriveGenreStatsWithOther,
   formatGenreLabel,
 } from "@/lib/analytics/derive";
+import { Tags } from "lucide-react";
 import type { SpotifyArtist } from "@/lib/spotify/types";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 
@@ -21,6 +22,7 @@ export function GenreDistribution({ artists, description, isLoading, error }: Ge
 
   return (
     <SectionShell
+      icon={Tags}
       title="Genre distribution"
       description={description ?? "Derived from genre tags on your top artists"}
       isLoading={isLoading}

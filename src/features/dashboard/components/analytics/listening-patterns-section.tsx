@@ -1,11 +1,9 @@
 "use client";
 
 import { Clock3 } from "lucide-react";
-import { DashboardIconSection } from "@/components/layout/dashboard-icon-section";
+import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 import type { SpotifyPlayHistoryItem } from "@/lib/spotify/types";
 import { deriveHourDistribution, deriveWeekdayDistribution } from "@/lib/analytics/listening-patterns";
-import { StatsEmptyState } from "@/components/stats/stats-feedback";
-
 type ListeningPatternsSectionProps = {
   items: SpotifyPlayHistoryItem[];
 };
@@ -63,18 +61,20 @@ export function ListeningPatternsSection({ items }: ListeningPatternsSectionProp
   const weekdayRows = weekdays.map((b) => ({ label: b.label, count: b.count, share: b.share }));
 
   return (
-    <DashboardIconSection icon={Clock3} title="Listening patterns" description={description}>
-      {!hasData ? (
-        <StatsEmptyState
-          title="Not enough recent plays"
-          description="Load recently played data to see hour and weekday patterns from that window."
-        />
-      ) : (
-        <div className="grid gap-6 md:grid-cols-2">
-          <DistributionList title="Plays by hour (local time)" rows={hourRows} />
-          <DistributionList title="Plays by weekday" rows={weekdayRows} />
-        </div>
-      )}
-    </DashboardIconSection>
+    <SectionShell
+      icon={Clock3}
+      title="Listening patterns"
+      description={description}
+      isLoading={false}
+      error={null}
+      isEmpty={!hasData}
+      emptyTitle="Not enough recent plays"
+      emptyDescription="Load recently played data to see hour and weekday patterns from that window."
+    >
+      <div className="grid gap-6 md:grid-cols-2">
+        <DistributionList title="Plays by hour (local time)" rows={hourRows} />
+        <DistributionList title="Plays by weekday" rows={weekdayRows} />
+      </div>
+    </SectionShell>
   );
 }

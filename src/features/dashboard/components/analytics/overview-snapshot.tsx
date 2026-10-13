@@ -9,6 +9,7 @@ import { deriveHourDistribution } from "@/lib/analytics/listening-patterns";
 import type { SpotifyArtist } from "@/lib/spotify/types";
 import type { SpotifyPlayHistoryItem } from "@/lib/spotify/types";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
+import { LayoutDashboard } from "lucide-react";
 
 type OverviewSnapshotProps = {
   topArtists: SpotifyArtist[];
@@ -39,6 +40,7 @@ export function OverviewSnapshot({ topArtists, recentPlays }: OverviewSnapshotPr
 
   return (
     <SectionShell
+      icon={LayoutDashboard}
       className="mt-8"
       title="Overview snapshot"
       description={description}

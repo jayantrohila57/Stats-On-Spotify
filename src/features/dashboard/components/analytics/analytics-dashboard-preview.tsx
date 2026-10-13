@@ -7,6 +7,7 @@ import { RecentlyPlayedSection } from "@/features/dashboard/components/analytics
 import { TasteEvolutionSection } from "@/features/dashboard/components/analytics/taste-evolution-section";
 import { TopArtistsSection } from "@/features/dashboard/components/analytics/top-artists-section";
 import { TopTracksTable } from "@/features/dashboard/components/analytics/top-tracks-table";
+import { NowPlayingCard } from "@/features/dashboard/components/analytics/now-playing-card";
 import { UnavailableMetricsPanel } from "@/features/dashboard/components/analytics/unavailable-metrics";
 import {
   fixtureArtists,
@@ -30,6 +31,19 @@ export function AnalyticsDashboardPreview() {
         <p className="text-xs text-muted-foreground">Signed-out QA — responsive tables and spacing</p>
       </header>
       <PageContainer className="space-y-8 py-6">
+        <NowPlayingCard
+          isLoading={false}
+          payload={{
+            scopeMissing: false,
+            playing: {
+              timestamp: Date.now(),
+              is_playing: true,
+              progress_ms: 86000,
+              currently_playing_type: "track",
+              item: fixtureTracks[0],
+            },
+          }}
+        />
         <TopTracksTable
           tracks={fixtureTracks}
           topArtists={fixtureArtists}

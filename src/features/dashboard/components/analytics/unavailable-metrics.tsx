@@ -1,11 +1,13 @@
 "use client";
 
+import { ChartNoAxesColumn, Clock } from "lucide-react";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 
 export function UnavailableMetricsPanel() {
   return (
     <div className="grid gap-8 lg:grid-cols-2">
       <SectionShell
+        icon={ChartNoAxesColumn}
         title="Listening activity over time"
         description="Play counts by day or week"
         isLoading={false}
@@ -15,6 +17,7 @@ export function UnavailableMetricsPanel() {
         emptyDescription="Spotify does not expose a full time-series play log. Recently played covers only the latest window."
       />
       <SectionShell
+        icon={Clock}
         title="Session length & play counts"
         description="Per-track play totals and listening hours"
         isLoading={false}

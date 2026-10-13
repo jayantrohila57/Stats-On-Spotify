@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BarChart3 } from "lucide-react";
+import { BarChart3, Sparkles } from "lucide-react";
 import { useMemo } from "react";
 import { useSpotifyAnalyticsQueries } from "@/features/spotify/hooks/use-spotify-queries";
 import { AnalyticsHeader } from "@/features/dashboard/components/analytics/analytics-header";
@@ -78,12 +78,18 @@ export function AnalyticsDashboard() {
     (savedTracks.isLoading && savedTracks.data === undefined);
 
   const overlapHintsReady =
+    !initialTopsLoading &&
     topTracks.length > 0 &&
     topArtists.length > 0 &&
     savedTracks.data !== undefined &&
     !savedTracks.isLoading &&
     followedArtists.data !== undefined &&
     !followedArtists.isLoading;
+
+  const overlapMetricsReady =
+    overlapHintsReady &&
+    libraryOverlap.tracks.topTrackTotal > 0 &&
+    libraryOverlap.artists.topArtistTotal > 0;
 
   const topsLoading = initialTopsLoading && topTracks.length === 0;
 
@@ -146,7 +152,7 @@ export function AnalyticsDashboard() {
                   profile={profile.data ?? null}
                   libraryOverlap={libraryOverlap}
                   recentPlayCount={recentList.length}
-                  overlapHintsReady={overlapHintsReady}
+                  overlapHintsReady={overlapMetricsReady}
                 />
                 <OverviewSnapshot topArtists={topArtists} recentPlays={recentList} />
               </div>
@@ -223,7 +229,7 @@ export function AnalyticsDashboard() {
 
           <DashboardSection id="section-library">
             <SectionErrorBoundary sectionTitle="Library overlap">
-              <LibraryOverlapSection libraryOverlap={libraryOverlap} />
+              <LibraryOverlapSection libraryOverlap={libraryOverlap} metricsReady={overlapMetricsReady} />
             </SectionErrorBoundary>
           </DashboardSection>
 
@@ -250,6 +256,7 @@ export function AnalyticsDashboard() {
           </DashboardSection>
 
           <SectionShell
+            icon={Sparkles}
             title="New releases (browse)"
             description="Spotify catalog — not personalized analytics"
             isLoading={newReleases.isLoading && !newReleases.data}

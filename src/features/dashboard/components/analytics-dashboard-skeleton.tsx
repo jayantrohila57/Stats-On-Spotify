@@ -4,14 +4,11 @@ import type { ReactNode } from "react";
 import { PageContainer } from "@/components/layout/page-container";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
-  HEADER_ACCOUNT_BUTTON_SKELETON_CLASS,
-  MOBILE_NAV_CHIP_SKELETON_CLASS,
-  SEGMENTED_CONTROL_CLASS,
-} from "@/lib/ui/layout-classes";
-import { DASHBOARD_SECTIONS } from "@/features/dashboard/components/analytics/dashboard-section-nav";
+  HeaderAccountButtonPlaceholder,
+  MobileSectionNavPlaceholder,
+  PeriodFilterBarPlaceholder,
+} from "@/features/dashboard/components/analytics/loading-chrome-placeholders";
 import { Skeleton } from "@/components/ui/skeleton";
-
-const DASHBOARD_SECTIONS_PREVIEW = DASHBOARD_SECTIONS.map((s) => s.label);
 
 function SectionCardSkeleton({ children }: { children?: ReactNode }) {
   return (
@@ -73,29 +70,13 @@ export function AnalyticsDashboardSkeleton() {
             <Skeleton className="h-4 w-36" />
             <Skeleton className="h-3 w-56 max-w-full" />
           </div>
-          <Skeleton className={HEADER_ACCOUNT_BUTTON_SKELETON_CLASS} />
+          <HeaderAccountButtonPlaceholder />
         </PageContainer>
       </header>
 
-      <div className="border-b border-border bg-background">
-        <PageContainer className="flex flex-wrap items-center gap-3 py-2.5">
-          <Skeleton className="h-3 w-12" />
-          <div className={SEGMENTED_CONTROL_CLASS}>
-            {Array.from({ length: 3 }).map((_, i) => (
-              <Skeleton key={i} className="mx-0.5 h-7 w-16 rounded-sm" />
-            ))}
-          </div>
-          <Skeleton className="hidden h-3 w-64 sm:block" />
-        </PageContainer>
-      </div>
+      <PeriodFilterBarPlaceholder />
 
-      <div className="sticky top-14 z-30 mb-3 border-b border-border bg-background/95 lg:hidden" aria-hidden>
-        <PageContainer className="flex gap-1 overflow-x-auto overscroll-x-contain py-1.5 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {DASHBOARD_SECTIONS_PREVIEW.map((label) => (
-            <Skeleton key={label} className={MOBILE_NAV_CHIP_SKELETON_CLASS} />
-          ))}
-        </PageContainer>
-      </div>
+      <MobileSectionNavPlaceholder />
 
       <PageContainer className="flex items-stretch gap-8 py-6">
         <aside className="hidden w-36 shrink-0 border-r border-border pr-3 lg:block" aria-hidden>

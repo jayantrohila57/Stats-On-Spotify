@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo } from "react";
 import type { SpotifyTrack } from "@/lib/spotify/types";
 import { pickSpotifyImageUrl } from "@/lib/spotify/images";
+import { Disc3 } from "lucide-react";
 import { SectionShell } from "@/features/dashboard/components/analytics/section-shell";
 import { SPOTIFY_MEDIA_SIZE, SpotifyThumbnail } from "@/components/spotify/spotify-media";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -51,6 +52,7 @@ export function AlbumsFromTracksTable({ tracks, isLoading, error }: AlbumsFromTr
 
   return (
     <SectionShell
+      icon={Disc3}
       title="Albums in your top tracks"
       description="Grouped from top track results for this period"
       isLoading={isLoading}

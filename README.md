@@ -60,3 +60,13 @@ npm run lint
 ## Placeholders
 
 Friends Activity and the bottom player bar are **UI placeholders** (no Spotify social/playback APIs in this pass). Top tracks, artists, playlists, and profile use live `/api/spotify/*` routes.
+
+## Sponsor
+
+If you find this project useful, consider supporting its development:
+
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-db61a2?logo=githubsponsors&logoColor=white)](https://github.com/sponsors/jayantrohila57)
+
+## License
+
+Released under the [MIT License](LICENSE).

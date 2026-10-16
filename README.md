@@ -4,6 +4,8 @@ Personal Spotify listening **dashboard** (dark, Spotify-inspired UI). Sign in wi
 
 **Live:** https://statsonspotify.vercel.app
 
+> **Gated demo:** the live app is labeled "Single-account personal use", so most visitors only see the sign-in page. To try it, run it locally with your own Spotify app credentials (see below).
+
 ## UX
 
 | State | Route | Experience |

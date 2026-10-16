@@ -48,6 +48,19 @@ Spotify **Redirect URI** (Dashboard):
 
 The Spotify provider in `src/auth.ts` must set `authorization.url` to `https://accounts.spotify.com/authorize` (params-only breaks Auth.js with `Invalid URL`).
 
+## Spotify scopes
+
+Requested at sign-in (`src/lib/spotify/scopes.ts`):
+
+`user-read-email`, `user-read-private`, `playlist-read-collaborative`, `playlist-read-private`, `user-library-read`, `user-top-read`, `user-read-recently-played`, `user-read-currently-playing`, `user-follow-read`
+
+## Tokens and errors
+
+- Sessions use JWTs (`src/auth.ts`). The Spotify access token, refresh token and expiry are stored on the token; once it expires, it is refreshed against `https://accounts.spotify.com/api/token`, keeping the old refresh token if Spotify doesn't return a new one.
+- If the refresh fails (or there is no refresh token), the session gets `error: "RefreshAccessTokenError"`. API routes then return `401 Session expired`, and the client shows a "Spotify session expired" toast and starts a new Spotify sign-in.
+- `/api/spotify/*` routes return `401 Unauthorized` without a session and `502` with the error message when a Spotify request fails.
+- Now playing: a `401`/`403` from Spotify is treated as a missing playback scope, and the card asks you to sign out and reconnect Spotify.
+
 ## Scripts
 
 ```bash

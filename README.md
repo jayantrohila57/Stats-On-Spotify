@@ -1,4 +1,6 @@
-# Stats on Spotify
+<p align="center"><img src=".github/brand/readme-banner.png" alt="Stats On Spotify: Personal Spotify listening dashboard." width="100%" /></p>
+
+# Stats On Spotify
 
 Personal Spotify listening **dashboard** (dark, Spotify-inspired UI). Sign in with Spotify to see your top tracks, artists, playlists, and profile.
 
@@ -75,6 +77,24 @@ npm run lint
 ## Placeholders
 
 Friends Activity and the bottom player bar are **UI placeholders** (no Spotify social/playback APIs in this pass). Top tracks, artists, playlists, and profile use live `/api/spotify/*` routes.
+
+## Brand
+
+<img src=".github/brand/logo-lockup-on-light.png#gh-light-mode-only" alt="Stats On Spotify logo" height="56" /><img src=".github/brand/logo-lockup-on-dark.png#gh-dark-mode-only" alt="Stats On Spotify logo" height="56" />
+
+**Personal Spotify listening dashboard.**
+
+Brand assets live in [`.github/brand`](.github/brand): logo mark (SVG and PNG), wordmark (SVG), light and dark lockups, app icons (512, 192 and 32 px), an Open Graph image (1200×630), a GitHub social preview (1280×640), this README banner, an X/LinkedIn banner (1500×500) and a palette sheet.
+
+| Role | Hex | Source |
+| --- | --- | --- |
+| Mark green | `#4ade80` | `icon.tsx / apple-icon.tsx` |
+| Mark tile / manifest | `#050505` | `manifest theme_color` |
+| Background | `#06070a` | `--background` |
+| Card | `#0c0d11` | `--card` |
+| Foreground | `#f0f2f5` | `--foreground` |
+
+Type: Inter (UI), IBM Plex Mono (numbers and code) and Noto Sans JP, from `src/app/layout.tsx`.
 
 ## Sponsor
 
